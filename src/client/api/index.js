@@ -460,6 +460,34 @@ api.settings.buildSass = () => {
   })
 }
 
+api.webhooks = {}
+api.webhooks.fetch = () => {
+  return axios.get('/api/v1/webhooks').then(res => {
+    return res.data
+  })
+}
+api.webhooks.create = payload => {
+  return axios.post('/api/v1/webhooks', payload).then(res => {
+    return res.data
+  })
+}
+api.webhooks.update = payload => {
+  const { _id, ...body } = payload
+  return axios.put(`/api/v1/webhooks/${_id}`, body).then(res => {
+    return res.data
+  })
+}
+api.webhooks.delete = ({ _id }) => {
+  return axios.delete(`/api/v1/webhooks/${_id}`).then(res => {
+    return res.data
+  })
+}
+api.webhooks.test = ({ _id, ...body }) => {
+  return axios.post(`/api/v1/webhooks/${_id}/test`, body).then(res => {
+    return res.data
+  })
+}
+
 api.common = {}
 api.common.getSessionUser = () => {
   return axios.get('/api/v2/login').then(res => {
