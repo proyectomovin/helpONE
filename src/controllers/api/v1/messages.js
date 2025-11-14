@@ -18,6 +18,7 @@ const winston = require('../../../logger')
 const ConversationSchema = require('../../../models/chat/conversation')
 const MessageSchema = require('../../../models/chat/message')
 const UserSchema = require('../../../models/user')
+const emitter = require('../../../emitter')
 
 const apiMessages = {}
 
@@ -238,15 +239,17 @@ apiMessages.send = function (req, res) {
           }
 
           // Update conversation Meta!!
-          return done(null, mSave)
+          return done(null, convo, mSave)
         })
       }
     ],
-    function (err, mSave) {
+    function (err, convo, mSave) {
       if (err) {
         winston.debug(err)
         return res.status(400).json({ success: false, error: err.message })
       }
+
+      emitter.emit('message:created', { conversation: convo._id, message: mSave })
       return res.json({ success: true, message: mSave })
     }
   )
