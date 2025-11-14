@@ -134,7 +134,7 @@ class WebhookFormModal extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
 
-    const { name, targetUrl, secret, events } = this.state
+    const { name, targetUrl, secret, events, method, headers, isActive } = this.state
     if (!events || events.length === 0) {
       helpers.UI.showSnackbar('Please select at least one event.', true)
       return
@@ -185,7 +185,7 @@ class WebhookFormModal extends React.Component {
 
   render () {
     const { mode, eventOptions } = this.props
-    const { name, targetUrl, secret, events } = this.state
+    const { name, targetUrl, secret, events, method, headers, isActive } = this.state
     const isEdit = mode === 'edit'
 
     return (
