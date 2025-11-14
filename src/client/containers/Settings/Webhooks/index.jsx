@@ -66,29 +66,62 @@ class WebhooksSettingsContainer extends React.Component {
 
     return (
       <ul className='uk-list uk-list-striped'>
-        {entries.map(({ id, data }) => (
-          <li key={id} className='uk-clearfix'>
-            <div className='uk-float-left' style={{ maxWidth: '70%' }}>
-              <h5 style={{ margin: 0 }}>{data.name || data.url}</h5>
-              <p style={{ margin: '4px 0 0 0', wordBreak: 'break-all' }} className='uk-text-muted'>
-                {data.url}
-              </p>
-              <p style={{ margin: '4px 0 0 0' }} className='uk-text-small'>
-                Events: {Array.isArray(data.events) && data.events.length ? data.events.join(', ') : '—'}
-              </p>
-              {data.secret && (
-                <p style={{ margin: '4px 0 0 0' }} className='uk-text-small uk-text-muted'>
-                  Secret configured
+        {entries.map(({ id, data }) => {
+          const isActive = typeof data.isActive === 'boolean' ? data.isActive : true
+          const eventsList = Array.isArray(data.events) && data.events.length ? data.events.join(', ') : '—'
+          const method = (data.method || 'POST').toUpperCase()
+          const headers = Array.isArray(data.headers)
+            ? data.headers
+              .filter(header => header && header.key)
+              .map(header => `${header.key}: ${header.value || ''}`)
+            : []
+          const headerSummary = headers.length ? headers.join(', ') : 'None'
+          const targetUrl = data.targetUrl || data.url || ''
+
+          return (
+            <li key={id} className='uk-clearfix'>
+              <div className='uk-float-left' style={{ maxWidth: '70%' }}>
+                <h5 style={{ margin: 0 }}>
+                  {data.name || targetUrl}
+                  {!isActive && (
+                    <span className='uk-badge uk-badge-danger' style={{ marginLeft: 8 }}>
+                      Inactive
+                    </span>
+                  )}
+                </h5>
+                <p style={{ margin: '4px 0 0 0', wordBreak: 'break-all' }} className='uk-text-muted'>
+                  {targetUrl}
                 </p>
-              )}
-            </div>
-            <div className='uk-float-right'>
-              <Button text='Test' small waves style='primary' onClick={() => this.handleTest(id)} extraClass='uk-margin-small-right' />
-              <Button text='Edit' small waves onClick={() => this.handleEdit(id)} extraClass='uk-margin-small-right' />
-              <Button text='Delete' small waves style='danger' onClick={() => this.handleDelete(id)} />
-            </div>
-          </li>
-        ))}
+                <p style={{ margin: '4px 0 0 0' }} className='uk-text-small'>
+                  Events: {eventsList}
+                </p>
+                <p style={{ margin: '4px 0 0 0' }} className='uk-text-small'>
+                  Method: {method}
+                </p>
+                <p style={{ margin: '4px 0 0 0' }} className='uk-text-small'>
+                  Headers: {headerSummary}
+                </p>
+                {data.secret && (
+                  <p style={{ margin: '4px 0 0 0' }} className='uk-text-small uk-text-muted'>
+                    Secret configured
+                  </p>
+                )}
+              </div>
+              <div className='uk-float-right'>
+                <Button
+                  text='Test'
+                  small
+                  waves
+                  style='primary'
+                  onClick={() => this.handleTest(id)}
+                  extraClass='uk-margin-small-right'
+                />
+                <Button text='Edit' small waves onClick={() => this.handleEdit(id)} extraClass='uk-margin-small-right' />
+                <Button text='Delete' small waves style='danger' onClick={() => this.handleDelete(id)} />
+              </div>
+            </li>
+          )
+        })}
       </ul>
     )
   }
