@@ -17,7 +17,8 @@
     "webpackwatch": "webpack --config webpack.config.js --watch",
     "webpackdev": "webpack --config webpack.config.js",
     "webpackdist": "rimraf public/js/* && webpack --env production --node-env production --config webpack.config.js",
-    "snyk-protect": "snyk protect"
+    "snyk-protect": "snyk protect",
+    "migrate:webhook-events": "node scripts/convert-webhook-events.js"
   },
   "dependencies": {
     "@elastic/elasticsearch": "8.2.1",
