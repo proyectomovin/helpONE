@@ -16,7 +16,7 @@ class WebhookFormModal extends React.Component {
     super(props)
     this.state = {
       name: '',
-      url: '',
+      targetUrl: '',
       secret: '',
       events: [],
       method: 'POST',
@@ -47,7 +47,7 @@ class WebhookFormModal extends React.Component {
     if (!webhook) {
       this.setState({
         name: '',
-        url: '',
+        targetUrl: '',
         secret: '',
         events: [],
         method: 'POST',
@@ -60,7 +60,7 @@ class WebhookFormModal extends React.Component {
     const data = webhook.toJS ? webhook.toJS() : webhook
     this.setState({
       name: data.name || '',
-      url: data.targetUrl || data.url || '',
+      targetUrl: data.targetUrl || data.url || '',
       secret: data.secret || '',
       events: Array.isArray(data.events) ? data.events : [],
       method: (data.method || 'POST').toUpperCase(),
@@ -134,7 +134,7 @@ class WebhookFormModal extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
 
-    const { name, url, secret, events, method, headers, isActive } = this.state
+    const { name, targetUrl, secret, events } = this.state
     if (!events || events.length === 0) {
       helpers.UI.showSnackbar('Please select at least one event.', true)
       return
@@ -142,8 +142,7 @@ class WebhookFormModal extends React.Component {
 
     const payload = {
       name: name ? name.trim() : '',
-      url: url ? url.trim() : '',
-      targetUrl: url ? url.trim() : '',
+      targetUrl: targetUrl ? targetUrl.trim() : '',
       secret: secret ? secret.trim() : undefined,
       events,
       method: method ? method.toUpperCase() : 'POST',
@@ -156,7 +155,7 @@ class WebhookFormModal extends React.Component {
       return
     }
 
-    if (!payload.url) {
+    if (!payload.targetUrl) {
       helpers.UI.showSnackbar('Webhook URL is required.', true)
       return
     }
@@ -186,7 +185,7 @@ class WebhookFormModal extends React.Component {
 
   render () {
     const { mode, eventOptions } = this.props
-    const { name, url, secret, events, method, headers, isActive } = this.state
+    const { name, targetUrl, secret, events } = this.state
     const isEdit = mode === 'edit'
 
     return (
@@ -213,10 +212,10 @@ class WebhookFormModal extends React.Component {
             <label htmlFor='webhook-url'>URL</label>
             <input
               id='webhook-url'
-              name='url'
+              name='targetUrl'
               type='text'
               className='md-input'
-              value={url}
+              value={targetUrl}
               onChange={this.handleInputChange}
               data-validation='url'
               data-validation-error-msg='Please provide a valid URL.'
