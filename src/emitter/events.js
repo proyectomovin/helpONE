@@ -17,6 +17,7 @@ const path = require('path')
 const async = require('async')
 const winston = require('../logger')
 const emitter = require('../emitter')
+const webhooks = require('../webhooks')
 const NotificationSchema = require('../models/notification')
 const settingsSchema = require('../models/setting')
 const Email = require('email-templates')
@@ -27,6 +28,10 @@ const notifications = require('../notifications') // Load Push Events
 const eventTicketCreated = require('./events/event_ticket_created')
 
 ;(function () {
+  webhooks.init().catch(err => {
+    winston.error('Failed to initialize webhooks module', err)
+  })
+
   notifications.init(emitter)
 
   emitter.on('ticket:created', async function (data) {
