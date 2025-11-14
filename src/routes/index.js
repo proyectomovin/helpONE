@@ -318,6 +318,12 @@ function mainRoutes (router, middleware, controllers) {
     controllers.settings.notificationsSettings
   )
   router.get(
+    '/settings/webhooks',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.webhooks
+  )
+  router.get(
     '/settings/elasticsearch',
     middleware.redirectToLogin,
     middleware.loadCommonData,

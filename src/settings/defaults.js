@@ -47,6 +47,7 @@ roleDefaults.adminGrants = [
   'comments:*',
   'reports:*',
   'notices:*',
+  'settings:webhooks',
   'settings:*',
   'api:*'
 ]

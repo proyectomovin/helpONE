@@ -155,6 +155,43 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v1/messages/conversations/recent', apiv1, apiCtrl.messages.getRecentConversations)
   router.post('/api/v1/messages/send', apiv1, apiCtrl.messages.send)
 
+  // Webhooks
+  router.get(
+    '/api/v1/webhooks',
+    apiv1,
+    isAdmin,
+    canUser('settings:webhooks'),
+    apiCtrl.webhooks.list
+  )
+  router.post(
+    '/api/v1/webhooks',
+    apiv1,
+    isAdmin,
+    canUser('settings:webhooks'),
+    apiCtrl.webhooks.create
+  )
+  router.put(
+    '/api/v1/webhooks/:id',
+    apiv1,
+    isAdmin,
+    canUser('settings:webhooks'),
+    apiCtrl.webhooks.update
+  )
+  router.delete(
+    '/api/v1/webhooks/:id',
+    apiv1,
+    isAdmin,
+    canUser('settings:webhooks'),
+    apiCtrl.webhooks.remove
+  )
+  router.post(
+    '/api/v1/webhooks/:id/test',
+    apiv1,
+    isAdmin,
+    canUser('settings:webhooks'),
+    apiCtrl.webhooks.test
+  )
+
   // Notices
   router.post('/api/v1/notices/create', apiv1, canUser('notices:create'), apiCtrl.notices.create)
   router.get('/api/v1/notices/clearactive', apiv1, canUser('notices:deactivate'), apiCtrl.notices.clearActive)

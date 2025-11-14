@@ -125,6 +125,14 @@ settingsController.notificationsSettings = function (req, res) {
   renderView(res, content)
 }
 
+settingsController.webhooks = function (req, res) {
+  if (!checkPerms(req, 'settings:webhooks')) return res.redirect('/settings')
+
+  const content = initViewContent('webhooks', req)
+
+  renderView(res, content)
+}
+
 settingsController.elasticsearchSettings = function (req, res) {
   if (!checkPerms(req, 'settings:elasticsearch')) return res.redirect('/settings')
 
