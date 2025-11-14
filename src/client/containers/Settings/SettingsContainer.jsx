@@ -26,6 +26,7 @@ import AppearanceSettings from './Appearance'
 import PermissionsSettingsContainer from './Permissions'
 import TicketsSettings from './Tickets'
 import MailerSettingsContainer from './Mailer'
+import WebhooksSettingsContainer from './Webhooks'
 import ElasticsearchSettingsContainer from './Elasticsearch'
 // import TPSSettingsContainer from './TPS'
 import BackupRestoreSettingsContainer from './BackupRestore'
@@ -126,6 +127,13 @@ class SettingsContainer extends React.Component {
                 }}
               />
               <MenuItem
+                title='Webhooks'
+                active={this.state.activeCategory === 'settings-webhooks'}
+                onClick={e => {
+                  this.onMenuItemClick(e, 'webhooks')
+                }}
+              />
+              <MenuItem
                 title={'Elasticsearch'}
                 active={this.state.activeCategory === 'settings-elasticsearch'}
                 onClick={e => {
@@ -169,6 +177,7 @@ class SettingsContainer extends React.Component {
               <PermissionsSettingsContainer active={this.state.activeCategory === 'settings-permissions'} />
               <TicketsSettings active={this.state.activeCategory === 'settings-tickets'} />
               <MailerSettingsContainer active={this.state.activeCategory === 'settings-mailer'} />
+              <WebhooksSettingsContainer active={this.state.activeCategory === 'settings-webhooks'} />
               <ElasticsearchSettingsContainer active={this.state.activeCategory === 'settings-elasticsearch'} />
               <BackupRestoreSettingsContainer active={this.state.activeCategory === 'settings-backup'} />
               <ServerSettingsController active={this.state.activeCategory === 'settings-server'} />

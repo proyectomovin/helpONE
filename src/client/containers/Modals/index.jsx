@@ -45,6 +45,9 @@ import EditNoticeModal from 'containers/Modals/EditNoticeModal'
 import LinkWarningModal from 'containers/Modals/LinkWarningModal'
 import PasswordPromptModal from 'containers/Modals/PasswordPromptModal'
 import PrivacyPolicyModal from 'containers/Modals/PrivacyPolicyModal'
+import WebhookFormModal from 'containers/Settings/Webhooks/WebhookFormModal'
+import DeleteWebhookModal from 'containers/Settings/Webhooks/DeleteWebhookModal'
+import TestWebhookModal from 'containers/Settings/Webhooks/TestWebhookModal'
 
 const MODAL_COMPONENTS = {
   NOTICE_ALERT: NoticeAlertModal,
@@ -74,7 +77,11 @@ const MODAL_COMPONENTS = {
   EDIT_NOTICE: EditNoticeModal,
   LINK_WARNING: LinkWarningModal,
   PASSWORD_PROMPT: PasswordPromptModal,
-  PRIVACY_POLICY: PrivacyPolicyModal
+  PRIVACY_POLICY: PrivacyPolicyModal,
+  CREATE_WEBHOOK: WebhookFormModal,
+  EDIT_WEBHOOK: WebhookFormModal,
+  TEST_WEBHOOK: TestWebhookModal,
+  DELETE_WEBHOOK: DeleteWebhookModal
 }
 
 const ModalRoot = ({ modalType, modalProps }) => {
