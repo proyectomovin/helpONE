@@ -25,6 +25,7 @@ import TopbarContainer from './containers/Topbar/TopbarContainer'
 import Sidebar from './components/Nav/Sidebar/index.jsx'
 import ModalRoot from './containers/Modals'
 import renderer from './renderer'
+import { LanguageProvider } from 'i18n'
 
 import SocketGlobal from 'containers/Global/SocketGlobal'
 import SessionLoader from 'lib2/sessionLoader'
@@ -57,15 +58,17 @@ sagaMiddleware.run(IndexSagas)
 if (document.getElementById('globals')) {
   const GlobalsRoot = (
     <Provider store={store}>
-      <>
-        <SingletonHooksContainer />
-        <SessionLoader />
-        <SocketGlobal />
-        {/*<HotKeysGlobal />*/}
+      <LanguageProvider>
+        <>
+          <SingletonHooksContainer />
+          <SessionLoader />
+          <SocketGlobal />
+          {/*<HotKeysGlobal />*/}
 
-        <ChatDock />
-        <BackupRestoreOverlay />
-      </>
+          <ChatDock />
+          <BackupRestoreOverlay />
+        </>
+      </LanguageProvider>
     </Provider>
   )
 
@@ -74,7 +77,9 @@ if (document.getElementById('globals')) {
 
 const sidebarWithProvider = (
   <Provider store={store}>
-    <Sidebar />
+    <LanguageProvider>
+      <Sidebar />
+    </LanguageProvider>
   </Provider>
 )
 
@@ -83,7 +88,9 @@ ReactDOM.render(sidebarWithProvider, document.getElementById('sidebar'))
 if (document.getElementById('modal-wrapper')) {
   const RootModal = (
     <Provider store={store}>
-      <ModalRoot />
+      <LanguageProvider>
+        <ModalRoot />
+      </LanguageProvider>
     </Provider>
   )
   ReactDOM.render(RootModal, document.getElementById('modal-wrapper'))
@@ -92,7 +99,9 @@ if (document.getElementById('modal-wrapper')) {
 if (document.getElementById('topbar')) {
   const TopbarRoot = (
     <Provider store={store}>
-      <TopbarContainer />
+      <LanguageProvider>
+        <TopbarContainer />
+      </LanguageProvider>
     </Provider>
   )
 

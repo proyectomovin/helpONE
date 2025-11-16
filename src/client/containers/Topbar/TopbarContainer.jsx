@@ -34,6 +34,8 @@ import OnlineUserListPartial from 'containers/Topbar/onlineUserList'
 import helpers from 'lib/helpers'
 import Cookies from 'jscookie'
 import { NOTIFICATIONS_UPDATE, USERS_UPDATE, NOTICE_UI_SHOW, NOTICE_UI_CLEAR } from 'serverSocket/socketEventConsts'
+import LanguageSelector from 'components/LanguageSelector'
+import { LanguageContext } from 'i18n'
 
 @observer
 class TopbarContainer extends React.Component {
@@ -142,60 +144,65 @@ class TopbarContainer extends React.Component {
     const { loadingViewData, viewdata, sessionUser } = this.props
     if (loadingViewData || !sessionUser) return <div />
     return (
-      <div>
-        {this.props.notice && <NoticeBanner notice={this.props.notice} />}
-        <div className={'uk-grid top-nav'}>
-          <div className='uk-width-1-1'>
-            <div className='top-bar' data-topbar>
-              <div className='title-area uk-float-left'>
-                <div className='logo'>
-                  <img src={viewdata.get('logoImage')} alt='Logo' className={'site-logo'} />
-                </div>
-              </div>
-              <section className='top-bar-section uk-clearfix'>
-                <div className='top-menu uk-float-right'>
-                  <ul className='uk-subnav uk-margin-bottom-remove'>
-                    {/* Start Create Ticket Perm */}
-                    {sessionUser && helpers.canUser('tickets:create') && (
-                      <li className='top-bar-icon nopadding'>
-                        <button
-                          title={'Create Ticket'}
-                          className={'anchor'}
-                          onClick={() => this.props.showModal('CREATE_TICKET')}
-                        >
-                          <i className='material-icons'>&#xE145;</i>
-                        </button>
-                      </li>
-                    )}
-                    {sessionUser && helpers.canUser('tickets:create') && (
-                      <li className='top-bar-icon nopadding nohover'>
-                        <i className='material-icons separator'>remove</i>
-                      </li>
-                    )}
-                    {/* End Create Ticket Perm */}
-                    <li className='top-bar-icon'>
-                      <PDropdownTrigger target={this.conversationsDropdownPartial}>
-                        <a
-                          title={'Conversations'}
-                          className='no-ajaxy uk-vertical-align'
-                          onClick={e => TopbarContainer.onConversationsClicked(e)}
-                        >
-                          <i className='material-icons'>question_answer</i>
-                        </a>
-                      </PDropdownTrigger>
-                    </li>
-                    <li className='top-bar-icon'>
-                      <PDropdownTrigger target={this.notificationsDropdownPartial}>
-                        <a title={'Notifications'} className={'no-ajaxy uk-vertical-align'}>
-                          <i className='material-icons'>notifications</i>
-                          <span
-                            className={'alert uk-border-circle label ' + (this.notificationCount < 1 ? 'hide' : '')}
-                          >
-                            {this.notificationCount}
-                          </span>
-                        </a>
-                      </PDropdownTrigger>
-                    </li>
+      <LanguageContext.Consumer>
+        {({ t }) => (
+          <div>
+            {this.props.notice && <NoticeBanner notice={this.props.notice} />}
+            <div className={'uk-grid top-nav'}>
+              <div className='uk-width-1-1'>
+                <div className='top-bar' data-topbar>
+                  <div className='title-area uk-float-left'>
+                    <div className='logo'>
+                      <img src={viewdata.get('logoImage')} alt='Logo' className={'site-logo'} />
+                    </div>
+                  </div>
+                  <section className='top-bar-section uk-clearfix'>
+                    <div className='top-menu uk-float-right'>
+                      <ul className='uk-subnav uk-margin-bottom-remove'>
+                        {/* Start Create Ticket Perm */}
+                        {sessionUser && helpers.canUser('tickets:create') && (
+                          <li className='top-bar-icon nopadding'>
+                            <button
+                              title={t('topbar.createTicket')}
+                              className={'anchor'}
+                              onClick={() => this.props.showModal('CREATE_TICKET')}
+                            >
+                              <i className='material-icons'>&#xE145;</i>
+                            </button>
+                          </li>
+                        )}
+                        {sessionUser && helpers.canUser('tickets:create') && (
+                          <li className='top-bar-icon nopadding nohover'>
+                            <i className='material-icons separator'>remove</i>
+                          </li>
+                        )}
+                        {/* End Create Ticket Perm */}
+                        <li className='top-bar-icon'>
+                          <PDropdownTrigger target={this.conversationsDropdownPartial}>
+                            <a
+                              title={t('topbar.conversations')}
+                              className='no-ajaxy uk-vertical-align'
+                              onClick={e => TopbarContainer.onConversationsClicked(e)}
+                            >
+                              <i className='material-icons'>question_answer</i>
+                            </a>
+                          </PDropdownTrigger>
+                        </li>
+                        <li className='top-bar-icon'>
+                          <PDropdownTrigger target={this.notificationsDropdownPartial}>
+                            <a title={t('topbar.notifications')} className={'no-ajaxy uk-vertical-align'}>
+                              <i className='material-icons'>notifications</i>
+                              <span
+                                className={'alert uk-border-circle label ' + (this.notificationCount < 1 ? 'hide' : '')}
+                              >
+                                {this.notificationCount}
+                              </span>
+                            </a>
+                          </PDropdownTrigger>
+                        </li>
+                        <li className='top-bar-icon language-selector-item'>
+                          <LanguageSelector className='topbar-language-select' />
+                        </li>
                     {/*<li className='top-bar-icon'>*/}
                     {/*  <OffCanvasTrigger target={'online-user-list'}>*/}
                     {/*    <a title={'Online Users'} className='no-ajaxy'>*/}
@@ -262,6 +269,8 @@ class TopbarContainer extends React.Component {
           />
         </div>
       </div>
+        )}
+      </LanguageContext.Consumer>
     )
   }
 }
