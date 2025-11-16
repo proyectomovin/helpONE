@@ -1,0 +1,48 @@
+{
+  "language": {
+    "label": "Idioma",
+    "changeLanguage": "Cambiar idioma",
+    "options": {
+      "en": "Inglés",
+      "es": "Español"
+    }
+  },
+  "topbar": {
+    "createTicket": "Crear Ticket",
+    "conversations": "Conversaciones",
+    "notifications": "Notificaciones"
+  },
+  "nav": {
+    "plugins": "Plugins",
+    "dashboard": "Panel",
+    "tickets": "Tickets",
+    "ticketsActive": "Activos",
+    "ticketsAssigned": "Asignados",
+    "ticketsUnassigned": "Sin asignar",
+    "messages": "Mensajes",
+    "accounts": "Cuentas",
+    "accountsCustomers": "Clientes",
+    "accountsAgents": "Agentes",
+    "accountsAdmins": "Administradores",
+    "groups": "Grupos de clientes",
+    "teams": "Equipos",
+    "departments": "Departamentos",
+    "reports": "Reportes",
+    "reportsGenerate": "Generar",
+    "notices": "Avisos",
+    "settings": "Configuración",
+    "settingsGeneral": "General",
+    "settingsAccounts": "Cuentas",
+    "settingsAppearance": "Apariencia",
+    "settingsTickets": "Tickets",
+    "settingsPermissions": "Permisos",
+    "settingsMailer": "Correo",
+    "settingsElastic": "Elasticsearch",
+    "settingsBackup": "Respaldo/Restauración",
+    "settingsServer": "Servidor",
+    "settingsLegal": "Legal",
+    "settingsLogs": "Registros",
+    "about": "Acerca de",
+    "collapse": "Contraer menú"
+  }
+}

@@ -23,7 +23,8 @@ import SubmenuItem from 'components/Nav/SubmenuItem'
 import { updateNavChange } from 'actions/nav'
 
 import Helpers from 'lib/helpers'
-import t from 'lib2/i18n'
+import t, { LanguageContext } from 'i18n';
+import { LanguageContext } from 'i18n'
 
 class Sidebar extends React.Component {
   constructor (props) {
@@ -47,7 +48,7 @@ class Sidebar extends React.Component {
     Helpers.UI.bindExpand()
   }
 
-  renderPlugins () {
+  renderPlugins (translate = key => key) {
     const { plugins, sessionUser, activeItem, activeSubItem } = this.state
     return (
       <SidebarItem
@@ -164,16 +165,59 @@ class Sidebar extends React.Component {
                         icon={'account_circle'}
                         active={activeSubItem === 'accounts-agents'}
                       />
-                    )}
-                    {sessionUser && Helpers.canUser('admin:*') && (
                       <SubmenuItem
                         href={'/accounts/admins'}
                         text={t('sidebar.accountsAdmins')}
                         icon={'how_to_reg'}
                         active={activeSubItem === 'accounts-admins'}
                       />
+                    </Submenu>
+                  </SidebarItem>
+                )}
+                <SidebarItem
+                  text={t('nav.messages')}
+                  icon='chat'
+                  href='/messages'
+                  class='navMessages'
+                  active={activeItem === 'messages'}
+                />
+                {sessionUser && Helpers.canUser('accounts:view') && (
+                  <SidebarItem
+                    text={t('nav.accounts')}
+                    icon='&#xE7FD;'
+                    href='/accounts'
+                    class='navAccounts'
+                    active={activeItem === 'accounts'}
+                    subMenuTarget='accounts'
+                    hasSubmenu={sessionUser && Helpers.canUser('agent:*', true)}
+                  >
+                    {sessionUser && Helpers.canUser('agent:*', true) && (
+                      <Submenu id='accounts'>
+                        <SubmenuItem
+                          href={'/accounts/customers'}
+                          text={t('nav.accountsCustomers')}
+                          icon={'account_box'}
+                          active={activeSubItem === 'accounts-customers'}
+                        />
+                        {sessionUser && Helpers.canUser('agent:*', true) && (
+                          <SubmenuItem
+                            href={'/accounts/agents'}
+                            text={t('nav.accountsAgents')}
+                            icon={'account_circle'}
+                            active={activeSubItem === 'accounts-agents'}
+                          />
+                        )}
+                        {sessionUser && Helpers.canUser('admin:*') && (
+                          <SubmenuItem
+                            href={'/accounts/admins'}
+                            text={t('nav.accountsAdmins')}
+                            icon={'how_to_reg'}
+                            active={activeSubItem === 'accounts-admins'}
+                          />
+                        )}
+                      </Submenu>
                     )}
-                  </Submenu>
+                  </SidebarItem>
                 )}
               </SidebarItem>
             )}
@@ -215,24 +259,39 @@ class Sidebar extends React.Component {
                     href='/reports/generate'
                     active={activeSubItem === 'reports-generate'}
                   />
-                  {/*<NavSeparator />*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='Group Breakdown'*/}
-                  {/*  icon='supervisor_account'*/}
-                  {/*  href='/reports/breakdown/group'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-group'}*/}
-                  {/*/>*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='User Breakdown'*/}
-                  {/*  icon='perm_identity'*/}
-                  {/*  href='/reports/breakdown/user'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-user'}*/}
-                  {/*/>*/}
-                </Submenu>
-              </SidebarItem>
-            )}
-
-            {/*{this.renderPlugins()}*/}
+                )}
+                {sessionUser && Helpers.canUser('teams:view') && (
+                  <SidebarItem text={t('nav.teams')} icon='wc' href='/teams' class='navTeams' active={activeItem === 'teams'} />
+                )}
+                {sessionUser && Helpers.canUser('departments:view') && (
+                  <SidebarItem
+                    text={t('nav.departments')}
+                    icon='domain'
+                    href='/departments'
+                    class='navTeams'
+                    active={activeItem === 'departments'}
+                  />
+                )}
+                {sessionUser && Helpers.canUser('reports:view') && (
+                  <SidebarItem
+                    text={t('nav.reports')}
+                    icon='assessment'
+                    href='/reports/generate'
+                    class='navReports no-ajaxy'
+                    hasSubmenu={true}
+                    subMenuTarget='reports'
+                    active={activeItem === 'reports'}
+                  >
+                    <Submenu id='reports'>
+                      <SubmenuItem
+                        text={t('nav.reportsGenerate')}
+                        icon='timeline'
+                        href='/reports/generate'
+                        active={activeSubItem === 'reports-generate'}
+                      />
+                    </Submenu>
+                  </SidebarItem>
+                )}
 
             {sessionUser && Helpers.canUser('notices:view') && (
               <SidebarItem

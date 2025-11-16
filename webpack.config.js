@@ -90,6 +90,7 @@ module.exports = {
       containers: path.resolve(__dirname, 'src/client/containers'),
       actions: path.resolve(__dirname, 'src/client/actions'),
       api: path.resolve(__dirname, 'src/client/api'),
+      i18n: path.resolve(__dirname, 'src/client/i18n'),
       lib: path.resolve(__dirname, 'src/public/js/modules'),
       lib2: path.resolve(__dirname, 'src/client/lib'),
       serverSocket: path.resolve(__dirname, 'src/socketio')

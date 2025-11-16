@@ -35,6 +35,8 @@ import helpers from 'lib/helpers'
 import t from 'lib2/i18n'
 import Cookies from 'jscookie'
 import { NOTIFICATIONS_UPDATE, USERS_UPDATE, NOTICE_UI_SHOW, NOTICE_UI_CLEAR } from 'serverSocket/socketEventConsts'
+import LanguageSelector from 'components/LanguageSelector'
+import { LanguageContext } from 'i18n'
 
 @observer
 class TopbarContainer extends React.Component {
@@ -263,6 +265,8 @@ class TopbarContainer extends React.Component {
           />
         </div>
       </div>
+        )}
+      </LanguageContext.Consumer>
     )
   }
 }
