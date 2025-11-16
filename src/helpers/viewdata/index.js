@@ -18,12 +18,25 @@ const winston = require('../../logger')
 const moment = require('moment')
 const settingSchema = require('../../models/setting')
 const settingsUtil = require('../../settings/settingsUtil')
+const i18n = require('../../i18n')
 
 const viewController = {}
 const viewdata = {}
 viewdata.users = {}
 
 viewController.getData = function (request, cb) {
+  const localeCode = i18n.getLocaleFromRequest(request)
+  const translations = i18n.getTranslations(localeCode)
+  const fallbackTranslations = i18n.getTranslations(i18n.defaultLocale)
+
+  viewdata.localeCode = localeCode
+  viewdata.locale = translations
+  viewdata.i18n = {
+    locale: localeCode,
+    translations,
+    fallback: fallbackTranslations
+  }
+
   async.parallel(
     [
       function (callback) {

@@ -25,6 +25,7 @@ import { startConversation } from 'lib2/chat'
 import OffCanvas from 'components/OffCanvas'
 
 import UIkit from 'uikit'
+import t, { getCurrentLocale } from 'lib2/i18n'
 
 @observer
 class OnlineUserListPartial extends React.Component {
@@ -65,23 +66,26 @@ class OnlineUserListPartial extends React.Component {
 
   fromNow (timezone, date) {
     if (isUndefined(date)) {
-      return 'Never'
+      return t('onlineUsers.status.never')
     }
-    moment.updateLocale('en', {
+
+    const locale = getCurrentLocale()
+    moment.locale(locale)
+    moment.updateLocale(locale, {
       relativeTime: {
-        future: 'in %s',
-        past: '%s ago',
-        s: 'a few seconds',
-        m: '1m',
-        mm: '%dm',
-        h: '1h',
-        hh: '%dh',
-        d: '1d',
-        dd: '%dd',
-        M: '1mo',
-        MM: '%dmos',
-        y: '1y',
-        yy: '%dyrs'
+        future: t('onlineUsers.relativeTime.future'),
+        past: t('onlineUsers.relativeTime.past'),
+        s: t('onlineUsers.relativeTime.seconds'),
+        m: t('onlineUsers.relativeTime.minute'),
+        mm: t('onlineUsers.relativeTime.minutes'),
+        h: t('onlineUsers.relativeTime.hour'),
+        hh: t('onlineUsers.relativeTime.hours'),
+        d: t('onlineUsers.relativeTime.day'),
+        dd: t('onlineUsers.relativeTime.days'),
+        M: t('onlineUsers.relativeTime.month'),
+        MM: t('onlineUsers.relativeTime.months'),
+        y: t('onlineUsers.relativeTime.year'),
+        yy: t('onlineUsers.relativeTime.years')
       }
     })
 
@@ -94,10 +98,10 @@ class OnlineUserListPartial extends React.Component {
   render () {
     const { timezone, users } = this.props
     return (
-      <OffCanvas title={'Online Users'} id={'online-user-list'}>
+      <OffCanvas title={t('onlineUsers.title')} id={'online-user-list'}>
         <div style={{ padding: '0 5px' }}>
           <div className='active-now'>
-            <h5>Active Now</h5>
+            <h5>{t('onlineUsers.activeNow')}</h5>
             <div className='online-list-wrapper'>
               <ul className='online-list'>
                 {entries(this.activeUsers).map(([key, value]) => {
@@ -113,7 +117,7 @@ class OnlineUserListPartial extends React.Component {
                           </div>
                           <span className='online-status' data-user-status-id={value.user._id} />
                           <div className={'user-name' + (isAgentOrAdmin ? ' _agent' : '')}>
-                            {value.user.fullname + (isAgentOrAdmin ? ' - Agent' : '')}
+                            {value.user.fullname + (isAgentOrAdmin ? t('onlineUsers.agentSuffix') : '')}
                           </div>
                         </div>
                       </a>
@@ -124,13 +128,13 @@ class OnlineUserListPartial extends React.Component {
             </div>
           </div>
 
-          <h5>More Conversations</h5>
+          <h5>{t('onlineUsers.moreConversations')}</h5>
           <div className='user-list-wrapper' style={{ lineHeight: 'normal' }}>
             <div
               className='online-list-search-box search-box'
               style={{ borderTop: '1px solid rgba(0,0,0,0.1)', borderRight: 'none' }}
             >
-              <input type='text' placeholder={'Search'} />
+              <input type='text' placeholder={t('onlineUsers.searchPlaceholder')} />
             </div>
             <ul className='user-list'>
               {users.map(user => {
@@ -151,7 +155,7 @@ class OnlineUserListPartial extends React.Component {
                         data-user-status-id={user.get('_id')}
                       >
                         {this.isActiveUser(user.get('username'))
-                          ? 'Now'
+                          ? t('onlineUsers.status.now')
                           : this.fromNow(timezone, user.get('lastOnline'))}
                       </span>
                       <div className='user-name'>{user.get('fullname')}</div>
