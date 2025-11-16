@@ -1,0 +1,48 @@
+{
+  "language": {
+    "label": "Language",
+    "changeLanguage": "Change language",
+    "options": {
+      "en": "English",
+      "es": "Spanish"
+    }
+  },
+  "topbar": {
+    "createTicket": "Create Ticket",
+    "conversations": "Conversations",
+    "notifications": "Notifications"
+  },
+  "nav": {
+    "plugins": "Plugins",
+    "dashboard": "Dashboard",
+    "tickets": "Tickets",
+    "ticketsActive": "Active",
+    "ticketsAssigned": "Assigned",
+    "ticketsUnassigned": "Unassigned",
+    "messages": "Messages",
+    "accounts": "Accounts",
+    "accountsCustomers": "Customers",
+    "accountsAgents": "Agents",
+    "accountsAdmins": "Admins",
+    "groups": "Customer Groups",
+    "teams": "Teams",
+    "departments": "Departments",
+    "reports": "Reports",
+    "reportsGenerate": "Generate",
+    "notices": "Notices",
+    "settings": "Settings",
+    "settingsGeneral": "General",
+    "settingsAccounts": "Accounts",
+    "settingsAppearance": "Appearance",
+    "settingsTickets": "Tickets",
+    "settingsPermissions": "Permissions",
+    "settingsMailer": "Mailer",
+    "settingsElastic": "Elasticsearch",
+    "settingsBackup": "Backup/Restore",
+    "settingsServer": "Server",
+    "settingsLegal": "Legal",
+    "settingsLogs": "Logs",
+    "about": "About",
+    "collapse": "Collapse Menu"
+  }
+}

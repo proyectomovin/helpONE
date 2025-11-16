@@ -23,6 +23,7 @@ import SubmenuItem from 'components/Nav/SubmenuItem'
 import { updateNavChange } from 'actions/nav'
 
 import Helpers from 'lib/helpers'
+import { LanguageContext } from 'i18n'
 
 class Sidebar extends React.Component {
   constructor (props) {
@@ -46,11 +47,11 @@ class Sidebar extends React.Component {
     Helpers.UI.bindExpand()
   }
 
-  renderPlugins () {
+  renderPlugins (translate = key => key) {
     const { plugins, sessionUser, activeItem, activeSubItem } = this.state
     return (
       <SidebarItem
-        text='Plugins'
+        text={translate('nav.plugins')}
         icon='extension'
         href='/plugins'
         class='navPlugins tether-plugins'
@@ -83,260 +84,252 @@ class Sidebar extends React.Component {
     const { activeItem, activeSubItem, sessionUser } = this.props
 
     return (
-      <div
-        className={'sidebar nopadding'}
-        style={{ overflowX: 'hidden', top: this.props.notice ? '95px' : '65px' }}
-        data-scroll-opacitymax='0.1'
-      >
-        <div id={'side-nav-container'} style={{ minHeight: 'calc(100% - 50px)' }}>
-          <ul className='side-nav'>
-            {sessionUser && Helpers.canUser('agent:*', true) && (
-              <SidebarItem
-                text='Dashboard'
-                icon='dashboard'
-                href='/dashboard'
-                class='navHome'
-                active={activeItem === 'dashboard'}
-              />
-            )}
-            {sessionUser && Helpers.canUser('tickets:view') && (
-              <SidebarItem
-                text='Tickets'
-                icon='assignment'
-                href='/tickets'
-                class='navTickets no-ajaxy'
-                hasSubmenu={true}
-                subMenuTarget='tickets'
-                active={activeItem === 'tickets'}
-              >
-                <Submenu id='tickets'>
-                  <SubmenuItem
-                    text='Active'
-                    icon='timer'
-                    href='/tickets/active'
-                    active={activeSubItem === 'tickets-active'}
-                  />
-                  <SubmenuItem
-                    text='Assigned'
-                    icon='assignment_ind'
-                    href='/tickets/assigned'
-                    active={activeSubItem === 'tickets-assigned'}
-                  />
-                  <SubmenuItem
-                    text='Unassigned'
-                    icon='person_add_disabled'
-                    href='/tickets/unassigned'
-                    active={activeSubItem === 'tickets-unassigned'}
-                  />
-                </Submenu>
-              </SidebarItem>
-            )}
-            <SidebarItem
-              text='Messages'
-              icon='chat'
-              href='/messages'
-              class='navMessages'
-              active={activeItem === 'messages'}
-            />
-            {sessionUser && Helpers.canUser('accounts:view') && (
-              <SidebarItem
-                text='Accounts'
-                icon='&#xE7FD;'
-                href='/accounts'
-                class='navAccounts'
-                active={activeItem === 'accounts'}
-                subMenuTarget='accounts'
-                hasSubmenu={sessionUser && Helpers.canUser('agent:*', true)}
-              >
+      <LanguageContext.Consumer>
+        {({ t }) => (
+          <div
+            className={'sidebar nopadding'}
+            style={{ overflowX: 'hidden', top: this.props.notice ? '95px' : '65px' }}
+            data-scroll-opacitymax='0.1'
+          >
+            <div id={'side-nav-container'} style={{ minHeight: 'calc(100% - 50px)' }}>
+              <ul className='side-nav'>
                 {sessionUser && Helpers.canUser('agent:*', true) && (
-                  <Submenu id='accounts'>
-                    <SubmenuItem
-                      href={'/accounts/customers'}
-                      text={'Customers'}
-                      icon={'account_box'}
-                      active={activeSubItem === 'accounts-customers'}
-                    />
-                    {sessionUser && Helpers.canUser('agent:*', true) && (
-                      <SubmenuItem
-                        href={'/accounts/agents'}
-                        text={'Agents'}
-                        icon={'account_circle'}
-                        active={activeSubItem === 'accounts-agents'}
-                      />
-                    )}
-                    {sessionUser && Helpers.canUser('admin:*') && (
-                      <SubmenuItem
-                        href={'/accounts/admins'}
-                        text={'Admins'}
-                        icon={'how_to_reg'}
-                        active={activeSubItem === 'accounts-admins'}
-                      />
-                    )}
-                  </Submenu>
+                  <SidebarItem
+                    text={t('nav.dashboard')}
+                    icon='dashboard'
+                    href='/dashboard'
+                    class='navHome'
+                    active={activeItem === 'dashboard'}
+                  />
                 )}
-              </SidebarItem>
-            )}
-            {sessionUser && Helpers.canUser('groups:view') && (
-              <SidebarItem
-                text='Customer Groups'
-                icon='supervisor_account'
-                href='/groups'
-                class='navGroups'
-                active={activeItem === 'groups'}
-              />
-            )}
-            {sessionUser && Helpers.canUser('teams:view') && (
-              <SidebarItem text='Teams' icon='wc' href='/teams' class='navTeams' active={activeItem === 'teams'} />
-            )}
-            {sessionUser && Helpers.canUser('departments:view') && (
-              <SidebarItem
-                text='Departments'
-                icon='domain'
-                href='/departments'
-                class='navTeams'
-                active={activeItem === 'departments'}
-              />
-            )}
-            {sessionUser && Helpers.canUser('reports:view') && (
-              <SidebarItem
-                text='Reports'
-                icon='assessment'
-                href='/reports/generate'
-                class='navReports no-ajaxy'
-                hasSubmenu={true}
-                subMenuTarget='reports'
-                active={activeItem === 'reports'}
-              >
-                <Submenu id='reports'>
-                  <SubmenuItem
-                    text='Generate'
-                    icon='timeline'
-                    href='/reports/generate'
-                    active={activeSubItem === 'reports-generate'}
-                  />
-                  {/*<NavSeparator />*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='Group Breakdown'*/}
-                  {/*  icon='supervisor_account'*/}
-                  {/*  href='/reports/breakdown/group'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-group'}*/}
-                  {/*/>*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='User Breakdown'*/}
-                  {/*  icon='perm_identity'*/}
-                  {/*  href='/reports/breakdown/user'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-user'}*/}
-                  {/*/>*/}
-                </Submenu>
-              </SidebarItem>
-            )}
-
-            {/*{this.renderPlugins()}*/}
-
-            {sessionUser && Helpers.canUser('notices:view') && (
-              <SidebarItem
-                text='Notices'
-                icon='campaign'
-                href='/notices'
-                class='navNotices'
-                active={activeItem === 'notices'}
-              />
-            )}
-
-            {sessionUser && Helpers.canUser('settings:edit') && (
-              <SidebarItem
-                text='Settings'
-                icon='settings'
-                href='/settings/general'
-                class='navSettings no-ajaxy'
-                hasSubmenu={true}
-                subMenuTarget='settings'
-                active={activeItem === 'settings'}
-              >
-                <Submenu id='settings'>
-                  <SubmenuItem
-                    text='General'
-                    icon='tune'
-                    href='/settings'
-                    active={activeSubItem === 'settings-general'}
-                  />
-                  <SubmenuItem
-                    text='Accounts'
-                    icon='tune'
-                    href='/settings/accounts'
-                    active={activeSubItem === 'settings-accounts'}
-                  />
-                  <SubmenuItem
-                    text='Appearance'
-                    icon='style'
-                    href='/settings/appearance'
-                    active={activeSubItem === 'settings-appearance'}
-                  />
-                  <SubmenuItem
-                    text='Tickets'
+                {sessionUser && Helpers.canUser('tickets:view') && (
+                  <SidebarItem
+                    text={t('nav.tickets')}
                     icon='assignment'
-                    href='/settings/tickets'
-                    active={activeSubItem === 'settings-tickets'}
+                    href='/tickets'
+                    class='navTickets no-ajaxy'
+                    hasSubmenu={true}
+                    subMenuTarget='tickets'
+                    active={activeItem === 'tickets'}
+                  >
+                    <Submenu id='tickets'>
+                      <SubmenuItem
+                        text={t('nav.ticketsActive')}
+                        icon='timer'
+                        href='/tickets/active'
+                        active={activeSubItem === 'tickets-active'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.ticketsAssigned')}
+                        icon='assignment_ind'
+                        href='/tickets/assigned'
+                        active={activeSubItem === 'tickets-assigned'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.ticketsUnassigned')}
+                        icon='person_add_disabled'
+                        href='/tickets/unassigned'
+                        active={activeSubItem === 'tickets-unassigned'}
+                      />
+                    </Submenu>
+                  </SidebarItem>
+                )}
+                <SidebarItem
+                  text={t('nav.messages')}
+                  icon='chat'
+                  href='/messages'
+                  class='navMessages'
+                  active={activeItem === 'messages'}
+                />
+                {sessionUser && Helpers.canUser('accounts:view') && (
+                  <SidebarItem
+                    text={t('nav.accounts')}
+                    icon='&#xE7FD;'
+                    href='/accounts'
+                    class='navAccounts'
+                    active={activeItem === 'accounts'}
+                    subMenuTarget='accounts'
+                    hasSubmenu={sessionUser && Helpers.canUser('agent:*', true)}
+                  >
+                    {sessionUser && Helpers.canUser('agent:*', true) && (
+                      <Submenu id='accounts'>
+                        <SubmenuItem
+                          href={'/accounts/customers'}
+                          text={t('nav.accountsCustomers')}
+                          icon={'account_box'}
+                          active={activeSubItem === 'accounts-customers'}
+                        />
+                        {sessionUser && Helpers.canUser('agent:*', true) && (
+                          <SubmenuItem
+                            href={'/accounts/agents'}
+                            text={t('nav.accountsAgents')}
+                            icon={'account_circle'}
+                            active={activeSubItem === 'accounts-agents'}
+                          />
+                        )}
+                        {sessionUser && Helpers.canUser('admin:*') && (
+                          <SubmenuItem
+                            href={'/accounts/admins'}
+                            text={t('nav.accountsAdmins')}
+                            icon={'how_to_reg'}
+                            active={activeSubItem === 'accounts-admins'}
+                          />
+                        )}
+                      </Submenu>
+                    )}
+                  </SidebarItem>
+                )}
+                {sessionUser && Helpers.canUser('groups:view') && (
+                  <SidebarItem
+                    text={t('nav.groups')}
+                    icon='supervisor_account'
+                    href='/groups'
+                    class='navGroups'
+                    active={activeItem === 'groups'}
                   />
-                  <SubmenuItem
-                    text='Permissions'
-                    icon='security'
-                    href='/settings/permissions'
-                    active={activeSubItem === 'settings-permissions'}
+                )}
+                {sessionUser && Helpers.canUser('teams:view') && (
+                  <SidebarItem text={t('nav.teams')} icon='wc' href='/teams' class='navTeams' active={activeItem === 'teams'} />
+                )}
+                {sessionUser && Helpers.canUser('departments:view') && (
+                  <SidebarItem
+                    text={t('nav.departments')}
+                    icon='domain'
+                    href='/departments'
+                    class='navTeams'
+                    active={activeItem === 'departments'}
                   />
-                  <SubmenuItem
-                    text='Mailer'
-                    icon='email'
-                    href='/settings/mailer'
-                    active={activeSubItem === 'settings-mailer'}
+                )}
+                {sessionUser && Helpers.canUser('reports:view') && (
+                  <SidebarItem
+                    text={t('nav.reports')}
+                    icon='assessment'
+                    href='/reports/generate'
+                    class='navReports no-ajaxy'
+                    hasSubmenu={true}
+                    subMenuTarget='reports'
+                    active={activeItem === 'reports'}
+                  >
+                    <Submenu id='reports'>
+                      <SubmenuItem
+                        text={t('nav.reportsGenerate')}
+                        icon='timeline'
+                        href='/reports/generate'
+                        active={activeSubItem === 'reports-generate'}
+                      />
+                    </Submenu>
+                  </SidebarItem>
+                )}
+
+                {/*{this.renderPlugins(t)}*/}
+
+                {sessionUser && Helpers.canUser('notices:view') && (
+                  <SidebarItem
+                    text={t('nav.notices')}
+                    icon='campaign'
+                    href='/notices'
+                    class='navNotices'
+                    active={activeItem === 'notices'}
                   />
-                  <SubmenuItem
-                    href={'/settings/elasticsearch'}
-                    text={'Elasticsearch'}
-                    icon={'search'}
-                    active={activeSubItem === 'settings-elasticsearch'}
-                  />
-                  <SubmenuItem
-                    text='Backup/Restore'
-                    icon='archive'
-                    href='/settings/backup'
-                    active={activeSubItem === 'settings-backup'}
-                  />
-                  <SubmenuItem
-                    text='Server'
-                    icon='dns'
-                    href='/settings/server'
-                    active={activeSubItem === 'settings-server'}
-                  />
-                  <SubmenuItem
-                    text='Legal'
-                    icon='gavel'
-                    href='/settings/legal'
-                    active={activeSubItem === 'settings-legal'}
-                  />
-                  {sessionUser && Helpers.canUser('settings:logs') && (
-                    <SubmenuItem
-                      text='Logs'
-                      icon='remove_from_queue'
-                      href='/settings/logs'
-                      hasSeperator={true}
-                      active={activeSubItem === 'settings-logs'}
-                    />
-                  )}
-                </Submenu>
-              </SidebarItem>
-            )}
-            <NavSeparator />
-            <SidebarItem href='/about' icon='help' text='About' active={activeItem === 'about'} />
-            {/*<SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} />*/}
-          </ul>
-        </div>
-        <div className='side-nav-bottom-panel'>
-          <a id='expand-menu' className='no-ajaxy' href='#'>
-            <i className='material-icons'>menu</i>Collapse Menu
-          </a>
-        </div>
-      </div>
+                )}
+
+                {sessionUser && Helpers.canUser('settings:edit') && (
+                  <SidebarItem
+                    text={t('nav.settings')}
+                    icon='settings'
+                    href='/settings/general'
+                    class='navSettings no-ajaxy'
+                    hasSubmenu={true}
+                    subMenuTarget='settings'
+                    active={activeItem === 'settings'}
+                  >
+                    <Submenu id='settings'>
+                      <SubmenuItem
+                        text={t('nav.settingsGeneral')}
+                        icon='tune'
+                        href='/settings'
+                        active={activeSubItem === 'settings-general'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsAccounts')}
+                        icon='tune'
+                        href='/settings/accounts'
+                        active={activeSubItem === 'settings-accounts'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsAppearance')}
+                        icon='style'
+                        href='/settings/appearance'
+                        active={activeSubItem === 'settings-appearance'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsTickets')}
+                        icon='assignment'
+                        href='/settings/tickets'
+                        active={activeSubItem === 'settings-tickets'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsPermissions')}
+                        icon='security'
+                        href='/settings/permissions'
+                        active={activeSubItem === 'settings-permissions'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsMailer')}
+                        icon='email'
+                        href='/settings/mailer'
+                        active={activeSubItem === 'settings-mailer'}
+                      />
+                      <SubmenuItem
+                        href={'/settings/elasticsearch'}
+                        text={t('nav.settingsElastic')}
+                        icon={'search'}
+                        active={activeSubItem === 'settings-elasticsearch'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsBackup')}
+                        icon='archive'
+                        href='/settings/backup'
+                        active={activeSubItem === 'settings-backup'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsServer')}
+                        icon='dns'
+                        href='/settings/server'
+                        active={activeSubItem === 'settings-server'}
+                      />
+                      <SubmenuItem
+                        text={t('nav.settingsLegal')}
+                        icon='gavel'
+                        href='/settings/legal'
+                        active={activeSubItem === 'settings-legal'}
+                      />
+                      {sessionUser && Helpers.canUser('settings:logs') && (
+                        <SubmenuItem
+                          text={t('nav.settingsLogs')}
+                          icon='remove_from_queue'
+                          href='/settings/logs'
+                          hasSeperator={true}
+                          active={activeSubItem === 'settings-logs'}
+                        />
+                      )}
+                    </Submenu>
+                  </SidebarItem>
+                )}
+                <NavSeparator />
+                <SidebarItem href='/about' icon='help' text={t('nav.about')} active={activeItem === 'about'} />
+                {/*<SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} />*/}
+              </ul>
+            </div>
+            <div className='side-nav-bottom-panel'>
+              <a id='expand-menu' className='no-ajaxy' href='#'>
+                <i className='material-icons'>menu</i>
+                {t('nav.collapse')}
+              </a>
+            </div>
+          </div>
+        )}
+      </LanguageContext.Consumer>
     )
   }
 }
