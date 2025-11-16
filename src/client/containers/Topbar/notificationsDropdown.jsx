@@ -22,6 +22,7 @@ import { makeObservable, observable } from 'mobx'
 import PDropdown from 'components/PDropdown'
 
 import helpers from 'lib/helpers'
+import t from 'lib2/i18n'
 import { NOTIFICATIONS_UPDATE, NOTIFICATIONS_MARK_READ, NOTIFICATIONS_CLEAR } from 'serverSocket/socketEventConsts'
 import 'history'
 
@@ -73,18 +74,18 @@ class NotificationsDropdownPartial extends React.Component {
       <PDropdown
         ref={forwardedRef}
         id={'notifications'}
-        title={'Notifications'}
+        title={t('topbar.notifications.title')}
         topOffset={-4}
         leftOffset={4}
         rightComponent={
           <a className={'hoverUnderline no-ajaxy'} onClick={e => this.clearNotificationsClicked(e)}>
-            Clear Notifications
+            {t('topbar.notifications.clear')}
           </a>
         }
         footerComponent={
           <div className={'uk-text-center' + (this.notifications.length < 1 ? ' hide' : '')}>
             <a className={'no-ajaxy hoverUnderline'} onClick={this.props.onViewAllNotificationsClick}>
-              View All Notifications
+              {t('topbar.notifications.viewAll')}
             </a>
           </div>
         }

@@ -1,0 +1,86 @@
+{
+  "loader": {
+    "wait": "Por favor espera...",
+    "viewMobile": "Ver versión móvil...",
+    "disconnected": "Desconectado... Intentando reconectar",
+    "restore": "Restauración en curso..."
+  },
+  "sidebar": {
+    "plugins": "Complementos",
+    "dashboard": "Panel",
+    "tickets": "Tickets",
+    "ticketsActive": "Activos",
+    "ticketsAssigned": "Asignados",
+    "ticketsUnassigned": "Sin asignar",
+    "messages": "Mensajes",
+    "accounts": "Cuentas",
+    "accountsCustomers": "Clientes",
+    "accountsAgents": "Agentes",
+    "accountsAdmins": "Administradores",
+    "customerGroups": "Grupos de clientes",
+    "teams": "Equipos",
+    "departments": "Departamentos",
+    "reports": "Reportes",
+    "reportsGenerate": "Generar",
+    "notices": "Avisos",
+    "settings": "Ajustes",
+    "settingsGeneral": "General",
+    "settingsAccounts": "Cuentas",
+    "settingsAppearance": "Apariencia",
+    "settingsTickets": "Tickets",
+    "settingsPermissions": "Permisos",
+    "settingsMailer": "Correo",
+    "settingsElasticsearch": "Elasticsearch",
+    "settingsBackup": "Respaldo/Restauración",
+    "settingsServer": "Servidor",
+    "settingsLegal": "Legal",
+    "settingsLogs": "Registros",
+    "about": "Acerca de",
+    "collapseMenu": "Contraer menú"
+  },
+  "topbar": {
+    "createTicket": "Crear ticket",
+    "conversations": {
+      "title": "Conversaciones",
+      "start": "Iniciar conversación",
+      "viewAll": "Ver todas las conversaciones"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "clear": "Borrar notificaciones",
+      "viewAll": "Ver todas las notificaciones"
+    }
+  },
+  "profile": {
+    "settings": "Configuración del perfil",
+    "logout": "Cerrar sesión",
+    "community": "Comunidad",
+    "privacyPolicy": "Política de privacidad"
+  },
+  "onlineUsers": {
+    "title": "Usuarios en línea",
+    "activeNow": "Activos ahora",
+    "moreConversations": "Más conversaciones",
+    "searchPlaceholder": "Buscar",
+    "agentSuffix": " - Agente",
+    "status": {
+      "now": "Ahora",
+      "never": "Nunca"
+    },
+    "relativeTime": {
+      "future": "en %s",
+      "past": "hace %s",
+      "seconds": "unos segundos",
+      "minute": "1 min",
+      "minutes": "%d min",
+      "hour": "1 h",
+      "hours": "%d h",
+      "day": "1 d",
+      "days": "%d d",
+      "month": "1 mes",
+      "months": "%d meses",
+      "year": "1 año",
+      "years": "%d años"
+    }
+  }
+}

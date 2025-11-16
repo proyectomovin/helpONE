@@ -22,6 +22,7 @@ import { MESSAGES_UPDATE_UI_CONVERSATION_NOTIFICATIONS } from 'serverSocket/sock
 import PDropDown from 'components/PDropdown'
 
 import helpers from 'lib/helpers'
+import t from 'lib2/i18n'
 import 'history'
 
 @observer
@@ -61,7 +62,7 @@ class ConversationsDropdownPartial extends React.Component {
       <PDropDown
         ref={forwardedRef}
         id={'conversations'}
-        title={'Conversations'}
+        title={t('topbar.conversations.title')}
         titleHref={'/messages'}
         topOffset={-4}
         leftOffset={4}
@@ -70,7 +71,7 @@ class ConversationsDropdownPartial extends React.Component {
         }}
         rightComponent={
           <a href={'/messages/startconversation'} className={'hoverUnderline'}>
-            Start Conversation
+            {t('topbar.conversations.start')}
           </a>
         }
         footerComponent={
@@ -81,7 +82,7 @@ class ConversationsDropdownPartial extends React.Component {
                 History.pushState(null, null, '/messages')
               }}
             >
-              View All Conversations
+              {t('topbar.conversations.viewAll')}
             </a>
           </div>
         }

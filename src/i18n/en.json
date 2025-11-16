@@ -1,0 +1,86 @@
+{
+  "loader": {
+    "wait": "Please Wait...",
+    "viewMobile": "View Mobile Site...",
+    "disconnected": "Disconnected... Trying to reconnect",
+    "restore": "Restore in Progress..."
+  },
+  "sidebar": {
+    "plugins": "Plugins",
+    "dashboard": "Dashboard",
+    "tickets": "Tickets",
+    "ticketsActive": "Active",
+    "ticketsAssigned": "Assigned",
+    "ticketsUnassigned": "Unassigned",
+    "messages": "Messages",
+    "accounts": "Accounts",
+    "accountsCustomers": "Customers",
+    "accountsAgents": "Agents",
+    "accountsAdmins": "Admins",
+    "customerGroups": "Customer Groups",
+    "teams": "Teams",
+    "departments": "Departments",
+    "reports": "Reports",
+    "reportsGenerate": "Generate",
+    "notices": "Notices",
+    "settings": "Settings",
+    "settingsGeneral": "General",
+    "settingsAccounts": "Accounts",
+    "settingsAppearance": "Appearance",
+    "settingsTickets": "Tickets",
+    "settingsPermissions": "Permissions",
+    "settingsMailer": "Mailer",
+    "settingsElasticsearch": "Elasticsearch",
+    "settingsBackup": "Backup/Restore",
+    "settingsServer": "Server",
+    "settingsLegal": "Legal",
+    "settingsLogs": "Logs",
+    "about": "About",
+    "collapseMenu": "Collapse Menu"
+  },
+  "topbar": {
+    "createTicket": "Create Ticket",
+    "conversations": {
+      "title": "Conversations",
+      "start": "Start Conversation",
+      "viewAll": "View All Conversations"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "clear": "Clear Notifications",
+      "viewAll": "View All Notifications"
+    }
+  },
+  "profile": {
+    "settings": "Profile Settings",
+    "logout": "Logout",
+    "community": "Community",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "onlineUsers": {
+    "title": "Online Users",
+    "activeNow": "Active Now",
+    "moreConversations": "More Conversations",
+    "searchPlaceholder": "Search",
+    "agentSuffix": " - Agent",
+    "status": {
+      "now": "Now",
+      "never": "Never"
+    },
+    "relativeTime": {
+      "future": "in %s",
+      "past": "%s ago",
+      "seconds": "a few seconds",
+      "minute": "1m",
+      "minutes": "%dm",
+      "hour": "1h",
+      "hours": "%dh",
+      "day": "1d",
+      "days": "%dd",
+      "month": "1mo",
+      "months": "%dmos",
+      "year": "1y",
+      "years": "%dyrs"
+    }
+  }
+}

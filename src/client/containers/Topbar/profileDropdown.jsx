@@ -13,6 +13,7 @@ import PDropdown from 'components/PDropdown'
 import Spacer from 'components/Spacer'
 
 import helpers from 'lib/helpers'
+import t from 'lib2/i18n'
 
 @observer
 class ProfileDropdownPartial extends React.Component {
@@ -79,7 +80,7 @@ class ProfileDropdownPartial extends React.Component {
                   {this.props.sessionUser.fullname}
                 </span>
                 <span>{this.props.sessionUser.email}</span>
-                <a href='/profile'>Profile Settings</a>
+                <a href='/profile'>{t('profile.settings')}</a>
               </div>
             </div>
           </div>
@@ -107,17 +108,17 @@ class ProfileDropdownPartial extends React.Component {
           <Spacer showBorder={true} borderSize={1} top={0} bottom={0} />
           {/*<div className={'profile-drop-dark-section'}></div>*/}
           {/*<Spacer showBorder={true} borderSize={1} top={0} bottom={0} />*/}
-          <div className={'profile-drop-actions'}>
-            <div className={'action-logout'}>
-              <i className='material-icons'>logout</i>
-              <a href='/logout'>Logout</a>
-            </div>
-          </div>
+              <div className={'profile-drop-actions'}>
+                <div className={'action-logout'}>
+                  <i className='material-icons'>logout</i>
+                  <a href='/logout'>{t('profile.logout')}</a>
+                </div>
+              </div>
         </div>
         <div className={'pdrop-footer'}>
           <div className='links'>
             <a href='https://forum.trudesk.io' target={'_blank'} rel={'noreferrer'}>
-              Community
+              {t('profile.community')}
             </a>
             <span>&middot;</span>
             <a
@@ -128,8 +129,8 @@ class ProfileDropdownPartial extends React.Component {
                 helpers.hideAllpDropDowns()
                 this.props.showModal('PRIVACY_POLICY')
               }}
-            >
-              Privacy Policy
+              >
+              {t('profile.privacyPolicy')}
             </a>
           </div>
         </div>
