@@ -57,11 +57,22 @@ installController.elastictest = function (req, res) {
 installController.mongotest = function (req, res) {
   const data = req.body
   const dbPassword = encodeURIComponent(data.password)
-  let CONNECTION_URI =
-    'mongodb://' + data.username + ':' + dbPassword + '@' + data.host + ':' + data.port + '/' + data.database
-
-  if (data.port === '---')
-    CONNECTION_URI = 'mongodb+srv://' + data.username + ':' + dbPassword + '@' + data.host + '/' + data.database
+  let CONNECTION_URI
+  
+  // Handle authentication
+  if (data.username && data.password) {
+    CONNECTION_URI =
+      'mongodb://' + data.username + ':' + dbPassword + '@' + data.host + ':' + data.port + '/' + data.database
+    
+    if (data.port === '---')
+      CONNECTION_URI = 'mongodb+srv://' + data.username + ':' + dbPassword + '@' + data.host + '/' + data.database
+  } else {
+    // No authentication
+    CONNECTION_URI = 'mongodb://' + data.host + ':' + data.port + '/' + data.database
+    
+    if (data.port === '---')
+      CONNECTION_URI = 'mongodb+srv://' + data.host + '/' + data.database
+  }
 
   const child = require('child_process').fork(path.join(__dirname, '../../src/install/mongotest'), {
     env: { FORK: 1, NODE_ENV: global.env, MONGOTESTURI: CONNECTION_URI }
@@ -156,8 +167,17 @@ installController.install = function (req, res) {
   }
 
   const dbPassword = encodeURIComponent(password)
-  let conuri = 'mongodb://' + username + ':' + dbPassword + '@' + host + ':' + port + '/' + database
-  if (port === '---') conuri = 'mongodb+srv://' + username + ':' + dbPassword + '@' + host + '/' + database
+  let conuri
+  
+  // Handle authentication
+  if (username && password) {
+    conuri = 'mongodb://' + username + ':' + dbPassword + '@' + host + ':' + port + '/' + database
+    if (port === '---') conuri = 'mongodb+srv://' + username + ':' + dbPassword + '@' + host + '/' + database
+  } else {
+    // No authentication
+    conuri = 'mongodb://' + host + ':' + port + '/' + database
+    if (port === '---') conuri = 'mongodb+srv://' + host + '/' + database
+  }
 
   async.waterfall(
     [

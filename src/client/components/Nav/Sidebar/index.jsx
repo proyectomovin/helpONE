@@ -23,8 +23,7 @@ import SubmenuItem from 'components/Nav/SubmenuItem'
 import { updateNavChange } from 'actions/nav'
 
 import Helpers from 'lib/helpers'
-import t, { LanguageContext } from 'i18n';
-import { LanguageContext } from 'i18n'
+import { t } from 'i18n'
 
 class Sidebar extends React.Component {
   constructor (props) {
@@ -52,7 +51,7 @@ class Sidebar extends React.Component {
     const { plugins, sessionUser, activeItem, activeSubItem } = this.state
     return (
       <SidebarItem
-        text={t('sidebar.plugins')}
+        text={translate('sidebar.plugins')}
         icon='extension'
         href='/plugins'
         class='navPlugins tether-plugins'
@@ -159,65 +158,22 @@ class Sidebar extends React.Component {
                       active={activeSubItem === 'accounts-customers'}
                     />
                     {sessionUser && Helpers.canUser('agent:*', true) && (
-                      <SubmenuItem
-                        href={'/accounts/agents'}
-                        text={t('sidebar.accountsAgents')}
-                        icon={'account_circle'}
-                        active={activeSubItem === 'accounts-agents'}
-                      />
-                      <SubmenuItem
-                        href={'/accounts/admins'}
-                        text={t('sidebar.accountsAdmins')}
-                        icon={'how_to_reg'}
-                        active={activeSubItem === 'accounts-admins'}
-                      />
-                    </Submenu>
-                  </SidebarItem>
-                )}
-                <SidebarItem
-                  text={t('nav.messages')}
-                  icon='chat'
-                  href='/messages'
-                  class='navMessages'
-                  active={activeItem === 'messages'}
-                />
-                {sessionUser && Helpers.canUser('accounts:view') && (
-                  <SidebarItem
-                    text={t('nav.accounts')}
-                    icon='&#xE7FD;'
-                    href='/accounts'
-                    class='navAccounts'
-                    active={activeItem === 'accounts'}
-                    subMenuTarget='accounts'
-                    hasSubmenu={sessionUser && Helpers.canUser('agent:*', true)}
-                  >
-                    {sessionUser && Helpers.canUser('agent:*', true) && (
-                      <Submenu id='accounts'>
+                      <>
                         <SubmenuItem
-                          href={'/accounts/customers'}
-                          text={t('nav.accountsCustomers')}
-                          icon={'account_box'}
-                          active={activeSubItem === 'accounts-customers'}
+                          href={'/accounts/agents'}
+                          text={t('sidebar.accountsAgents')}
+                          icon={'account_circle'}
+                          active={activeSubItem === 'accounts-agents'}
                         />
-                        {sessionUser && Helpers.canUser('agent:*', true) && (
-                          <SubmenuItem
-                            href={'/accounts/agents'}
-                            text={t('nav.accountsAgents')}
-                            icon={'account_circle'}
-                            active={activeSubItem === 'accounts-agents'}
-                          />
-                        )}
-                        {sessionUser && Helpers.canUser('admin:*') && (
-                          <SubmenuItem
-                            href={'/accounts/admins'}
-                            text={t('nav.accountsAdmins')}
-                            icon={'how_to_reg'}
-                            active={activeSubItem === 'accounts-admins'}
-                          />
-                        )}
-                      </Submenu>
+                        <SubmenuItem
+                          href={'/accounts/admins'}
+                          text={t('sidebar.accountsAdmins')}
+                          icon={'how_to_reg'}
+                          active={activeSubItem === 'accounts-admins'}
+                        />
+                      </>
                     )}
-                  </SidebarItem>
+                  </Submenu>
                 )}
               </SidebarItem>
             )}
@@ -259,39 +215,9 @@ class Sidebar extends React.Component {
                     href='/reports/generate'
                     active={activeSubItem === 'reports-generate'}
                   />
-                )}
-                {sessionUser && Helpers.canUser('teams:view') && (
-                  <SidebarItem text={t('nav.teams')} icon='wc' href='/teams' class='navTeams' active={activeItem === 'teams'} />
-                )}
-                {sessionUser && Helpers.canUser('departments:view') && (
-                  <SidebarItem
-                    text={t('nav.departments')}
-                    icon='domain'
-                    href='/departments'
-                    class='navTeams'
-                    active={activeItem === 'departments'}
-                  />
-                )}
-                {sessionUser && Helpers.canUser('reports:view') && (
-                  <SidebarItem
-                    text={t('nav.reports')}
-                    icon='assessment'
-                    href='/reports/generate'
-                    class='navReports no-ajaxy'
-                    hasSubmenu={true}
-                    subMenuTarget='reports'
-                    active={activeItem === 'reports'}
-                  >
-                    <Submenu id='reports'>
-                      <SubmenuItem
-                        text={t('nav.reportsGenerate')}
-                        icon='timeline'
-                        href='/reports/generate'
-                        active={activeSubItem === 'reports-generate'}
-                      />
-                    </Submenu>
-                  </SidebarItem>
-                )}
+                </Submenu>
+              </SidebarItem>
+            )}
 
             {sessionUser && Helpers.canUser('notices:view') && (
               <SidebarItem

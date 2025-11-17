@@ -265,8 +265,6 @@ class TopbarContainer extends React.Component {
           />
         </div>
       </div>
-        )}
-      </LanguageContext.Consumer>
     )
   }
 }

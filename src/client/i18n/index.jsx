@@ -20,6 +20,14 @@ export const SUPPORTED_LANGUAGES = {
 let currentDictionary = SUPPORTED_LANGUAGES[DEFAULT_LOCALE]
 let currentLocale = DEFAULT_LOCALE
 
+console.log('i18n initialization:', {
+  DEFAULT_LOCALE,
+  currentLocale,
+  currentDictionary,
+  'es dictionary': SUPPORTED_LANGUAGES.es,
+  'sidebar in es': SUPPORTED_LANGUAGES.es?.sidebar
+})
+
 const applyReplacements = (text, values) => {
   if (!values) return text
   return text.replace(/\{(.*?)\}/g, (match, token) => {
@@ -42,12 +50,15 @@ const getValueFromDictionary = (dictionary, key) => {
 }
 
 const translateKey = (key, options = {}, dictionary = currentDictionary) => {
+  console.log('translateKey called with:', key, 'dictionary:', dictionary)
   if (!key) return ''
   const fallbackDictionary = SUPPORTED_LANGUAGES[FALLBACK_LOCALE]
   let value = getValueFromDictionary(dictionary, key)
+  console.log('value from dictionary:', value)
 
   if (typeof value === 'undefined' && dictionary !== fallbackDictionary) {
     value = getValueFromDictionary(fallbackDictionary, key)
+    console.log('fallback value:', value)
   }
 
   if (typeof value === 'string') {
@@ -58,6 +69,7 @@ const translateKey = (key, options = {}, dictionary = currentDictionary) => {
 
   if (typeof options.defaultValue !== 'undefined') return options.defaultValue
 
+  console.log('returning key as fallback:', key)
   return key
 }
 
@@ -154,7 +166,12 @@ export const useTranslation = () => {
   return context
 }
 
-export const t = (key, options) => translateKey(key, options, currentDictionary)
+export const t = (key, options) => {
+  console.log('t function called with:', key, 'currentLocale:', currentLocale, 'currentDictionary:', currentDictionary)
+  const result = translateKey(key, options, currentDictionary)
+  console.log('t function result:', result)
+  return result
+}
 
 export const getCurrentLocale = () => currentLocale
 

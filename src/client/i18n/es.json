@@ -12,7 +12,7 @@
     "conversations": "Conversaciones",
     "notifications": "Notificaciones"
   },
-  "nav": {
+  "sidebar": {
     "plugins": "Plugins",
     "dashboard": "Panel",
     "tickets": "Tickets",
@@ -24,7 +24,7 @@
     "accountsCustomers": "Clientes",
     "accountsAgents": "Agentes",
     "accountsAdmins": "Administradores",
-    "groups": "Grupos de clientes",
+    "customerGroups": "Grupos de clientes",
     "teams": "Equipos",
     "departments": "Departamentos",
     "reports": "Reportes",
@@ -37,12 +37,12 @@
     "settingsTickets": "Tickets",
     "settingsPermissions": "Permisos",
     "settingsMailer": "Correo",
-    "settingsElastic": "Elasticsearch",
+    "settingsElasticsearch": "Elasticsearch",
     "settingsBackup": "Respaldo/Restauración",
     "settingsServer": "Servidor",
     "settingsLegal": "Legal",
     "settingsLogs": "Registros",
     "about": "Acerca de",
-    "collapse": "Contraer menú"
+    "collapseMenu": "Contraer menú"
   }
 }
