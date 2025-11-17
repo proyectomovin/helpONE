@@ -78,6 +78,117 @@
       "shortDateFormatSubtitle": "Establece el formato para fechas cortas",
       "longDateFormat": "Formato de Fecha Larga",
       "longDateFormatSubtitle": "Establece el formato para fechas largas"
+    },
+    "accounts": {
+      "allowUserRegistration": "Permitir Registro de Usuarios",
+      "allowUserRegistrationSubtitle": "Permitir a los usuarios crear cuentas en la pantalla de inicio de sesión.",
+      "passwordComplexity": "Complejidad de Contraseña",
+      "passwordComplexitySubtitle": "Requerir que las contraseñas de los usuarios cumplan con la complejidad mínima",
+      "passwordComplexityTooltip": "Mínimo 8 caracteres con mayúsculas y números.",
+      "enable": "Habilitar"
+    },
+    "appearance": {
+      "siteLogo": "Logo del Sitio",
+      "siteLogoSubtitle": "Subir logo del sitio para mostrar en la navegación superior.",
+      "siteLogoNote": "Nota: Redimensionar a un ancho máximo de 140px",
+      "pageLogo": "Logo de Página",
+      "pageLogoSubtitle": "Subir logo para mostrar dentro de las vistas de página.",
+      "pageLogoNote": "Nota: Usado en la página de inicio de sesión (ancho mínimo: 400px)",
+      "favicon": "Favicon",
+      "faviconSubtitle": "Subir un favicon personalizado",
+      "uploadLogo": "Subir Logo",
+      "uploadFavicon": "Subir Favicon",
+      "colorScheme": "Esquema de Color",
+      "colorSchemeSubtitle": "Selecciona los colores para tu esquema de color.",
+      "builtInColorSchemes": "Esquemas de Color Predefinidos",
+      "headerBackground": "Fondo del Encabezado",
+      "headerPrimary": "Primario del Encabezado",
+      "primary": "Primario",
+      "secondary": "Secundario",
+      "tertiary": "Terciario",
+      "quaternary": "Cuaternario",
+      "save": "Guardar",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "bluejean": "Mezclilla Azul",
+      "midnight": "Medianoche",
+      "moonlight": "Luz de Luna",
+      "purplerain": "Lluvia Púrpura",
+      "sandstone": "Arenisca",
+      "winterfire": "Fuego Invernal"
+    },
+    "permissions": {
+      "defaultNewUserRole": "Rol Predeterminado para Nuevos Usuarios",
+      "defaultNewUserRoleSubtitle": "Rol asignado a usuarios creados durante el registro y tickets públicos",
+      "permissions": "Permisos",
+      "permissionsSubtitle": "Establecer permisos para roles y grupos",
+      "agent": "Agente",
+      "mod": "Moderador",
+      "admin": "Administrador",
+      "user": "Usuario"
+    },
+    "tickets": {
+      "defaultTicketType": "Tipo de Ticket Predeterminado",
+      "defaultTicketTypeSubtitle": "Tipo de ticket predeterminado para tickets recién creados.",
+      "allowPublicTickets": "Permitir Tickets Públicos",
+      "allowPublicTicketsSubtitle": "Permitir la creación de tickets por usuarios no autenticados.",
+      "allowAgentsCreateOnBehalf": "Permitir a los Agentes Enviar Tickets en Nombre del Usuario",
+      "allowAgentsCreateOnBehalfSubtitle": "Permitir la creación de tickets por agentes en nombre de los usuarios.",
+      "showOverdueTickets": "Mostrar Tickets Vencidos",
+      "showOverdueTicketsSubtitle": "Habilitar/Deshabilitar el parpadeo de tickets basado en el tiempo de SLA de la prioridad del tipo.",
+      "minimumSubjectLength": "Longitud Mínima del Asunto",
+      "minimumSubjectLengthSubtitle": "Límite mínimo de caracteres para el asunto del ticket",
+      "minimumIssueLength": "Longitud Mínima del Problema",
+      "minimumIssueLengthSubtitle": "Límite mínimo de caracteres para el problema del ticket",
+      "ticketTypes": "Tipos de Ticket",
+      "ticketTypesSubtitle": "Crear/Modificar Tipos de Ticket",
+      "ticketPriorities": "Prioridades de Ticket",
+      "ticketPrioritiesSubtitle": "Las prioridades de ticket establecen el nivel de SLA para cada ticket.",
+      "ticketStatus": "Estado de Ticket",
+      "ticketStatusSubtitle": "Gestionar estados de ticket personalizados",
+      "ticketTags": "Etiquetas de Ticket",
+      "ticketTagsSubtitle": "Gestionar etiquetas de ticket",
+      "enable": "Habilitar",
+      "create": "Crear"
+    },
+    "mailer": {
+      "title": "Configuración de Correo",
+      "subtitle": "Configurar las opciones del servidor de correo electrónico",
+      "comingSoon": "Próximamente..."
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "subtitle": "Gestionar webhooks salientes que notifican a servicios externos sobre eventos."
+    },
+    "elasticsearch": {
+      "title": "Elasticsearch",
+      "subtitle": "Configuración de búsqueda avanzada con Elasticsearch",
+      "comingSoon": "Próximamente..."
+    },
+    "backupRestore": {
+      "title": "Respaldo y Restauración",
+      "subtitle": "Crear respaldos y restaurar datos del sistema",
+      "comingSoon": "Próximamente..."
+    },
+    "server": {
+      "title": "Servidor",
+      "subtitle": "Configuración del servidor y opciones avanzadas",
+      "comingSoon": "Próximamente..."
+    },
+    "legal": {
+      "privacyPolicy": "Política de Privacidad",
+      "privacyPolicySubtitle": "Establecer la política de privacidad de tu organización.",
+      "privacyPolicyPlaceholder": "Ingresa tu política de privacidad aquí...",
+      "save": "Guardar"
+    },
+    "common": {
+      "save": "Guardar",
+      "enable": "Habilitar",
+      "disable": "Deshabilitar",
+      "upload": "Subir",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
     }
   }
 }

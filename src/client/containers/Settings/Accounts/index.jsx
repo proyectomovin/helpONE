@@ -27,9 +27,11 @@ import EnableSwitch from 'components/Settings/EnableSwitch'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import UIKit from 'uikit'
+import { LanguageContext } from 'i18n'
 
 @observer
 class AccountsSettingsContainer extends React.Component {
+  static contextType = LanguageContext
   @observable passwordComplexityEnabled = false
   @observable allowUserRegistrationEnabled = false
 
@@ -96,15 +98,16 @@ class AccountsSettingsContainer extends React.Component {
 
   render () {
     const { active } = this.props
+    const { t } = this.context
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Allow User Registration'
-          subtitle='Allow users to create accounts on the login screen.'
+          title={t('settings.accounts.allowUserRegistration')}
+          subtitle={t('settings.accounts.allowUserRegistrationSubtitle')}
           component={
             <EnableSwitch
               stateName='allowUserRegistration'
-              label='Enable'
+              label={t('settings.accounts.enable')}
               checked={this.allowUserRegistrationEnabled}
               onChange={e => {
                 this.updateSetting('allowUserRegistration', 'allowUserRegistration:enable', e.target.checked)
@@ -113,13 +116,13 @@ class AccountsSettingsContainer extends React.Component {
           }
         />
         <SettingItem
-          title={'Password Complexity'}
-          subtitle={'Require users passwords to meet minimum password complexity'}
-          tooltip={'Minimum 8 characters with uppercase and numeric.'}
+          title={t('settings.accounts.passwordComplexity')}
+          subtitle={t('settings.accounts.passwordComplexitySubtitle')}
+          tooltip={t('settings.accounts.passwordComplexityTooltip')}
           component={
             <EnableSwitch
               stateName={'accountsPasswordComplexity'}
-              label={'Enable'}
+              label={t('settings.accounts.enable')}
               checked={this.passwordComplexityEnabled}
               onChange={e => {
                 this.updateSetting('accountsPasswordComplexity', 'accountsPasswordComplexity:enable', e.target.checked)

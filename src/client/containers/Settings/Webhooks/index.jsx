@@ -15,8 +15,10 @@ import {
   TEST_WEBHOOK_MODAL,
   DELETE_WEBHOOK_MODAL
 } from './modalTypes'
+import { LanguageContext } from 'i18n'
 
 class WebhooksSettingsContainer extends React.Component {
+  static contextType = LanguageContext
   componentDidMount () {
     if (!this.props.webhooks.loaded) {
       this.props.fetchWebhooks()
@@ -95,11 +97,12 @@ class WebhooksSettingsContainer extends React.Component {
 
   render () {
     const { active } = this.props
+    const { t } = this.context
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Webhooks'
-          subtitle='Manage outgoing webhooks that notify external services about events.'
+          title={t('settings.webhooks.title')}
+          subtitle={t('settings.webhooks.subtitle')}
           component={<Button text='Add Webhook' style='primary' waves onClick={this.handleCreate} />}
         >
           {this.renderWebhookList()}

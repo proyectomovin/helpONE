@@ -43,8 +43,11 @@ import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import SpinLoader from 'components/SpinLoader'
 import EditStatusPartial from './editStatusPartial'
 import TicketStatusContainer from 'containers/Settings/Tickets/ticketStatusContainer'
+import { LanguageContext } from 'i18n'
 
 class TicketsSettings extends React.Component {
+  static contextType = LanguageContext
+  
   constructor (props) {
     super(props)
 
@@ -239,6 +242,7 @@ class TicketsSettings extends React.Component {
 
   render () {
     const { active, viewdata } = this.props
+    const { t } = this.context
     const mappedTypes = this.getTicketTypes().map(function (type) {
       return { text: type.get('name'), value: type.get('_id') }
     })
@@ -246,8 +250,8 @@ class TicketsSettings extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title={'Default Ticket Type'}
-          subtitle={'Default ticket type for newly created tickets.'}
+          title={t('settings.tickets.defaultTicketType')}
+          subtitle={t('settings.tickets.defaultTicketTypeSubtitle')}
           component={
             <SingleSelect
               items={mappedTypes}
@@ -261,7 +265,7 @@ class TicketsSettings extends React.Component {
           }
         />
         <SettingItem
-          title={'Allow Public Tickets'}
+          title={t('settings.tickets.allowPublicTickets')}
           subtitle={
             <div>
               Allow the creation of tickets by users that are unregistered. (
@@ -271,7 +275,7 @@ class TicketsSettings extends React.Component {
           component={
             <EnableSwitch
               stateName={'allowPublicTickets'}
-              label={'Enable'}
+              label={t('settings.tickets.enable')}
               checked={this.getSetting('allowPublicTickets')}
               onChange={e => {
                 this.onAllowPublicTicketsChange(e)
@@ -280,13 +284,13 @@ class TicketsSettings extends React.Component {
           }
         />
         <SettingItem
-          title={'Allow Agents to Submit Tickets on Behalf of User'}
-          subtitle={<div>Allow the creation of tickets by agents on behalf of users.</div>}
+          title={t('settings.tickets.allowAgentsCreateOnBehalf')}
+          subtitle={<div>{t('settings.tickets.allowAgentsCreateOnBehalfSubtitle')}</div>}
           tooltip={'Setting takes affect after refresh.'}
           component={
             <EnableSwitch
               stateName={'allowAgentUserTickets'}
-              label={'Enable'}
+              label={t('settings.tickets.enable')}
               checked={this.getSetting('allowAgentUserTickets')}
               onChange={e => {
                 this.onAllowAgentUserTicketsChange(e)
@@ -295,13 +299,13 @@ class TicketsSettings extends React.Component {
           }
         />
         <SettingItem
-          title={'Show Overdue Tickets'}
-          subtitle={'Enable/Disable flashing of tickets based on SLA time of type priority.'}
+          title={t('settings.tickets.showOverdueTickets')}
+          subtitle={t('settings.tickets.showOverdueTicketsSubtitle')}
           tooltip={'If disabled, priority SLA times will not mark tickets overdue.'}
           component={
             <EnableSwitch
               stateName={'showOverdueTickets'}
-              label={'Enable'}
+              label={t('settings.tickets.enable')}
               checked={this.getSetting('showOverdueTickets')}
               onChange={e => {
                 this.onShowOverdueChange(e)
@@ -326,8 +330,8 @@ class TicketsSettings extends React.Component {
         {/*  }*/}
         {/*/>*/}
         <SettingItem
-          title={'Minimum Subject Length'}
-          subtitle={'Minimum character limit for ticket subject'}
+          title={t('settings.tickets.minimumSubjectLength')}
+          subtitle={t('settings.tickets.minimumSubjectLengthSubtitle')}
           component={
             <NumberWithSave
               stateName={'minSubjectLength'}
@@ -338,8 +342,8 @@ class TicketsSettings extends React.Component {
           }
         />
         <SettingItem
-          title={'Minimum Issue Length'}
-          subtitle={'Minimum character limit for ticket issue'}
+          title={t('settings.tickets.minimumIssueLength')}
+          subtitle={t('settings.tickets.minimumIssueLengthSubtitle')}
           component={
             <NumberWithSave
               stateName={'minIssueLength'}
@@ -350,11 +354,11 @@ class TicketsSettings extends React.Component {
           }
         />
         <SplitSettingsPanel
-          title={'Ticket Types'}
-          subtitle={'Create/Modify Ticket Types'}
+          title={t('settings.tickets.ticketTypes')}
+          subtitle={t('settings.tickets.ticketTypesSubtitle')}
           rightComponent={
             <Button
-              text={'Create'}
+              text={t('settings.tickets.create')}
               style={'success'}
               flat={true}
               extraClass={'md-btn-wave'}
@@ -368,11 +372,11 @@ class TicketsSettings extends React.Component {
           })}
         />
         <SettingItem
-          title={'Ticket Priorities'}
-          subtitle={'Ticket priorities set the level of SLAs for each ticket.'}
+          title={t('settings.tickets.ticketPriorities')}
+          subtitle={t('settings.tickets.ticketPrioritiesSubtitle')}
           component={
             <Button
-              text={'Create'}
+              text={t('settings.tickets.create')}
               style={'success'}
               flat={true}
               waves={true}

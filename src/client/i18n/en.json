@@ -78,6 +78,117 @@
       "shortDateFormatSubtitle": "Set the format for short dates",
       "longDateFormat": "Long Date Format",
       "longDateFormatSubtitle": "Set the format for long dates"
+    },
+    "accounts": {
+      "allowUserRegistration": "Allow User Registration",
+      "allowUserRegistrationSubtitle": "Allow users to create accounts on the login screen.",
+      "passwordComplexity": "Password Complexity",
+      "passwordComplexitySubtitle": "Require users passwords to meet minimum password complexity",
+      "passwordComplexityTooltip": "Minimum 8 characters with uppercase and numeric.",
+      "enable": "Enable"
+    },
+    "appearance": {
+      "siteLogo": "Site Logo",
+      "siteLogoSubtitle": "Upload site logo to display in top navigation.",
+      "siteLogoNote": "Note: Resize to max width of 140px",
+      "pageLogo": "Page Logo",
+      "pageLogoSubtitle": "Upload logo to display within page views.",
+      "pageLogoNote": "Note: Used on login page (min-width: 400px)",
+      "favicon": "Favicon",
+      "faviconSubtitle": "Upload a custom favicon",
+      "uploadLogo": "Upload Logo",
+      "uploadFavicon": "Upload Favicon",
+      "colorScheme": "Color Scheme",
+      "colorSchemeSubtitle": "Select the colors for your color scheme.",
+      "builtInColorSchemes": "Built-In Color Schemes",
+      "headerBackground": "Header Background",
+      "headerPrimary": "Header Primary",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "tertiary": "Tertiary",
+      "quaternary": "Quaternary",
+      "save": "Save",
+      "light": "Light",
+      "dark": "Dark",
+      "bluejean": "Blue Jean",
+      "midnight": "Midnight",
+      "moonlight": "Moonlight",
+      "purplerain": "Purple Rain",
+      "sandstone": "Sandstone",
+      "winterfire": "Winter Fire"
+    },
+    "permissions": {
+      "defaultNewUserRole": "Default New User Role",
+      "defaultNewUserRoleSubtitle": "Role assigned to users created during sign-up and public tickets",
+      "permissions": "Permissions",
+      "permissionsSubtitle": "Set permissions for roles and groups",
+      "agent": "Agent",
+      "mod": "Mod",
+      "admin": "Admin",
+      "user": "User"
+    },
+    "tickets": {
+      "defaultTicketType": "Default Ticket Type",
+      "defaultTicketTypeSubtitle": "Default ticket type for newly created tickets.",
+      "allowPublicTickets": "Allow Public Tickets",
+      "allowPublicTicketsSubtitle": "Allow the creation of tickets by unauthenticated users.",
+      "allowAgentsCreateOnBehalf": "Allow Agents to Submit Tickets on Behalf of User",
+      "allowAgentsCreateOnBehalfSubtitle": "Allow the creation of tickets by agents on behalf of users.",
+      "showOverdueTickets": "Show Overdue Tickets",
+      "showOverdueTicketsSubtitle": "Enable/Disable flashing of tickets based on SLA time of type priority.",
+      "minimumSubjectLength": "Minimum Subject Length",
+      "minimumSubjectLengthSubtitle": "Minimum character limit for ticket subject",
+      "minimumIssueLength": "Minimum Issue Length",
+      "minimumIssueLengthSubtitle": "Minimum character limit for ticket issue",
+      "ticketTypes": "Ticket Types",
+      "ticketTypesSubtitle": "Create/Modify Ticket Types",
+      "ticketPriorities": "Ticket Priorities",
+      "ticketPrioritiesSubtitle": "Ticket priorities set the level of SLAs for each ticket.",
+      "ticketStatus": "Ticket Status",
+      "ticketStatusSubtitle": "Manage custom ticket statuses",
+      "ticketTags": "Ticket Tags",
+      "ticketTagsSubtitle": "Manage ticket tags",
+      "enable": "Enable",
+      "create": "Create"
+    },
+    "mailer": {
+      "title": "Mailer Configuration",
+      "subtitle": "Configure email server settings",
+      "comingSoon": "Coming Soon..."
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "subtitle": "Manage outgoing webhooks that notify external services about events."
+    },
+    "elasticsearch": {
+      "title": "Elasticsearch",
+      "subtitle": "Advanced search configuration with Elasticsearch",
+      "comingSoon": "Coming Soon..."
+    },
+    "backupRestore": {
+      "title": "Backup & Restore",
+      "subtitle": "Create backups and restore system data",
+      "comingSoon": "Coming Soon..."
+    },
+    "server": {
+      "title": "Server",
+      "subtitle": "Server configuration and advanced options",
+      "comingSoon": "Coming Soon..."
+    },
+    "legal": {
+      "privacyPolicy": "Privacy Policy",
+      "privacyPolicySubtitle": "Set your organization's privacy policy.",
+      "privacyPolicyPlaceholder": "Enter your privacy policy here...",
+      "save": "Save"
+    },
+    "common": {
+      "save": "Save",
+      "enable": "Enable",
+      "disable": "Disable",
+      "upload": "Upload",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
     }
   }
 }
