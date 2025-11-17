@@ -34,8 +34,11 @@ import ServerSettingsController from './Server'
 import LegalSettingsContainer from 'containers/Settings/Legal'
 
 import helpers from 'lib/helpers'
+import { LanguageContext } from 'i18n'
 
 class SettingsContainer extends React.Component {
+  static contextType = LanguageContext
+
   constructor (props) {
     super(props)
     this.state = {
@@ -71,6 +74,8 @@ class SettingsContainer extends React.Component {
   }
 
   render () {
+    const { t } = this.context
+
     return (
       <div className='uk-grid uk-grid-collapse'>
         <div className='uk-width-1-6 uk-width-xLarge-1-10 message-list full-height' data-offset='68'>
@@ -79,83 +84,83 @@ class SettingsContainer extends React.Component {
             style={{ borderTop: 'none', borderBottom: 'none', height: '68px', paddingLeft: '20px' }}
           >
             <div style={{ position: 'relative' }}>
-              <p style={{ fontSize: '24px' }}>{this.state.title}</p>
+              <p style={{ fontSize: '24px' }}>{t('settings.title')}</p>
             </div>
           </div>
           <div className='page-content-left noborder full-height'>
             <Menu>
               <MenuItem
-                title='General'
+                title={t('settings.menu.general')}
                 active={this.state.activeCategory === 'settings-general'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'general')
                 }}
               />
               <MenuItem
-                title='Accounts'
+                title={t('settings.menu.accounts')}
                 active={this.state.activeCategory === 'settings-accounts'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'accounts')
                 }}
               />
               <MenuItem
-                title='Appearance'
+                title={t('settings.menu.appearance')}
                 active={this.state.activeCategory === 'settings-appearance'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'appearance')
                 }}
               />
               <MenuItem
-                title='Permissions'
+                title={t('settings.menu.permissions')}
                 active={this.state.activeCategory === 'settings-permissions'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'permissions')
                 }}
               />
               <MenuItem
-                title='Tickets'
+                title={t('settings.menu.tickets')}
                 active={this.state.activeCategory === 'settings-tickets'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'tickets')
                 }}
               />
               <MenuItem
-                title='Mailer'
+                title={t('settings.menu.mailer')}
                 active={this.state.activeCategory === 'settings-mailer'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'mailer')
                 }}
               />
               <MenuItem
-                title='Webhooks'
+                title={t('settings.menu.webhooks')}
                 active={this.state.activeCategory === 'settings-webhooks'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'webhooks')
                 }}
               />
               <MenuItem
-                title={'Elasticsearch'}
+                title={t('settings.menu.elasticsearch')}
                 active={this.state.activeCategory === 'settings-elasticsearch'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'elasticsearch')
                 }}
               />
               <MenuItem
-                title='Backup/Restore'
+                title={t('settings.menu.backupRestore')}
                 active={this.state.activeCategory === 'settings-backup'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'backup')
                 }}
               />
               <MenuItem
-                title='Server'
+                title={t('settings.menu.server')}
                 active={this.state.activeCategory === 'settings-server'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'server')
                 }}
               />
               <MenuItem
-                title='Legal'
+                title={t('settings.menu.legal')}
                 active={this.state.activeCategory === 'settings-legal'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'legal')

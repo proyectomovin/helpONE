@@ -12,7 +12,7 @@
     "conversations": "Conversations",
     "notifications": "Notifications"
   },
-  "nav": {
+  "sidebar": {
     "plugins": "Plugins",
     "dashboard": "Dashboard",
     "tickets": "Tickets",
@@ -24,7 +24,7 @@
     "accountsCustomers": "Customers",
     "accountsAgents": "Agents",
     "accountsAdmins": "Admins",
-    "groups": "Customer Groups",
+    "customerGroups": "Customer Groups",
     "teams": "Teams",
     "departments": "Departments",
     "reports": "Reports",
@@ -37,12 +37,47 @@
     "settingsTickets": "Tickets",
     "settingsPermissions": "Permissions",
     "settingsMailer": "Mailer",
-    "settingsElastic": "Elasticsearch",
+    "settingsElasticsearch": "Elasticsearch",
     "settingsBackup": "Backup/Restore",
     "settingsServer": "Server",
     "settingsLegal": "Legal",
     "settingsLogs": "Logs",
     "about": "About",
-    "collapse": "Collapse Menu"
+    "collapseMenu": "Collapse Menu"
+  },
+  "settings": {
+    "title": "Settings",
+    "menu": {
+      "general": "General",
+      "accounts": "Accounts",
+      "appearance": "Appearance",
+      "permissions": "Permissions",
+      "tickets": "Tickets",
+      "mailer": "Mailer",
+      "webhooks": "Webhooks",
+      "elasticsearch": "Elasticsearch",
+      "backupRestore": "Backup/Restore",
+      "server": "Server",
+      "legal": "Legal"
+    },
+    "general": {
+      "siteTitle": "Site Title",
+      "siteTitleSubtitle": "Title of site. Used as page title.",
+      "siteTitleDefault": "default: Trudesk",
+      "siteUrl": "Site Url",
+      "siteUrlSubtitle": "Publicly accessible URL of this site.",
+      "siteUrlExample": "ex:",
+      "serverTimezone": "Server Timezone",
+      "serverTimezoneSubtitle": "Set the local server timezone for date display",
+      "serverTimezoneTooltip": "User can override in user profile. Requires Server Restart",
+      "timeDateFormat": "Time & Date Format",
+      "timeDateFormatLink": "Moment.js Format Options",
+      "timeFormat": "Time Format",
+      "timeFormatSubtitle": "Set the format for time display",
+      "shortDateFormat": "Short Date Format",
+      "shortDateFormatSubtitle": "Set the format for short dates",
+      "longDateFormat": "Long Date Format",
+      "longDateFormatSubtitle": "Set the format for long dates"
+    }
   }
 }

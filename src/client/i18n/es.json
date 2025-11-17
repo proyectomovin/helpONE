@@ -44,5 +44,40 @@
     "settingsLogs": "Registros",
     "about": "Acerca de",
     "collapseMenu": "Contraer menú"
+  },
+  "settings": {
+    "title": "Configuración",
+    "menu": {
+      "general": "General",
+      "accounts": "Cuentas",
+      "appearance": "Apariencia",
+      "permissions": "Permisos",
+      "tickets": "Tickets",
+      "mailer": "Correo",
+      "webhooks": "Webhooks",
+      "elasticsearch": "Elasticsearch",
+      "backupRestore": "Respaldo/Restauración",
+      "server": "Servidor",
+      "legal": "Legal"
+    },
+    "general": {
+      "siteTitle": "Título del Sitio",
+      "siteTitleSubtitle": "Título del sitio. Usado como título de página.",
+      "siteTitleDefault": "predeterminado: Trudesk",
+      "siteUrl": "URL del Sitio",
+      "siteUrlSubtitle": "URL públicamente accesible de este sitio.",
+      "siteUrlExample": "ej:",
+      "serverTimezone": "Zona Horaria del Servidor",
+      "serverTimezoneSubtitle": "Establece la zona horaria local del servidor para mostrar fechas",
+      "serverTimezoneTooltip": "El usuario puede anular esto en su perfil. Requiere reinicio del servidor",
+      "timeDateFormat": "Formato de Hora y Fecha",
+      "timeDateFormatLink": "Opciones de Formato de Moment.js",
+      "timeFormat": "Formato de Hora",
+      "timeFormatSubtitle": "Establece el formato para mostrar la hora",
+      "shortDateFormat": "Formato de Fecha Corta",
+      "shortDateFormatSubtitle": "Establece el formato para fechas cortas",
+      "longDateFormat": "Formato de Fecha Larga",
+      "longDateFormatSubtitle": "Establece el formato para fechas largas"
+    }
   }
 }
