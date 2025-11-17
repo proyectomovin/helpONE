@@ -181,6 +181,111 @@
       "privacyPolicyPlaceholder": "Enter your privacy policy here...",
       "save": "Save"
     },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Recent activity and system statistics summary.",
+      "recentTickets": "Recent Tickets",
+      "recentMessages": "Recent Messages",
+      "systemStatus": "System Status",
+      "quickStats": "Quick Stats",
+      "totalTickets": "Total Tickets",
+      "openTickets": "Open Tickets",
+      "closedTickets": "Closed Tickets",
+      "totalUsers": "Total Users",
+      "totalAgents": "Total Agents",
+      "totalAdmins": "Total Admins",
+      "overdueTickets": "Overdue Tickets",
+      "quickStatsLast365": "Quick Stats (Last 365 Days)",
+      "stat": "Stat",
+      "value": "Value",
+      "mostTicketsBy": "Most tickets by...",
+      "mostCommentsBy": "Most comments by....",
+      "mostAssignedSupportUser": "Most assigned support user....",
+      "mostActiveTicket": "Most active ticket..."
+    },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Manage internal messages between users.",
+      "inbox": "Inbox",
+      "sent": "Sent",
+      "drafts": "Drafts",
+      "trash": "Trash",
+      "compose": "Compose Message",
+      "search": "Search messages...",
+      "noMessages": "No messages to display."
+    },
+    "clients": {
+      "title": "Clients",
+      "subtitle": "Manage client accounts.",
+      "addClient": "Add Client",
+      "clientName": "Client Name",
+      "email": "Email",
+      "phone": "Phone",
+      "actions": "Actions"
+    },
+    "agents": {
+      "title": "Agents",
+      "subtitle": "Manage agent accounts.",
+      "addAgent": "Add Agent",
+      "agentName": "Agent Name",
+      "email": "Email",
+      "phone": "Phone",
+      "actions": "Actions"
+    },
+    "admins": {
+      "title": "Administrators",
+      "subtitle": "Manage administrator accounts.",
+      "addAdmin": "Add Administrator",
+      "adminName": "Administrator Name",
+      "email": "Email",
+      "phone": "Phone",
+      "actions": "Actions"
+    },
+    "groups": {
+      "title": "Groups",
+      "subtitle": "Manage user groups.",
+      "addGroup": "Add Group",
+      "groupName": "Group Name",
+      "description": "Description",
+      "members": "Members",
+      "actions": "Actions"
+    },
+    "teams": {
+      "title": "Teams",
+      "subtitle": "Manage work teams.",
+      "addTeam": "Add Team",
+      "teamName": "Team Name",
+      "description": "Description",
+      "members": "Members",
+      "actions": "Actions"
+    },
+    "departments": {
+      "title": "Departments",
+      "subtitle": "Manage organization departments.",
+      "addDepartment": "Add Department",
+      "departmentName": "Department Name",
+      "description": "Description",
+      "members": "Members",
+      "actions": "Actions"
+    },
+    "reports": {
+      "title": "Reports",
+      "subtitle": "Generate and view system reports.",
+      "generateReport": "Generate Report",
+      "selectReportType": "Select report type",
+      "dateRange": "Date Range",
+      "from": "From",
+      "to": "To",
+      "generate": "Generate",
+      "noReports": "No reports available."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "View and manage system notifications.",
+      "markAllRead": "Mark All as Read",
+      "clearAll": "Clear All",
+      "noNotifications": "No notifications to display."
+    },
     "common": {
       "save": "Save",
       "enable": "Enable",

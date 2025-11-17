@@ -34,9 +34,11 @@ import { startConversation } from 'lib2/chat'
 import UIKit from 'uikit'
 import $ from 'jquery'
 import helpers from 'lib/helpers'
+import { LanguageContext } from 'i18n'
 
 @observer
 class MessagesContainer extends React.Component {
+  static contextType = LanguageContext
   @observable userListShown = false
   @observable userListSearchText = ''
   @observable mutableUserList = []
@@ -302,6 +304,7 @@ class MessagesContainer extends React.Component {
   }
 
   render () {
+    const { t } = this.context
     const { currentConversation } = this.props.messagesState
 
     return (
@@ -309,7 +312,7 @@ class MessagesContainer extends React.Component {
         <Grid>
           <GridItem width={'3-10'} extraClass={'full-height'}>
             <PageTitle
-              title={'Conversations'}
+              title={t('messages.title')}
               extraClasses={'page-title-border-right'}
               hideBorderBottom={true}
               rightComponent={
@@ -317,7 +320,7 @@ class MessagesContainer extends React.Component {
                   <div id='convo-actions' style={{ position: 'absolute', top: 20, right: 15 }}>
                     {!this.userListShown && (
                       <a
-                        title='Start Conversation'
+                        title={t('messages.compose')}
                         className='no-ajaxy'
                         style={{ display: 'block', height: 28 }}
                         onClick={e => this.showUserList(e)}
@@ -333,7 +336,7 @@ class MessagesContainer extends React.Component {
                         style={{ height: 28, lineHeight: '30px', fontSize: '16px', fontWeight: 300 }}
                         onClick={e => this.hideUserList(e)}
                       >
-                        Cancel
+                        {t('common.cancel')}
                       </a>
                     )}
                   </div>
@@ -377,7 +380,7 @@ class MessagesContainer extends React.Component {
                 <div className='search-box'>
                   <input
                     type='text'
-                    placeholder={'Search'}
+                    placeholder={t('messages.search')}
                     value={this.userListSearchText}
                     onChange={e => this.onUserListSearchChange(e)}
                   />
@@ -413,11 +416,11 @@ class MessagesContainer extends React.Component {
                 style={{ marginBottom: '41px !important' }}
               >
                 <span className={'conversation-start'}>
-                  Conversation Started on {helpers.formatDate(currentConversation.get('createdAt'), helpers.getLongDateWithTimeFormat())}
+                  {t('messages.conversationStarted')} {helpers.formatDate(currentConversation.get('createdAt'), helpers.getLongDateWithTimeFormat())}
                 </span>
                 {currentConversation.get('requestingUserMeta').get('deletedAt') && (
                   <span className={'conversation-deleted'}>
-                    Conversation Deleted at {helpers.formatDate(currentConversation.get('requestingUserMeta').get('deletedAt'), helpers.getLongDateWithTimeFormat())}
+                    {t('messages.conversationDeleted')} {helpers.formatDate(currentConversation.get('requestingUserMeta').get('deletedAt'), helpers.getLongDateWithTimeFormat())}
                   </span>
                 )}
                 <div ref={this.conversationScrollSpy} className={clsx('uk-text-center', 'uk-hidden')}>
@@ -497,7 +500,7 @@ class MessagesContainer extends React.Component {
                   <input
                     type='text'
                     name={'chatMessage'}
-                    placeholder={'Type your message...'}
+                    placeholder={t('messages.typeMessage')}
                     onKeyDown={e =>
                       this.onSendMessageKeyDown(
                         e,
@@ -506,7 +509,7 @@ class MessagesContainer extends React.Component {
                       )
                     }
                   />
-                  <button type={'submit'}>SEND</button>
+                  <button type={'submit'}>{t('common.send')}</button>
                 </form>
               </div>
             </GridItem>
@@ -514,7 +517,7 @@ class MessagesContainer extends React.Component {
         </Grid>
         <ul className='context-menu'>
           <li data-action={'delete'} style={{ color: '#d32f2f' }}>
-            Delete Conversation
+            {t('messages.deleteConversation')}
           </li>
         </ul>
       </div>

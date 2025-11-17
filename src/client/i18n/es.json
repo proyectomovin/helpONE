@@ -181,6 +181,111 @@
       "privacyPolicyPlaceholder": "Ingresa tu política de privacidad aquí...",
       "save": "Guardar"
     },
+    "dashboard": {
+      "title": "Panel de Control",
+      "subtitle": "Resumen de la actividad reciente y estadísticas del sistema.",
+      "recentTickets": "Tickets Recientes",
+      "recentMessages": "Mensajes Recientes",
+      "systemStatus": "Estado del Sistema",
+      "quickStats": "Estadísticas Rápidas",
+      "totalTickets": "Total de Tickets",
+      "openTickets": "Tickets Abiertos",
+      "closedTickets": "Tickets Cerrados",
+      "totalUsers": "Total de Usuarios",
+      "totalAgents": "Total de Agentes",
+      "totalAdmins": "Total de Administradores",
+      "overdueTickets": "Tickets Vencidos",
+      "quickStatsLast365": "Estadísticas Rápidas (Últimos 365 días)",
+      "stat": "Estadística",
+      "value": "Valor",
+      "mostTicketsBy": "Mayor número de tickets por...",
+      "mostCommentsBy": "Mayor número de comentarios por....",
+      "mostAssignedSupportUser": "Usuario de soporte con más asignaciones....",
+      "mostActiveTicket": "Ticket más activo..."
+    },
+    "messages": {
+      "title": "Mensajes",
+      "subtitle": "Gestionar mensajes internos entre usuarios.",
+      "inbox": "Bandeja de Entrada",
+      "sent": "Enviados",
+      "drafts": "Borradores",
+      "trash": "Papelera",
+      "compose": "Redactar Mensaje",
+      "search": "Buscar en mensajes...",
+      "noMessages": "No hay mensajes para mostrar."
+    },
+    "clients": {
+      "title": "Clientes",
+      "subtitle": "Gestionar cuentas de clientes.",
+      "addClient": "Agregar Cliente",
+      "clientName": "Nombre del Cliente",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "actions": "Acciones"
+    },
+    "agents": {
+      "title": "Agentes",
+      "subtitle": "Gestionar cuentas de agentes.",
+      "addAgent": "Agregar Agente",
+      "agentName": "Nombre del Agente",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "actions": "Acciones"
+    },
+    "admins": {
+      "title": "Administradores",
+      "subtitle": "Gestionar cuentas de administradores.",
+      "addAdmin": "Agregar Administrador",
+      "adminName": "Nombre del Administrador",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "actions": "Acciones"
+    },
+    "groups": {
+      "title": "Grupos",
+      "subtitle": "Gestionar grupos de usuarios.",
+      "addGroup": "Agregar Grupo",
+      "groupName": "Nombre del Grupo",
+      "description": "Descripción",
+      "members": "Miembros",
+      "actions": "Acciones"
+    },
+    "teams": {
+      "title": "Equipos",
+      "subtitle": "Gestionar equipos de trabajo.",
+      "addTeam": "Agregar Equipo",
+      "teamName": "Nombre del Equipo",
+      "description": "Descripción",
+      "members": "Miembros",
+      "actions": "Acciones"
+    },
+    "departments": {
+      "title": "Departamentos",
+      "subtitle": "Gestionar departamentos de la organización.",
+      "addDepartment": "Agregar Departamento",
+      "departmentName": "Nombre del Departamento",
+      "description": "Descripción",
+      "members": "Miembros",
+      "actions": "Acciones"
+    },
+    "reports": {
+      "title": "Reportes",
+      "subtitle": "Generar y ver reportes del sistema.",
+      "generateReport": "Generar Reporte",
+      "selectReportType": "Seleccionar tipo de reporte",
+      "dateRange": "Rango de Fechas",
+      "from": "Desde",
+      "to": "Hasta",
+      "generate": "Generar",
+      "noReports": "No hay reportes disponibles."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "subtitle": "Ver y gestionar notificaciones del sistema.",
+      "markAllRead": "Marcar Todo como Leído",
+      "clearAll": "Limpiar Todo",
+      "noNotifications": "No hay notificaciones para mostrar."
+    },
     "common": {
       "save": "Guardar",
       "enable": "Habilitar",

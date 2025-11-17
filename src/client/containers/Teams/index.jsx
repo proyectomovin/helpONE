@@ -31,8 +31,10 @@ import TableRow from 'components/Table/TableRow'
 import TableCell from 'components/Table/TableCell'
 import TableHeader from 'components/Table/TableHeader'
 import ButtonGroup from 'components/ButtonGroup'
+import { LanguageContext } from 'i18n'
 
 class TeamsContainer extends React.Component {
+  static contextType = LanguageContext
   constructor (props) {
     super(props)
   }
@@ -87,6 +89,7 @@ class TeamsContainer extends React.Component {
   }
 
   render () {
+    const { t } = this.context
     const tableItems = this.props.teamsState.teams.map(team => {
       return (
         <TableRow key={team.get('_id')} className={'vam nbb'}>
@@ -116,11 +119,11 @@ class TeamsContainer extends React.Component {
           <TableCell style={{ textAlign: 'right', paddingRight: 15 }}>
             <ButtonGroup>
               {helpers.canUser('teams:update', true) && (
-                <Button text={'Edit'} small={true} waves={true} onClick={() => this.onEditTeamClick(team.toJS())} />
+                <Button text={t('common.edit')} small={true} waves={true} onClick={() => this.onEditTeamClick(team.toJS())} />
               )}
               {helpers.canUser('teams:delete', true) && (
                 <Button
-                  text={'Delete'}
+                  text={t('common.delete')}
                   style={'danger'}
                   small={true}
                   waves={true}
@@ -136,13 +139,13 @@ class TeamsContainer extends React.Component {
     return (
       <div>
         <PageTitle
-          title={'Teams'}
+          title={t('teams.title')}
           shadow={true}
           rightComponent={
             <div className={'uk-grid uk-grid-collapse'}>
               <div className={'uk-width-1-1 mt-15 uk-text-right'}>
                 <Button
-                  text={'Create'}
+                  text={t('teams.createTeam')}
                   flat={false}
                   small={true}
                   waves={false}
@@ -156,15 +159,15 @@ class TeamsContainer extends React.Component {
         <PageContent id={'teams-page-content'} padding={0} paddingBottom={0}>
           <Table
             headers={[
-              <TableHeader key={0} width={'25%'} height={40} text={'Name'} padding={'8px 8px 8px 15px'} />,
-              <TableHeader key={1} width={'50%'} text={'Team Members'} />,
-              <TableHeader key={2} width={130} text={'Team Actions'} />
+              <TableHeader key={0} width={'25%'} height={40} text={t('teams.name')} padding={'8px 8px 8px 15px'} />,
+              <TableHeader key={1} width={'50%'} text={t('teams.teamMembers')} />,
+              <TableHeader key={2} width={130} text={t('teams.teamActions')} />
             ]}
           >
             {this.props.teamsState.teams.size < 1 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <h5 style={{ paddingLeft: 8 }}>No Teams</h5>
+                  <h5 style={{ paddingLeft: 8 }}>{t('teams.noTeams')}</h5>
                 </TableCell>
               </TableRow>
             )}
