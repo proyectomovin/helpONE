@@ -10,7 +10,8 @@ import en from './en.json'
 import es from './es.json'
 
 const LANGUAGE_COOKIE = 'trudesk_locale'
-const DEFAULT_LOCALE = 'en'
+const DEFAULT_LOCALE = 'es'
+const FALLBACK_LOCALE = 'en'
 export const SUPPORTED_LANGUAGES = {
   en,
   es
@@ -29,15 +30,25 @@ const applyReplacements = (text, values) => {
   })
 }
 
-const translateKey = (key, options = {}, dictionary = currentDictionary) => {
-  if (!key) return ''
+const getValueFromDictionary = (dictionary, key) => {
+  if (!dictionary || !key) return undefined
   const segments = key.split('.')
-  let value = segments.reduce((acc, segment) => {
+  return segments.reduce((acc, segment) => {
     if (acc && typeof acc === 'object' && Object.prototype.hasOwnProperty.call(acc, segment)) {
       return acc[segment]
     }
     return undefined
   }, dictionary)
+}
+
+const translateKey = (key, options = {}, dictionary = currentDictionary) => {
+  if (!key) return ''
+  const fallbackDictionary = SUPPORTED_LANGUAGES[FALLBACK_LOCALE]
+  let value = getValueFromDictionary(dictionary, key)
+
+  if (typeof value === 'undefined' && dictionary !== fallbackDictionary) {
+    value = getValueFromDictionary(fallbackDictionary, key)
+  }
 
   if (typeof value === 'string') {
     return applyReplacements(value, options.values)

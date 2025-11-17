@@ -10,8 +10,8 @@ const getNestedValue = (source, path) => {
 }
 
 export const getCurrentLocale = () => {
-  if (typeof window === 'undefined') return 'en'
-  if (!window.__i18n || !window.__i18n.locale) return 'en'
+  if (typeof window === 'undefined') return 'es'
+  if (!window.__i18n || !window.__i18n.locale) return 'es'
   return window.__i18n.locale
 }
 

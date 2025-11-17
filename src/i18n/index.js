@@ -3,7 +3,8 @@ const translations = {
   es: require('./es.json')
 }
 
-const defaultLocale = 'en'
+const defaultLocale = 'es'
+const fallbackLocale = 'en'
 
 const normalizeLocale = locale => {
   if (!locale || typeof locale !== 'string') return defaultLocale
@@ -12,7 +13,7 @@ const normalizeLocale = locale => {
 
 const getTranslations = locale => {
   const normalized = normalizeLocale(locale)
-  return translations[normalized] || translations[defaultLocale]
+  return translations[normalized] || translations[defaultLocale] || translations[fallbackLocale]
 }
 
 const getLocaleFromRequest = req => {
@@ -42,6 +43,7 @@ const getLocaleFromRequest = req => {
 
 module.exports = {
   defaultLocale,
+  fallbackLocale,
   getTranslations,
   getLocaleFromRequest,
   translations
