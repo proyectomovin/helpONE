@@ -16,6 +16,7 @@ services:
       USE_XFORWARDIP: "true"
     volumes:
       - trudesk_uploads:/usr/src/trudesk/public/uploads
+      - trudesk_img:/usr/src/trudesk/public/img
       - trudesk_backups:/usr/src/trudesk/backups
   mongo:
     image: mongo:5.0-focal
@@ -45,6 +46,7 @@ services:
       - elasticsearch:/usr/share/elasticsearch/data
 volumes:
   trudesk_uploads:
+  trudesk_img:
   trudesk_backups:
   mongo:
   mongo_data:
