@@ -24,10 +24,12 @@ import SettingItem from 'components/Settings/SettingItem'
 import SingleSelect from 'components/SingleSelect'
 import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import PermissionBody from './permissionBody'
+import { LanguageContext } from 'i18n'
 
 import $ from 'jquery'
 
 class PermissionsSettingsContainer extends React.Component {
+  static contextType = LanguageContext
   componentDidMount () {
     this.props.fetchRoles()
   }
@@ -71,6 +73,7 @@ class PermissionsSettingsContainer extends React.Component {
   }
 
   render () {
+    const { t } = this.context
     const mappedRoles = this.props.roles
       .map(role => {
         return { text: role.get('name'), value: role.get('_id') }
@@ -80,8 +83,8 @@ class PermissionsSettingsContainer extends React.Component {
     return (
       <div className={this.props.active ? '' : 'hide'}>
         <SettingItem
-          title={'Default New User Role'}
-          subtitle={'Role assigned to users created during sign-up and public tickets'}
+          title={t('settings.permissions.defaultNewUserRole')}
+          subtitle={t('settings.permissions.defaultNewUserRoleSubtitle')}
           component={
             <SingleSelect
               items={mappedRoles}
@@ -95,11 +98,11 @@ class PermissionsSettingsContainer extends React.Component {
           }
         />
         <SplitSettingsPanel
-          title={'Permissions'}
+          title={t('settings.permissions.permissions')}
           tooltip={'Permission order is top down. ex: Admins at top; Users at bottom.'}
           subtitle={
             <div>
-              Create/Modify Role Permissions{' '}
+              {t('settings.permissions.permissionsSubtitle')}{' '}
               <span className={'uk-text-danger'}>Note: Changes take affect after page refresh</span>
             </div>
           }

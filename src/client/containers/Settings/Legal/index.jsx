@@ -21,8 +21,11 @@ import { updateSetting } from 'actions/settings'
 
 import helpers from 'lib/helpers'
 import SettingItem from 'components/Settings/SettingItem'
+import { LanguageContext } from 'i18n'
 
 class LegalSettingsContainer extends React.Component {
+  static contextType = LanguageContext
+  
   constructor (props) {
     super(props)
     this.state = {
@@ -53,9 +56,10 @@ class LegalSettingsContainer extends React.Component {
 
   render () {
     const { active } = this.props
+    const { t } = this.context
     return (
       <div className={!active ? 'hide' : ''}>
-        <SettingItem title={'Privacy Policy'} subtitle={'Paste in HTML/Text of your privacy policy.'}>
+        <SettingItem title={t('settings.legal.privacyPolicy')} subtitle={t('settings.legal.privacyPolicySubtitle')}>
           <div>
             <EasyMDE
               defaultValue={this.getSetting('privacyPolicy')}
@@ -64,7 +68,7 @@ class LegalSettingsContainer extends React.Component {
           </div>
           <div className='uk-clearfix'>
             <Button
-              text={'Save'}
+              text={t('settings.legal.save')}
               extraClass={'uk-float-right'}
               flat={true}
               style={'success'}
