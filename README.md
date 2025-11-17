@@ -1,61 +1,72 @@
 <h1 align="center">
-<a href="http://trudesk.io"><img src="http://trudesk.io/TD_Black.png" width="500" /></a>
-<br />Community Edition
+HelpONE
+<br />
+<sub>Fork mejorado de Trudesk Community Edition</sub>
 </h1>
+
 <p align="center">
-<a href="https://app.codacy.com/gh/polonel/trudesk/dashboard"><img alt="Codacy grade" src="https://img.shields.io/codacy/grade/3228c30aa1d14530ba25a04948985079?style=flat-square"></a>
-<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square" /></a>
-<a href="https://app.circleci.com/pipelines/github/polonel/trudesk"><img src="https://img.shields.io/circleci/token/ad7d2d066a75685a15c8e2fd08bd75e53b18fbb7/project/github/polonel/trudesk/master.svg?style=flat-square" /></a>
-<a href="https://forum.trudesk.io"><img src="https://img.shields.io/discourse/https/forum.trudesk.io/topics.svg?style=flat-square" /></a>
-<a title="Crowdin" target="_blank" href="https://crowdin.com/project/trudesk"><img src="https://d322cqt584bo4o.cloudfront.net/trudesk/localized.svg?style=flat-square"></a>
 <a href="https://github.com/polonel/trudesk/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-APACHE%202-green.svg?style=flat-square" /></a>
-<a href="https://github.com/polonel/trudesk/releases"><img src="https://img.shields.io/github/release/polonel/trudesk.svg?style=flat-square" /></a>
-<a href="https://docs.trudesk.io/v1.2"><img src="https://img.shields.io/badge/documentation-click%20to%20read-blue.svg?style=flat-square" /></a>
+<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square" /></a>
 <br />
-<sub>© 2014-2023, Trudesk, Inc. (<b><a href="https://trudesk.io">@trudesk</a></b>).</sub>
+<sub>Basado en Trudesk © 2014-2023 Trudesk, Inc. | Fork extendido por Marco - 2024</sub>
 </p>
 <br />
 
-### Open Source Help Desk - Simply Organized.
-Quickly resolve issues & task with an easy-to-use solution. Built with one goal in mind, to keep work loads organized and simple. **This is the source for Trudesk Community Edition. For the more comprehensive, cloud-hosted version, please see Trudesk Cloud at <a href="http://trudesk.io">Trudesk.io</a>.**
+### Sistema de Help Desk Open Source - Organizado y Mejorado
 
-<p align="center">
-    <img src="https://trudesk.io/images/hero-td-right.png" />
-</p>
+**HelpONE** es un fork mejorado de Trudesk Community Edition, con características adicionales y optimizaciones. Resuelve tickets y tareas rápidamente con una solución fácil de usar, construida para mantener las cargas de trabajo organizadas y simples.
 
-#### Deploy Trudesk Anywhere
-**Trudesk** is built with <a href="https://nodejs.org">nodejs</a> and <a href="https://mongodb.org">mongodb</a> and can run on any cloud provider, docker, bare-metal, or even a raspberry pi.
-Take it for a spin on Ubuntu 20.04 with a one liner - <br />`curl -L -s https://storage.trudesk.io/install/ubuntu-1.2.sh | sudo bash`
+#### Nuevas Características en HelpONE
+- ✨ [Lista aquí las mejoras que has implementado]
+- 🚀 [Por ejemplo: Integraciones adicionales]
+- 🔧 [Optimizaciones de rendimiento]
+- 📱 [Mejoras en la interfaz]
 
-#### Requirements
-- NodeJS 16+
+#### Despliega HelpONE en Cualquier Lugar
+**HelpONE** está construido con <a href="https://nodejs.org">Node.js</a> y <a href="https://mongodb.org">MongoDB</a> y puede ejecutarse en cualquier proveedor cloud, Docker, bare-metal, o incluso una Raspberry Pi.
+
+#### Requisitos
+- Node.js 16+
 - MongoDB 5.0+
-- Elasticsearch 8 (optional to enable search)
+- Elasticsearch 8 (opcional para habilitar búsqueda)
 
-### Documentation
-Online documentation: [https://docs.trudesk.io/v1.2](https://docs.trudesk.io/v1.2)
+### Instalación
+```bash
+# Clona el repositorio
+git clone [tu-repo-url]
 
-### Internationalization
-See [docs/i18n.md](docs/i18n.md) for details on adding dictionaries and wiring localized strings into
-the React client.
+# Instala dependencias
+npm install
 
-### Contributing
-If you like what you see here, and want to help support the work being done, you could:
-+ Report Bugs
-+ Request/Implement Features
-+ Refactor Codebase
-+ Help Write Documentation
+# Configura las variables de entorno
+cp .env.example .env
 
-### Sponsors
-Just a few who have made the project possible.
-<br />
-<a href="https://www.browserstack.com"><img src="https://files.trudesk.io/browserstack-logo-600x315.png" width="115" /></a>
+# Inicia la aplicación
+npm start
+```
 
-Trudesk is tested with confidence using [BrowserStack](https://browserstack.com).
+### Documentación
+La documentación base de Trudesk está disponible en: [https://docs.trudesk.io/v1.2](https://docs.trudesk.io/v1.2)
 
-### License
+Documentación específica de HelpONE: [Por definir]
 
-    Copyright 2014-2023 Trudesk, Inc.
+### Internacionalización
+Ver [docs/i18n.md](docs/i18n.md) para detalles sobre cómo agregar diccionarios y conectar strings localizados en el cliente React.
+
+### Contribuciones
+Este es un proyecto privado, pero las sugerencias son bienvenidas:
++ Reportar Bugs
++ Solicitar/Implementar Características
++ Refactorizar Código Base
++ Ayudar con Documentación
+
+### Créditos
+Este proyecto es un fork de [Trudesk Community Edition](https://github.com/polonel/trudesk), creado originalmente por Trudesk, Inc.
+
+### Licencia
+
+    Basado en Trudesk - Copyright 2014-2023 Trudesk, Inc.
+    Fork HelpONE - Copyright 2024 [Tu Nombre/Empresa]
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
