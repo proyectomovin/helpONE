@@ -27,7 +27,7 @@ viewdata.users = {}
 viewController.getData = function (request, cb) {
   const localeCode = i18n.getLocaleFromRequest(request)
   const translations = i18n.getTranslations(localeCode)
-  const fallbackTranslations = i18n.getTranslations(i18n.defaultLocale)
+  const fallbackTranslations = i18n.getTranslations(i18n.fallbackLocale)
 
   viewdata.localeCode = localeCode
   viewdata.locale = translations
