@@ -193,7 +193,15 @@
       "closedTickets": "Tickets Cerrados",
       "totalUsers": "Total de Usuarios",
       "totalAgents": "Total de Agentes",
-      "totalAdmins": "Total de Administradores"
+      "totalAdmins": "Total de Administradores",
+      "overdueTickets": "Tickets Vencidos",
+      "quickStatsLast365": "Estadísticas Rápidas (Últimos 365 días)",
+      "stat": "Estadística",
+      "value": "Valor",
+      "mostTicketsBy": "Mayor número de tickets por...",
+      "mostCommentsBy": "Mayor número de comentarios por....",
+      "mostAssignedSupportUser": "Usuario de soporte con más asignaciones....",
+      "mostActiveTicket": "Ticket más activo..."
     },
     "messages": {
       "title": "Mensajes",

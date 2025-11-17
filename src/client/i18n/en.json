@@ -193,7 +193,15 @@
       "closedTickets": "Closed Tickets",
       "totalUsers": "Total Users",
       "totalAgents": "Total Agents",
-      "totalAdmins": "Total Admins"
+      "totalAdmins": "Total Admins",
+      "overdueTickets": "Overdue Tickets",
+      "quickStatsLast365": "Quick Stats (Last 365 Days)",
+      "stat": "Stat",
+      "value": "Value",
+      "mostTicketsBy": "Most tickets by...",
+      "mostCommentsBy": "Most comments by....",
+      "mostAssignedSupportUser": "Most assigned support user....",
+      "mostActiveTicket": "Most active ticket..."
     },
     "messages": {
       "title": "Messages",
