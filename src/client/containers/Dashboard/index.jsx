@@ -210,7 +210,7 @@ class DashboardContainer extends React.Component {
                 style={{ minHeight: 250 }}
                 header={
                   <div className='uk-text-left'>
-                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Overdue Tickets</h6>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>{t('dashboard.overdueTickets')}</h6>
                   </div>
                 }
                 content={
@@ -254,7 +254,7 @@ class DashboardContainer extends React.Component {
               <TruCard
                 header={
                   <div className='uk-text-left'>
-                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Quick Stats (Last 365 Days)</h6>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>{t('dashboard.quickStatsLast365')}</h6>
                   </div>
                 }
                 content={
@@ -262,14 +262,14 @@ class DashboardContainer extends React.Component {
                     <table className='uk-table'>
                       <thead>
                         <tr>
-                          <th className='uk-text-nowrap'>Stat</th>
-                          <th className='uk-text-nowrap uk-text-right'>Value</th>
+                          <th className='uk-text-nowrap'>{t('dashboard.stat')}</th>
+                          <th className='uk-text-nowrap uk-text-right'>{t('dashboard.value')}</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr className='uk-table-middle'>
                           <td className='uk-width-6-10 uk-text-nowrap uk-text-muted uk-text-small'>
-                            Most tickets by...
+                            {t('dashboard.mostTicketsBy')}
                           </td>
                           <td id='mostRequester' className='uk-width-4-10 uk-text-right  uk-text-small'>
                             {this.props.dashboardState.mostRequester
@@ -282,7 +282,7 @@ class DashboardContainer extends React.Component {
 
                         <tr className='uk-table-middle'>
                           <td className='uk-width-6-10 uk-text-nowrap uk-text-muted uk-text-small'>
-                            Most comments by....
+                            {t('dashboard.mostCommentsBy')}
                           </td>
                           <td id='mostCommenter' className='uk-width-4-10 uk-text-right  uk-text-small'>
                             {this.props.dashboardState.mostCommenter
@@ -295,7 +295,7 @@ class DashboardContainer extends React.Component {
 
                         <tr className='uk-table-middle'>
                           <td className='uk-width-6-10 uk-text-nowrap uk-text-muted uk-text-small'>
-                            Most assigned support user....
+                            {t('dashboard.mostAssignedSupportUser')}
                           </td>
                           <td id='mostAssignee' className='uk-width-4-10 uk-text-right  uk-text-small'>
                             {this.props.dashboardState.mostAssignee
@@ -308,7 +308,7 @@ class DashboardContainer extends React.Component {
 
                         <tr className='uk-table-middle'>
                           <td className='uk-width-6-10 uk-text-nowrap uk-text-muted uk-text-small'>
-                            Most active ticket...
+                            {t('dashboard.mostActiveTicket')}
                           </td>
                           <td className='uk-width-4-10 uk-text-right  uk-text-small'>
                             <a id='mostActiveTicket' href='#'>
