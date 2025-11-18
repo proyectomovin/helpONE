@@ -1,17 +1,25 @@
+import React from 'react'
 import i18n from 'i18next'
-import { initReactI18next, useTranslation as useTranslationBase } from 'react-i18next'
+import { initReactI18next, useTranslation as useTranslationBase, Trans } from 'react-i18next'
 import moment from 'moment'
-import 'moment/locale/es'
 
 import enCommon from '../locales/en/common.json'
 import esCommon from '../locales/es/common.json'
+import enSidebar from '../locales/en/sidebar.json'
+import esSidebar from '../locales/es/sidebar.json'
 
 const DEFAULT_LOCALE = 'en'
 const LOCALE_STORAGE_KEY = 'trudesk:locale'
 
 const resources = {
-  en: { common: enCommon },
-  es: { common: esCommon }
+  en: {
+    common: enCommon,
+    sidebar: enSidebar
+  },
+  es: {
+    common: esCommon,
+    sidebar: esSidebar
+  }
 }
 
 const supportedLocales = Object.keys(resources)
@@ -44,7 +52,13 @@ const getStoredLocale = () => {
 const initialLocale = getStoredLocale() || DEFAULT_LOCALE
 
 const applyLocaleToDateLibraries = locale => {
-  moment.locale(locale)
+  // Import moment locales dynamically based on need
+  if (locale === 'es') {
+    // Moment includes 'es' locale by default
+    moment.locale('es')
+  } else {
+    moment.locale(locale)
+  }
 }
 
 i18n.use(initReactI18next).init({
@@ -87,5 +101,19 @@ export const setLocale = locale => {
 }
 
 export const useTranslation = (...args) => useTranslationBase(...args)
+
+// Export TranslationProvider from TranslationProvider.jsx
+export { TranslationProvider, useTranslation as useTranslationCustom } from './TranslationProvider'
+
+// Export Trans component from react-i18next
+export { Trans }
+
+// HOC for class components that need translation
+export const withTranslation = (namespace = 'common') => Component => {
+  return props => {
+    const { t, i18n: i18nInstance } = useTranslationBase(namespace)
+    return <Component {...props} t={t} i18n={i18nInstance} />
+  }
+}
 
 export default i18n
