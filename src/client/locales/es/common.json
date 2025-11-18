@@ -1,0 +1,10 @@
+{
+  "app": {
+    "title": "Trudesk",
+    "loading": "Cargando..."
+  },
+  "navigation": {
+    "dashboard": "Tablero",
+    "tickets": "Tickets"
+  }
+}
