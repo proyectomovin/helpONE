@@ -1,0 +1,41 @@
+{
+  "plugins": "Plugins",
+  "dashboard": "Dashboard",
+  "tickets": {
+    "label": "Tickets",
+    "active": "Active",
+    "assigned": "Assigned",
+    "unassigned": "Unassigned"
+  },
+  "messages": "Messages",
+  "accounts": {
+    "label": "Accounts",
+    "customers": "Customers",
+    "agents": "Agents",
+    "admins": "Admins"
+  },
+  "customerGroups": "Customer Groups",
+  "teams": "Teams",
+  "departments": "Departments",
+  "reports": {
+    "label": "Reports",
+    "generate": "Generate"
+  },
+  "notices": "Notices",
+  "settings": {
+    "label": "Settings",
+    "general": "General",
+    "accounts": "Accounts",
+    "appearance": "Appearance",
+    "tickets": "Tickets",
+    "permissions": "Permissions",
+    "mailer": "Mailer",
+    "elasticsearch": "Elasticsearch",
+    "backup": "Backup/Restore",
+    "server": "Server",
+    "legal": "Legal",
+    "logs": "Logs"
+  },
+  "about": "About",
+  "collapseMenu": "Collapse Menu"
+}

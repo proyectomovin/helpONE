@@ -25,6 +25,7 @@ import TopbarContainer from './containers/Topbar/TopbarContainer'
 import Sidebar from './components/Nav/Sidebar/index.jsx'
 import ModalRoot from './containers/Modals'
 import renderer from './renderer'
+import { TranslationProvider } from './i18n'
 
 import SocketGlobal from 'containers/Global/SocketGlobal'
 import SessionLoader from 'lib2/sessionLoader'
@@ -74,7 +75,9 @@ if (document.getElementById('globals')) {
 
 const sidebarWithProvider = (
   <Provider store={store}>
-    <Sidebar />
+    <TranslationProvider>
+      <Sidebar />
+    </TranslationProvider>
   </Provider>
 )
 
