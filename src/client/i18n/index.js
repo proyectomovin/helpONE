@@ -1,72 +1,91 @@
-import { useCallback, useMemo } from 'react'
+import i18n from 'i18next'
+import { initReactI18next, useTranslation as useTranslationBase } from 'react-i18next'
+import moment from 'moment'
+import 'moment/locale/es'
 
-import en from './locales/en.json'
-import es from './locales/es.json'
+import enCommon from '../locales/en/common.json'
+import esCommon from '../locales/es/common.json'
 
-const resources = { en, es }
+const DEFAULT_LOCALE = 'en'
+const LOCALE_STORAGE_KEY = 'trudesk:locale'
 
-const getValueFromKey = (resource, key) => {
-  return key.split('.').reduce((acc, segment) => {
-    if (acc && Object.prototype.hasOwnProperty.call(acc, segment)) {
-      return acc[segment]
-    }
-    return null
-  }, resource)
+const resources = {
+  en: { common: enCommon },
+  es: { common: esCommon }
 }
 
-const formatMessage = (message, variables = {}) => {
-  if (typeof message !== 'string') return message || ''
+const supportedLocales = Object.keys(resources)
 
-  return message.replace(/\{([^}]+)\}/g, (match, variable) => {
-    if (Object.prototype.hasOwnProperty.call(variables, variable)) {
-      return variables[variable]
+const getStoredLocale = () => {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const persisted = window.localStorage ? window.localStorage.getItem(LOCALE_STORAGE_KEY) : null
+    if (persisted && supportedLocales.includes(persisted)) {
+      return persisted
     }
-
-    return match
-  })
-}
-
-const detectLocale = () => {
-  if (typeof window !== 'undefined') {
-    try {
-      const storedLocale = window.localStorage && window.localStorage.getItem('helpone_locale')
-      if (storedLocale) return storedLocale
-    } catch (e) {
-      // Ignore access issues
-    }
-
-    if (window.__LOCALE__) return window.__LOCALE__
-    if (window.navigator && window.navigator.language) return window.navigator.language
+  } catch (err) {
+    // Ignore storage access issues
   }
 
-  if (typeof document !== 'undefined' && document.documentElement && document.documentElement.lang) {
-    return document.documentElement.lang
+  const sessionUserLocale = window?.trudeskSessionService?.getUser?.()?.preferences?.locale
+  if (sessionUserLocale && supportedLocales.includes(sessionUserLocale)) {
+    return sessionUserLocale
   }
 
-  return 'en'
+  const browserLocale = window?.navigator?.language?.split?.('-')?.[0]
+  if (browserLocale && supportedLocales.includes(browserLocale)) {
+    return browserLocale
+  }
+
+  return null
 }
 
-const normalizeLocale = locale => {
-  if (!locale) return 'en'
-  const normalized = locale.toLowerCase()
-  if (normalized.startsWith('es')) return 'es'
-  return 'en'
+const initialLocale = getStoredLocale() || DEFAULT_LOCALE
+
+const applyLocaleToDateLibraries = locale => {
+  moment.locale(locale)
 }
 
-export const useTranslation = () => {
-  const locale = useMemo(() => normalizeLocale(detectLocale()), [])
-  const dictionary = useMemo(() => resources[locale] || resources.en, [locale])
+i18n.use(initReactI18next).init({
+  resources,
+  lng: initialLocale,
+  fallbackLng: DEFAULT_LOCALE,
+  defaultNS: 'common',
+  interpolation: {
+    escapeValue: false
+  },
+  react: {
+    useSuspense: false
+  }
+})
 
-  const t = useCallback(
-    (key, variables = {}) => {
-      const template = getValueFromKey(dictionary, key)
-      if (!template) return key
-      return formatMessage(template, variables)
-    },
-    [dictionary]
-  )
+applyLocaleToDateLibraries(initialLocale)
 
-  return { t, locale }
+i18n.on('languageChanged', lng => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, lng)
+    }
+  } catch (err) {
+    // Ignore storage errors
+  }
+
+  applyLocaleToDateLibraries(lng)
+})
+
+export const getAvailableLocales = () => [...supportedLocales]
+
+export const getCurrentLocale = () => i18n.language
+
+export const setLocale = locale => {
+  if (!supportedLocales.includes(locale)) {
+    return Promise.reject(new Error(`Unsupported locale: ${locale}`))
+  }
+
+  return i18n.changeLanguage(locale)
 }
 
-export default useTranslation
+export const useTranslation = (...args) => useTranslationBase(...args)
+
+export default i18n
