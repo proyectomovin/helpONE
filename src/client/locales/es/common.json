@@ -6,5 +6,38 @@
   "navigation": {
     "dashboard": "Tablero",
     "tickets": "Tickets"
+  },
+  "settings": {
+    "general": {
+      "siteTitle": {
+        "title": "Título del sitio",
+        "subtitle": "Título del sitio. Se usa como título de la página. <italic>predeterminado: {{defaultValue}}</italic>"
+      },
+      "siteUrl": {
+        "title": "URL del sitio",
+        "subtitle": "URL pública de este sitio. <italic>ejemplo: {{example}}</italic>"
+      },
+      "timezone": {
+        "title": "Zona horaria del servidor",
+        "subtitle": "Configura la zona horaria local del servidor para mostrar fechas",
+        "tooltip": "El usuario puede sobrescribirla en su perfil. Requiere reiniciar el servidor"
+      },
+      "timeDateFormat": {
+        "title": "Formato de fecha y hora",
+        "linkText": "Opciones de formato de Moment.js"
+      },
+      "timeFormat": {
+        "title": "Formato de hora",
+        "subtitle": "Configura el formato para mostrar la hora"
+      },
+      "shortDateFormat": {
+        "title": "Formato de fecha corta",
+        "subtitle": "Configura el formato para fechas cortas"
+      },
+      "longDateFormat": {
+        "title": "Formato de fecha larga",
+        "subtitle": "Configura el formato para fechas largas"
+      }
+    }
   }
 }
