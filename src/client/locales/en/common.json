@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "Trudesk",
+    "loading": "Loading..."
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "tickets": "Tickets"
+  },
+  "settings": {
+    "general": {
+      "siteTitle": {
+        "title": "Site Title",
+        "subtitle": "Title of site. Used as page title. <italic>default: {{defaultValue}}</italic>"
+      },
+      "siteUrl": {
+        "title": "Site Url",
+        "subtitle": "Publicly accessible URL of this site. <italic>ex: {{example}}</italic>"
+      },
+      "timezone": {
+        "title": "Server Timezone",
+        "subtitle": "Set the local server timezone for date display",
+        "tooltip": "User can override in user profile. Requires Server Restart"
+      },
+      "timeDateFormat": {
+        "title": "Time & Date Format",
+        "linkText": "Moment.js Format Options"
+      },
+      "timeFormat": {
+        "title": "Time Format",
+        "subtitle": "Set the format for time display"
+      },
+      "shortDateFormat": {
+        "title": "Short Date Format",
+        "subtitle": "Set the format for short dates"
+      },
+      "longDateFormat": {
+        "title": "Long Date Format",
+        "subtitle": "Set the format for long dates"
+      }
+    }
+  }
+}

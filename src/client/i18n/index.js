@@ -1,92 +1,91 @@
-import { useMemo } from 'react'
-import enTicket from './locales/en/ticket.json'
-import esTicket from './locales/es/ticket.json'
+import i18n from 'i18next'
+import { initReactI18next, useTranslation as useTranslationBase } from 'react-i18next'
+import moment from 'moment'
+import 'moment/locale/es'
 
-const STORAGE_KEY = 'td_locale'
+import enCommon from '../locales/en/common.json'
+import esCommon from '../locales/es/common.json'
+
 const DEFAULT_LOCALE = 'en'
+const LOCALE_STORAGE_KEY = 'trudesk:locale'
 
 const resources = {
-  en: { ticket: enTicket },
-  es: { ticket: esTicket }
+  en: { common: enCommon },
+  es: { common: esCommon }
 }
 
-const normalizeLocale = value => {
-  if (!value) return null
-  return value.split('-')[0].toLowerCase()
-}
+const supportedLocales = Object.keys(resources)
 
 const getStoredLocale = () => {
   if (typeof window === 'undefined') return null
+
   try {
-    const persisted = window.localStorage.getItem(STORAGE_KEY)
-    return persisted ? normalizeLocale(persisted) : null
-  } catch (error) {
-    return null
-  }
-}
-
-const getBrowserLocale = () => {
-  if (typeof navigator === 'undefined') return null
-  const navLang = normalizeLocale(navigator.language)
-  if (navLang && resources[navLang]) return navLang
-  return null
-}
-
-const getDocumentLocale = () => {
-  if (typeof document === 'undefined') return null
-  const docLang = normalizeLocale(document.documentElement && document.documentElement.lang)
-  if (docLang && resources[docLang]) return docLang
-  return null
-}
-
-const getNamespaceResources = (locale, namespace) => {
-  const bundle = resources[locale] && resources[locale][namespace]
-  if (bundle) return bundle
-  return (resources[DEFAULT_LOCALE] && resources[DEFAULT_LOCALE][namespace]) || {}
-}
-
-const getValueFromPath = (obj, segments) => {
-  return segments.reduce((value, segment) => {
-    if (value && Object.prototype.hasOwnProperty.call(value, segment)) {
-      return value[segment]
+    const persisted = window.localStorage ? window.localStorage.getItem(LOCALE_STORAGE_KEY) : null
+    if (persisted && supportedLocales.includes(persisted)) {
+      return persisted
     }
-    return undefined
-  }, obj)
-}
-
-const interpolate = (template, options = {}) => {
-  if (typeof template !== 'string') return template
-  return template.replace(/{{\s*(\w+)\s*}}/g, (_, token) => {
-    return Object.prototype.hasOwnProperty.call(options, token) ? options[token] : ''
-  })
-}
-
-const translate = (locale, namespace, key, options = {}) => {
-  const segments = key.split('.')
-  const resource = getNamespaceResources(locale, namespace)
-  let value = getValueFromPath(resource, segments)
-
-  if (value === undefined) {
-    const fallback = getNamespaceResources(DEFAULT_LOCALE, namespace)
-    value = getValueFromPath(fallback, segments)
+  } catch (err) {
+    // Ignore storage access issues
   }
 
-  if (typeof value === 'string') {
-    return interpolate(value, options)
+  const sessionUserLocale = window?.trudeskSessionService?.getUser?.()?.preferences?.locale
+  if (sessionUserLocale && supportedLocales.includes(sessionUserLocale)) {
+    return sessionUserLocale
   }
 
-  return value !== undefined ? value : options.defaultValue || key
+  const browserLocale = window?.navigator?.language?.split?.('-')?.[0]
+  if (browserLocale && supportedLocales.includes(browserLocale)) {
+    return browserLocale
+  }
+
+  return null
 }
 
-const resolveLocale = () => {
-  return getStoredLocale() || getDocumentLocale() || getBrowserLocale() || DEFAULT_LOCALE
+const initialLocale = getStoredLocale() || DEFAULT_LOCALE
+
+const applyLocaleToDateLibraries = locale => {
+  moment.locale(locale)
 }
 
-export const useTranslation = (namespace = 'ticket') => {
-  const locale = resolveLocale()
-  const translator = useMemo(() => {
-    return (key, options) => translate(locale, namespace, key, options)
-  }, [locale, namespace])
+i18n.use(initReactI18next).init({
+  resources,
+  lng: initialLocale,
+  fallbackLng: DEFAULT_LOCALE,
+  defaultNS: 'common',
+  interpolation: {
+    escapeValue: false
+  },
+  react: {
+    useSuspense: false
+  }
+})
 
-  return { t: translator, locale }
+applyLocaleToDateLibraries(initialLocale)
+
+i18n.on('languageChanged', lng => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, lng)
+    }
+  } catch (err) {
+    // Ignore storage errors
+  }
+
+  applyLocaleToDateLibraries(lng)
+})
+
+export const getAvailableLocales = () => [...supportedLocales]
+
+export const getCurrentLocale = () => i18n.language
+
+export const setLocale = locale => {
+  if (!supportedLocales.includes(locale)) {
+    return Promise.reject(new Error(`Unsupported locale: ${locale}`))
+  }
+
+  return i18n.changeLanguage(locale)
 }
+
+export const useTranslation = (...args) => useTranslationBase(...args)
+
+export default i18n
