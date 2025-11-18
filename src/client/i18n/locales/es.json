@@ -1,0 +1,64 @@
+{
+  "dashboard": {
+    "title": "Panel",
+    "filters": {
+      "last30Days": "Últimos 30 días",
+      "last60Days": "Últimos 60 días",
+      "last90Days": "Últimos 90 días",
+      "last180Days": "Últimos 180 días",
+      "last365Days": "Últimos 365 días"
+    },
+    "lastUpdated": {
+      "text": "Última actualización: {lastUpdated}",
+      "loading": "La caché todavía se está cargando..."
+    },
+    "cards": {
+      "totalTickets": {
+        "label": "Total de tickets (últimos {days}d)"
+      },
+      "ticketsCompleted": {
+        "label": "Tickets completados"
+      },
+      "avgResponse": {
+        "label": "Tiempo de respuesta promedio",
+        "extra": "horas"
+      }
+    },
+    "sections": {
+      "ticketBreakdown": "Desglose de tickets",
+      "topGroups": "5 mejores grupos",
+      "topTags": "10 mejores etiquetas",
+      "overdueTickets": "Tickets vencidos",
+      "quickStats": "Estadísticas rápidas (últimos {days} días)"
+    },
+    "tables": {
+      "overdue": {
+        "headers": {
+          "ticket": "Ticket",
+          "status": "Estado",
+          "subject": "Asunto",
+          "lastUpdated": "Última actualización"
+        },
+        "badges": {
+          "open": "Abierto"
+        }
+      },
+      "quickStats": {
+        "headers": {
+          "stat": "Métrica",
+          "value": "Valor"
+        },
+        "rows": {
+          "mostTickets": "Más tickets por...",
+          "mostComments": "Más comentarios por....",
+          "mostAssignee": "Usuario de soporte más asignado....",
+          "mostActive": "Ticket más activo..."
+        }
+      }
+    },
+    "common": {
+      "ticketPrefix": "T#",
+      "noData": "--"
+    }
+  }
+}
