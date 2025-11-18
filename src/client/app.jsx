@@ -58,9 +58,16 @@ const withProviders = children => (
 
 // This is need to call an action from angular
 // Goal: remove this once angular is fully removed
+window.react = window.react || {}
 window.react.redux = { store }
 
 sagaMiddleware.run(IndexSagas)
+
+const withProviders = children => (
+  <Provider store={store}>
+    <TranslationProvider>{children}</TranslationProvider>
+  </Provider>
+)
 
 // Mount Globals
 if (document.getElementById('globals')) {

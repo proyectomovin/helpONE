@@ -39,7 +39,17 @@ const withProviders = (store, component) => (
   </I18nextProvider>
 )
 
+let storeReference
+
+const withProviders = children => (
+  <Provider store={storeReference}>
+    <TranslationProvider>{children}</TranslationProvider>
+  </Provider>
+)
+
 export default function (store) {
+  storeReference = store
+
   if (document.getElementById('dashboard-container')) {
     const DashboardContainerWithProvider = withProviders(store, <DashboardContainer />)
 

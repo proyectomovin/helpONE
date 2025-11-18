@@ -12,44 +12,37 @@
  *  Copyright (c) 2014-2019. All rights reserved.
  */
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withTranslation, Trans } from 'react-i18next'
 import moment from 'moment-timezone'
 import { updateSetting } from 'actions/settings'
+import { useTranslation } from '../../i18n'
 
 import SettingItem from 'components/Settings/SettingItem'
 
 import InputWithSave from 'components/Settings/InputWithSave'
 import SingleSelect from 'components/SingleSelect'
-import EnableSwitch from 'components/Settings/EnableSwitch'
 import SettingSubItem from 'components/Settings/SettingSubItem'
 import Zone from 'components/ZoneBox/zone'
 import ZoneBox from 'components/ZoneBox'
 
-class GeneralSettings extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+const GeneralSettings = ({ active, settings, viewdata, updateSetting }) => {
+  const { t } = useTranslation()
 
-  componentDidMount () {}
-  componentWillUnmount () {}
+  const getSettingsValue = useCallback(
+    name => {
+      const value = settings.getIn(['settings', name, 'value'])
+      return value || ''
+    },
+    [settings]
+  )
 
-  getSettingsValue (name) {
-    return this.props.settings.getIn(['settings', name, 'value'])
-      ? this.props.settings.getIn(['settings', name, 'value'])
-      : ''
-  }
-
-  updateSetting (stateName, name, value) {
-    this.props.updateSetting({ stateName, name, value })
-  }
-
-  getTimezones () {
+  const timezones = useMemo(() => {
     return moment.tz
       .names()
-      .map(function (name) {
+      .map(name => {
         const year = new Date().getUTCFullYear()
         const timezoneAtBeginningOfyear = moment.tz(year + '-01-01', name)
         return {
@@ -77,22 +70,10 @@ class GeneralSettings extends React.Component {
         settingName='gen:sitetitle'
         initialValue={this.getSettingsValue('siteTitle')}
       />
-    )
-
-    const SiteUrl = (
-      <InputWithSave stateName='siteUrl' settingName='gen:siteurl' initialValue={this.getSettingsValue('siteUrl')} />
-    )
-
-    const Timezone = (
-      <SingleSelect
-        stateName='timezone'
-        settingName='gen:timezone'
-        items={this.getTimezones()}
-        defaultValue={this.getSettingsValue('timezone')}
-        onSelectChange={e => {
-          this.onTimezoneChange(e)
-        }}
-        showTextbox={true}
+      <SettingItem
+        title={t('settings.general.siteUrl.title')}
+        subtitle={<div dangerouslySetInnerHTML={siteUrlMarkup} />}
+        component={SiteUrl}
       />
     )
 
