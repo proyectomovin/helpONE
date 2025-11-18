@@ -1,0 +1,64 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "filters": {
+      "last30Days": "Last 30 Days",
+      "last60Days": "Last 60 Days",
+      "last90Days": "Last 90 Days",
+      "last180Days": "Last 180 Days",
+      "last365Days": "Last 365 Days"
+    },
+    "lastUpdated": {
+      "text": "Last Updated: {lastUpdated}",
+      "loading": "Cache Still Loading..."
+    },
+    "cards": {
+      "totalTickets": {
+        "label": "Total Tickets (last {days}d)"
+      },
+      "ticketsCompleted": {
+        "label": "Tickets Completed"
+      },
+      "avgResponse": {
+        "label": "Avg Response Time",
+        "extra": "hours"
+      }
+    },
+    "sections": {
+      "ticketBreakdown": "Ticket Breakdown",
+      "topGroups": "Top 5 Groups",
+      "topTags": "Top 10 Tags",
+      "overdueTickets": "Overdue Tickets",
+      "quickStats": "Quick Stats (Last {days} Days)"
+    },
+    "tables": {
+      "overdue": {
+        "headers": {
+          "ticket": "Ticket",
+          "status": "Status",
+          "subject": "Subject",
+          "lastUpdated": "Last Updated"
+        },
+        "badges": {
+          "open": "Open"
+        }
+      },
+      "quickStats": {
+        "headers": {
+          "stat": "Stat",
+          "value": "Value"
+        },
+        "rows": {
+          "mostTickets": "Most tickets by...",
+          "mostComments": "Most comments by....",
+          "mostAssignee": "Most assigned support user....",
+          "mostActive": "Most active ticket..."
+        }
+      }
+    },
+    "common": {
+      "ticketPrefix": "T#",
+      "noData": "--"
+    }
+  }
+}
