@@ -11,6 +11,8 @@ import {
   fetchDashboardOverdueTickets
 } from 'actions/dashboard'
 
+import TimeTrackingStatsWidget from 'components/TimeTracking/TimeTrackingStatsWidget'
+
 import Grid from 'components/Grid'
 import GridItem from 'components/Grid/GridItem'
 import PageTitle from 'components/PageTitle'
@@ -144,6 +146,9 @@ class DashboardContainer extends React.Component {
                   </div>
                 }
               />
+            </GridItem>
+            <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
+              <TimeTrackingStatsWidget />
             </GridItem>
             <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
               <TruCard

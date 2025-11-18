@@ -67,6 +67,8 @@ const COLLECTION = 'tickets'
  * @property {Array} attachments An Array of {@link Attachment} items
  * @property {Array} history An array of {@link History} items
  * @property {Array} subscribers An array of user _ids that receive notifications on ticket changes.
+ * @property {Number} estimatedHours Initial estimated hours for completing this ticket
+ * @property {Boolean} timeTrackingEnabled Whether time tracking is enabled for this ticket
  */
 const ticketSchema = mongoose.Schema({
   uid: { type: Number, unique: true, index: true },
@@ -109,6 +111,22 @@ const ticketSchema = mongoose.Schema({
   issue: { type: String, required: true },
   closedDate: { type: Date },
   dueDate: { type: Date },
+  estimatedHours: {
+    type: Number,
+    min: 0,
+    max: 999.99,
+    validate: {
+      validator: function(v) {
+        return v === null || v === undefined || (v >= 0 && v <= 999.99)
+      },
+      message: 'Estimated hours must be between 0 and 999.99'
+    }
+  },
+  timeTrackingEnabled: {
+    type: Boolean,
+    default: true,
+    index: true
+  },
   comments: [commentSchema],
   notes: [noteSchema],
   attachments: [attachmentSchema],
@@ -1708,6 +1726,53 @@ ticketSchema.statics.getDeleted = function (callback) {
     .sort({ uid: -1 })
     .limit(1000)
     .exec(callback)
+}
+
+// Time Tracking Virtual Fields
+ticketSchema.virtual('totalTimeSpent').get(function () {
+  if (!this.timeTracking || this.timeTracking.length === 0) return 0
+  return this.timeTracking.reduce((total, entry) => total + (entry.actualHours || 0), 0)
+})
+
+ticketSchema.virtual('totalEstimatedTime').get(function () {
+  return this.estimatedHours || 0
+})
+
+ticketSchema.virtual('timeVariance').get(function () {
+  const estimated = this.totalEstimatedTime
+  const actual = this.totalTimeSpent
+  if (estimated === 0) return 0
+  return ((actual - estimated) / estimated) * 100
+})
+
+ticketSchema.virtual('isOverBudget').get(function () {
+  return this.totalTimeSpent > this.totalEstimatedTime
+})
+
+// Time Tracking Methods
+ticketSchema.methods.addTimeEntry = function (timeData) {
+  const TimeTracking = require('./timeTracking')
+  return TimeTracking.create({
+    ...timeData,
+    ticket: this._id
+  })
+}
+
+ticketSchema.methods.getTimeEntries = function () {
+  const TimeTracking = require('./timeTracking')
+  return TimeTracking.find({ ticket: this._id })
+    .populate('agent', 'fullname email')
+    .sort({ workDate: -1 })
+}
+
+ticketSchema.methods.getTimeStatistics = function () {
+  return {
+    estimatedHours: this.estimatedHours || 0,
+    totalTimeSpent: this.totalTimeSpent,
+    timeVariance: this.timeVariance,
+    isOverBudget: this.isOverBudget,
+    timeTrackingEnabled: this.timeTrackingEnabled
+  }
 }
 
 module.exports = mongoose.model(COLLECTION, ticketSchema)

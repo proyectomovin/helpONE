@@ -51,6 +51,16 @@ module.exports = function (middleware, router, controllers) {
   router.delete('/api/v2/tickets/:uid', apiv2Auth, canUser('tickets:delete'), apiv2.tickets.delete)
   router.delete('/api/v2/tickets/deleted/:id', apiv2Auth, isAdmin, apiv2.tickets.permDelete)
 
+  // Time Tracking
+  router.get('/api/v2/timetracking', apiv2Auth, canUser('tickets:view'), apiv2.timetracking.get)
+  router.post('/api/v2/timetracking', apiv2Auth, canUser('tickets:edit'), apiv2.timetracking.create)
+  router.get('/api/v2/timetracking/:id', apiv2Auth, canUser('tickets:view'), apiv2.timetracking.single)
+  router.put('/api/v2/timetracking/:id', apiv2Auth, canUser('tickets:edit'), apiv2.timetracking.update)
+  router.delete('/api/v2/timetracking/:id', apiv2Auth, canUser('tickets:delete'), apiv2.timetracking.delete)
+  router.get('/api/v2/timetracking/ticket/:ticketId/stats', apiv2Auth, canUser('tickets:view'), apiv2.timetracking.getTicketStats)
+  router.get('/api/v2/timetracking/agent/:agentId/stats', apiv2Auth, canUser('tickets:view'), apiv2.timetracking.getAgentStats)
+  router.get('/api/v2/timetracking/reports/summary', apiv2Auth, canUser('reports:view'), apiv2.timetracking.getSummaryReport)
+
   // Groups
   router.get('/api/v2/groups', apiv2Auth, apiv2.groups.get)
   router.post('/api/v2/groups', apiv2Auth, canUser('groups:create'), apiv2.groups.create)

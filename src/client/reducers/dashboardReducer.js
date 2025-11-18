@@ -19,7 +19,8 @@ import {
   FETCH_DASHBOARD_DATA,
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
-  FETCH_DASHBOARD_TOP_TAGS
+  FETCH_DASHBOARD_TOP_TAGS,
+  FETCH_DASHBOARD_TIME_TRACKING
 } from 'actions/types'
 
 const initialState = {
@@ -41,7 +42,16 @@ const initialState = {
   topTags: List([]),
 
   loadingOverdueTickets: false,
-  overdueTickets: List([])
+  overdueTickets: List([]),
+
+  loadingTimeTracking: false,
+  timeTrackingStats: Map({
+    totalHours: 0,
+    totalTickets: 0,
+    averageHours: 0,
+    topAgents: List([]),
+    recentEntries: List([])
+  })
 }
 
 const reducer = handleActions(
@@ -124,6 +134,43 @@ const reducer = handleActions(
         ...state,
         loadingOverdueTickets: false,
         overdueTickets: fromJS(action.response.tickets)
+      }
+    },
+
+    [FETCH_DASHBOARD_TIME_TRACKING.PENDING]: state => {
+      return {
+        ...state,
+        loadingTimeTracking: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TIME_TRACKING.SUCCESS]: (state, action) => {
+      if (action.response.success === false) {
+        return { 
+          ...state, 
+          loadingTimeTracking: false, 
+          timeTrackingStats: initialState.timeTrackingStats 
+        }
+      }
+
+      return {
+        ...state,
+        loadingTimeTracking: false,
+        timeTrackingStats: fromJS({
+          totalHours: action.response.totalHours || 0,
+          totalTickets: action.response.totalTickets || 0,
+          averageHours: action.response.averageHours || 0,
+          topAgents: action.response.topAgents || [],
+          recentEntries: action.response.recentEntries || []
+        })
+      }
+    },
+
+    [FETCH_DASHBOARD_TIME_TRACKING.ERROR]: state => {
+      return {
+        ...state,
+        loadingTimeTracking: false,
+        timeTrackingStats: initialState.timeTrackingStats
       }
     }
   },

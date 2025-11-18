@@ -53,6 +53,7 @@ import TruTabSection from 'components/TruTabs/TruTabSection'
 import TruTabSelector from 'components/TruTabs/TruTabSelector'
 import TruTabSelectors from 'components/TruTabs/TruTabSelectors'
 import TruTabWrapper from 'components/TruTabs/TruTabWrapper'
+import TimeTrackingWidget from 'components/TimeTracking/TimeTrackingWidget'
 
 import axios from 'axios'
 import helpers from 'lib/helpers'
@@ -538,6 +539,22 @@ class SingleTicketContainer extends React.Component {
                         </div>
                       </div>
                     </div>
+
+                    {/* Time Tracking Widget */}
+                    {helpers.canUser('agent:*', true) && this.ticket && (
+                      <div className='uk-width-1-1 padding-left-right-15'>
+                        <TimeTrackingWidget 
+                          ticketId={this.ticket._id}
+                          ticketUid={this.ticket.uid}
+                          estimatedHours={this.ticket.estimatedHours}
+                          timeTrackingEnabled={this.ticket.timeTrackingEnabled}
+                          onTimeUpdate={() => {
+                            // Refresh ticket data to update time statistics
+                            fetchTicket(this)
+                          }}
+                        />
+                      </div>
+                    )}
 
                     {helpers.canUser('agent:*', true) && (
                       <div className='uk-width-1-1 padding-left-right-15'>
