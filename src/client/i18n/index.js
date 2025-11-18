@@ -112,7 +112,7 @@ export { Trans }
 export const withTranslation = (namespace = 'common') => Component => {
   return props => {
     const { t, i18n: i18nInstance } = useTranslationBase(namespace)
-    return <Component {...props} t={t} i18n={i18nInstance} />
+    return React.createElement(Component, { ...props, t, i18n: i18nInstance })
   }
 }
 
