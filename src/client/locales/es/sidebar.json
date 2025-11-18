@@ -1,0 +1,41 @@
+{
+  "plugins": "Plugins",
+  "dashboard": "Panel",
+  "tickets": {
+    "label": "Tickets",
+    "active": "Activos",
+    "assigned": "Asignados",
+    "unassigned": "Sin asignar"
+  },
+  "messages": "Mensajes",
+  "accounts": {
+    "label": "Cuentas",
+    "customers": "Clientes",
+    "agents": "Agentes",
+    "admins": "Administradores"
+  },
+  "customerGroups": "Grupos de clientes",
+  "teams": "Equipos",
+  "departments": "Departamentos",
+  "reports": {
+    "label": "Informes",
+    "generate": "Generar"
+  },
+  "notices": "Avisos",
+  "settings": {
+    "label": "Configuración",
+    "general": "General",
+    "accounts": "Cuentas",
+    "appearance": "Apariencia",
+    "tickets": "Tickets",
+    "permissions": "Permisos",
+    "mailer": "Correo",
+    "elasticsearch": "Elasticsearch",
+    "backup": "Copia de seguridad/Restaurar",
+    "server": "Servidor",
+    "legal": "Legal",
+    "logs": "Registros"
+  },
+  "about": "Acerca de",
+  "collapseMenu": "Contraer menú"
+}

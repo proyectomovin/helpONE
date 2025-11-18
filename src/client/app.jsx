@@ -26,6 +26,7 @@ import TopbarContainer from './containers/Topbar/TopbarContainer'
 import Sidebar from './components/Nav/Sidebar/index.jsx'
 import ModalRoot from './containers/Modals'
 import renderer from './renderer'
+import { TranslationProvider } from './i18n'
 import i18n from './i18n'
 
 import SocketGlobal from 'containers/Global/SocketGlobal'
