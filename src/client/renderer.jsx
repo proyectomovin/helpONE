@@ -15,7 +15,7 @@
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { TranslationProvider } from './i18n'
+import { I18nextProvider } from 'react-i18next'
 
 import DashboardContainer from 'containers/Dashboard'
 import TicketsContainer from 'containers/Tickets/TicketsContainer'
@@ -31,6 +31,13 @@ import ProfileContainer from 'containers/Profile'
 import MessagesContainer from 'containers/Messages'
 import ReportsContainer from 'containers/Reports'
 import AboutContainer from 'containers/About'
+import i18n from './i18n'
+
+const withProviders = (store, component) => (
+  <I18nextProvider i18n={i18n}>
+    <Provider store={store}>{component}</Provider>
+  </I18nextProvider>
+)
 
 let storeReference
 
@@ -44,7 +51,7 @@ export default function (store) {
   storeReference = store
 
   if (document.getElementById('dashboard-container')) {
-    const DashboardContainerWithProvider = withProviders(<DashboardContainer />)
+    const DashboardContainerWithProvider = withProviders(store, <DashboardContainer />)
 
     ReactDOM.render(DashboardContainerWithProvider, document.getElementById('dashboard-container'))
   }
@@ -55,9 +62,7 @@ export default function (store) {
     let filter = document.getElementById('tickets-container').getAttribute('data-filter')
     filter = filter ? JSON.parse(filter) : {}
 
-    const TicketsContainerWithProvider = withProviders(
-      <TicketsContainer view={view} page={page} filter={filter} />
-    )
+    const TicketsContainerWithProvider = withProviders(store, <TicketsContainer view={view} page={page} filter={filter} />)
 
     ReactDOM.render(TicketsContainerWithProvider, document.getElementById('tickets-container'))
   }
@@ -66,6 +71,7 @@ export default function (store) {
     const ticketId = document.getElementById('single-ticket-container').getAttribute('data-ticket-id')
     const ticketUid = document.getElementById('single-ticket-container').getAttribute('data-ticket-uid')
     const SingleTicketContainerWithProvider = withProviders(
+      store,
       <SingleTicketContainer ticketId={ticketId} ticketUid={ticketUid} />
     )
 
@@ -73,7 +79,7 @@ export default function (store) {
   }
 
   if (document.getElementById('profile-container')) {
-    const ProfileContainerWithProvider = withProviders(<ProfileContainer />)
+    const ProfileContainerWithProvider = withProviders(store, <ProfileContainer />)
 
     ReactDOM.render(ProfileContainerWithProvider, document.getElementById('profile-container'))
   }
@@ -81,31 +87,31 @@ export default function (store) {
   if (document.getElementById('accounts-container')) {
     const title = document.getElementById('accounts-container').getAttribute('data-title')
     const view = document.getElementById('accounts-container').getAttribute('data-view')
-    const AccountsContainerWithProvider = withProviders(<AccountsContainer title={title} view={view} />)
+    const AccountsContainerWithProvider = withProviders(store, <AccountsContainer title={title} view={view} />)
 
     ReactDOM.render(AccountsContainerWithProvider, document.getElementById('accounts-container'))
   }
 
   if (document.getElementById('accounts-import-container')) {
-    const AccountsImportContainerWithProvider = withProviders(<AccountsImportContainer />)
+    const AccountsImportContainerWithProvider = withProviders(store, <AccountsImportContainer />)
 
     ReactDOM.render(AccountsImportContainerWithProvider, document.getElementById('accounts-import-container'))
   }
 
   if (document.getElementById('groups-container')) {
-    const GroupsContainerWithProvider = withProviders(<GroupsContainer />)
+    const GroupsContainerWithProvider = withProviders(store, <GroupsContainer />)
 
     ReactDOM.render(GroupsContainerWithProvider, document.getElementById('groups-container'))
   }
 
   if (document.getElementById('teams-container')) {
-    const TeamsContainerWithProvider = withProviders(<TeamsContainer />)
+    const TeamsContainerWithProvider = withProviders(store, <TeamsContainer />)
 
     ReactDOM.render(TeamsContainerWithProvider, document.getElementById('teams-container'))
   }
 
   if (document.getElementById('departments-container')) {
-    const TeamsContainerWithProvider = withProviders(<DepartmentsContainer />)
+    const TeamsContainerWithProvider = withProviders(store, <DepartmentsContainer />)
 
     ReactDOM.render(TeamsContainerWithProvider, document.getElementById('departments-container'))
   }
@@ -114,6 +120,7 @@ export default function (store) {
     const conversation = document.getElementById('messages-container').getAttribute('data-conversation-id')
     const showNewConversation = document.getElementById('messages-container').getAttribute('data-show-new-convo')
     const MessagesContainterWithProvider = withProviders(
+      store,
       <MessagesContainer initialConversation={conversation} showNewConvo={showNewConversation} />
     )
 
@@ -121,25 +128,25 @@ export default function (store) {
   }
 
   if (document.getElementById('notices-container')) {
-    const NoticeContainerWithProvider = withProviders(<NoticeContainer />)
+    const NoticeContainerWithProvider = withProviders(store, <NoticeContainer />)
 
     ReactDOM.render(NoticeContainerWithProvider, document.getElementById('notices-container'))
   }
 
   if (document.getElementById('reports-container')) {
-    const ReportsContainerWithProvider = withProviders(<ReportsContainer />)
+    const ReportsContainerWithProvider = withProviders(store, <ReportsContainer />)
 
     ReactDOM.render(ReportsContainerWithProvider, document.getElementById('reports-container'))
   }
 
   if (document.getElementById('settings-container')) {
-    const SettingsContainerWithProvider = withProviders(<SettingsContainer />)
+    const SettingsContainerWithProvider = withProviders(store, <SettingsContainer />)
 
     ReactDOM.render(SettingsContainerWithProvider, document.getElementById('settings-container'))
   }
 
   if (document.getElementById('about-container')) {
-    const AboutContainerWithProvider = withProviders(<AboutContainer />)
+    const AboutContainerWithProvider = withProviders(store, <AboutContainer />)
 
     ReactDOM.render(AboutContainerWithProvider, document.getElementById('about-container'))
   }

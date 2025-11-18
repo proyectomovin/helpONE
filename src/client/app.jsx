@@ -16,6 +16,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
+import { I18nextProvider } from 'react-i18next'
 import createSagaMiddleware from 'redux-saga'
 import { middleware as thunkMiddleware } from 'redux-saga-thunk'
 import IndexReducer from './reducers'
@@ -26,6 +27,7 @@ import Sidebar from './components/Nav/Sidebar/index.jsx'
 import ModalRoot from './containers/Modals'
 import renderer from './renderer'
 import { TranslationProvider } from './i18n'
+import i18n from './i18n'
 
 import SocketGlobal from 'containers/Global/SocketGlobal'
 import SessionLoader from 'lib2/sessionLoader'
@@ -47,6 +49,12 @@ localStorage.setItem('debug', 'trudesk:*') // Enable logger
 // }
 
 const store = createStore(IndexReducer, composeSetup(applyMiddleware(thunkMiddleware, sagaMiddleware)))
+
+const withProviders = children => (
+  <I18nextProvider i18n={i18n}>
+    <Provider store={store}>{children}</Provider>
+  </I18nextProvider>
+)
 
 // This is need to call an action from angular
 // Goal: remove this once angular is fully removed
