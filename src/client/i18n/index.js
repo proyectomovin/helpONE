@@ -1,139 +1,91 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import i18n from 'i18next'
+import { initReactI18next, useTranslation as useTranslationBase } from 'react-i18next'
+import moment from 'moment'
+import 'moment/locale/es'
 
-import enSidebar from '../locales/en/sidebar.json'
-import esSidebar from '../locales/es/sidebar.json'
+import enCommon from '../locales/en/common.json'
+import esCommon from '../locales/es/common.json'
+
+const DEFAULT_LOCALE = 'en'
+const LOCALE_STORAGE_KEY = 'trudesk:locale'
 
 const resources = {
-  en: {
-    sidebar: enSidebar
-  },
-  es: {
-    sidebar: esSidebar
-  }
+  en: { common: enCommon },
+  es: { common: esCommon }
 }
 
-export const SUPPORTED_LOCALES = Object.keys(resources)
+const supportedLocales = Object.keys(resources)
 
-const getValueFromTree = (tree, segments) =>
-  segments.reduce((acc, segment) => {
-    if (acc && Object.prototype.hasOwnProperty.call(acc, segment)) {
-      return acc[segment]
+const getStoredLocale = () => {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const persisted = window.localStorage ? window.localStorage.getItem(LOCALE_STORAGE_KEY) : null
+    if (persisted && supportedLocales.includes(persisted)) {
+      return persisted
     }
-
-    return undefined
-  }, tree)
-
-const safeLocalStorageGet = key => {
-  if (typeof window === 'undefined' || !window.localStorage) return null
-
-  try {
-    return window.localStorage.getItem(key)
-  } catch (error) {
-    return null
+  } catch (err) {
+    // Ignore storage access issues
   }
+
+  const sessionUserLocale = window?.trudeskSessionService?.getUser?.()?.preferences?.locale
+  if (sessionUserLocale && supportedLocales.includes(sessionUserLocale)) {
+    return sessionUserLocale
+  }
+
+  const browserLocale = window?.navigator?.language?.split?.('-')?.[0]
+  if (browserLocale && supportedLocales.includes(browserLocale)) {
+    return browserLocale
+  }
+
+  return null
 }
 
-const safeLocalStorageSet = (key, value) => {
-  if (typeof window === 'undefined' || !window.localStorage) return
+const initialLocale = getStoredLocale() || DEFAULT_LOCALE
 
-  try {
-    window.localStorage.setItem(key, value)
-  } catch (error) {
-    // ignore storage failures
-  }
+const applyLocaleToDateLibraries = locale => {
+  moment.locale(locale)
 }
 
-const detectLocale = () => {
-  if (typeof window === 'undefined') return 'en'
-
-  const storedLocale = safeLocalStorageGet('td.locale')
-  if (storedLocale && SUPPORTED_LOCALES.includes(storedLocale)) {
-    return storedLocale
+i18n.use(initReactI18next).init({
+  resources,
+  lng: initialLocale,
+  fallbackLng: DEFAULT_LOCALE,
+  defaultNS: 'common',
+  interpolation: {
+    escapeValue: false
+  },
+  react: {
+    useSuspense: false
   }
-
-  const htmlLocale = document?.documentElement?.getAttribute('lang')
-  if (htmlLocale && SUPPORTED_LOCALES.includes(htmlLocale)) {
-    return htmlLocale
-  }
-
-  const navigatorLocale = window.navigator?.language?.split('-')[0]
-  if (navigatorLocale && SUPPORTED_LOCALES.includes(navigatorLocale)) {
-    return navigatorLocale
-  }
-
-  return 'en'
-}
-
-const TranslationContext = createContext({
-  locale: 'en',
-  setLocale: () => {},
-  t: key => key
 })
 
-TranslationContext.displayName = 'TranslationContext'
+applyLocaleToDateLibraries(initialLocale)
 
-export const TranslationProvider = ({ children, initialLocale }) => {
-  const [locale, setLocaleState] = useState(initialLocale || detectLocale())
-
-  const changeLocale = useCallback(
-    nextLocale => {
-      if (!nextLocale || !SUPPORTED_LOCALES.includes(nextLocale)) return
-
-      setLocaleState(nextLocale)
-      safeLocalStorageSet('td.locale', nextLocale)
-
-      if (typeof document !== 'undefined' && document.documentElement) {
-        document.documentElement.setAttribute('lang', nextLocale)
-      }
-    },
-    []
-  )
-
-  const translate = useCallback(
-    key => {
-      if (!key) return ''
-
-      const path = key.split('.')
-      const languageResources = resources[locale] || resources.en
-      const fallbackResources = resources.en
-
-      const value = getValueFromTree(languageResources, path)
-      if (value !== undefined) {
-        return value
-      }
-
-      const fallbackValue = getValueFromTree(fallbackResources, path)
-      return fallbackValue !== undefined ? fallbackValue : key
-    },
-    [locale]
-  )
-
-  const contextValue = useMemo(
-    () => ({
-      locale,
-      setLocale: changeLocale,
-      t: translate
-    }),
-    [locale, changeLocale, translate]
-  )
-
-  return <TranslationContext.Provider value={contextValue}>{children}</TranslationContext.Provider>
-}
-
-export const useTranslation = () => {
-  const context = useContext(TranslationContext)
-  return { t: context.t, locale: context.locale, setLocale: context.setLocale }
-}
-
-export const withTranslation = (namespace = null) => WrappedComponent => {
-  const ComponentWithTranslation = props => {
-    const translationProps = useTranslation()
-    return <WrappedComponent {...props} {...translationProps} />
+i18n.on('languageChanged', lng => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, lng)
+    }
+  } catch (err) {
+    // Ignore storage errors
   }
 
-  const wrappedName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
-  const namespaceLabel = namespace ? `${namespace}:` : ''
-  ComponentWithTranslation.displayName = `withTranslation(${namespaceLabel}${wrappedName})`
+  applyLocaleToDateLibraries(lng)
+})
 
-  return ComponentWithTranslation
+export const getAvailableLocales = () => [...supportedLocales]
+
+export const getCurrentLocale = () => i18n.language
+
+export const setLocale = locale => {
+  if (!supportedLocales.includes(locale)) {
+    return Promise.reject(new Error(`Unsupported locale: ${locale}`))
+  }
+
+  return i18n.changeLanguage(locale)
 }
+
+export const useTranslation = (...args) => useTranslationBase(...args)
+
+export default i18n
