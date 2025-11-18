@@ -1,0 +1,40 @@
+{
+  "pageTitle": "Ticket #{{id}}",
+  "assignee": {
+    "title": "Asignado",
+    "setAssignee": "Asignar usuario",
+    "none": "Sin usuario asignado"
+  },
+  "details": {
+    "type": "Tipo",
+    "priority": "Prioridad",
+    "group": "Grupo",
+    "dueDate": "Fecha de vencimiento",
+    "clear": "Borrar",
+    "tags": "Etiquetas",
+    "editTags": "Editar etiquetas"
+  },
+  "history": {
+    "title": "Historial del ticket",
+    "actionBy": "Acción de:"
+  },
+  "actions": {
+    "transferThirdParty": "Transferir a ThirdParty",
+    "addComment": "Agregar comentario",
+    "postComment": "Publicar comentario",
+    "saveNote": "Guardar nota",
+    "saveEdit": "Guardar edición"
+  },
+  "tabs": {
+    "all": "Todo",
+    "comments": "Comentarios",
+    "notes": "Notas",
+    "comment": "Comentario",
+    "internalNote": "Nota interna"
+  },
+  "modals": {
+    "priorityReset": {
+      "message": "La prioridad seleccionada no existe para este tipo de ticket. La prioridad se restableció al valor predeterminado para este tipo.<br><br><strong>Selecciona una nueva prioridad</strong>"
+    }
+  }
+}
