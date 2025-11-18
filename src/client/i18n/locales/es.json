@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "general": {
+      "siteTitle": {
+        "title": "Título del sitio",
+        "subtitle": "Título del sitio. Se utiliza como título de la página. <i>predeterminado: {{defaultTitle}}</i>"
+      },
+      "siteUrl": {
+        "title": "URL del sitio",
+        "subtitle": "URL de acceso público para este sitio. <i>ej.: {{example}}</i>"
+      },
+      "serverTimezone": {
+        "title": "Zona horaria del servidor",
+        "subtitle": "Define la zona horaria local del servidor para mostrar las fechas",
+        "tooltip": "El usuario puede anularla en su perfil. Requiere reiniciar el servidor"
+      },
+      "timeDate": {
+        "title": "Formato de fecha y hora",
+        "linkLabel": "Opciones de formato de Moment.js",
+        "timeFormat": {
+          "title": "Formato de hora",
+          "subtitle": "Define el formato para mostrar la hora"
+        },
+        "shortDateFormat": {
+          "title": "Formato de fecha corta",
+          "subtitle": "Define el formato para las fechas cortas"
+        },
+        "longDateFormat": {
+          "title": "Formato de fecha larga",
+          "subtitle": "Define el formato para las fechas largas"
+        }
+      }
+    }
+  }
+}

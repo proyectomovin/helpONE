@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "general": {
+      "siteTitle": {
+        "title": "Site Title",
+        "subtitle": "Title of site. Used as page title. <i>default: {{defaultTitle}}</i>"
+      },
+      "siteUrl": {
+        "title": "Site Url",
+        "subtitle": "Publicly accessible URL of this site. <i>ex: {{example}}</i>"
+      },
+      "serverTimezone": {
+        "title": "Server Timezone",
+        "subtitle": "Set the local server timezone for date display",
+        "tooltip": "User can override in user profile. Requires Server Restart"
+      },
+      "timeDate": {
+        "title": "Time & Date Format",
+        "linkLabel": "Moment.js Format Options",
+        "timeFormat": {
+          "title": "Time Format",
+          "subtitle": "Set the format for time display"
+        },
+        "shortDateFormat": {
+          "title": "Short Date Format",
+          "subtitle": "Set the format for short dates"
+        },
+        "longDateFormat": {
+          "title": "Long Date Format",
+          "subtitle": "Set the format for long dates"
+        }
+      }
+    }
+  }
+}

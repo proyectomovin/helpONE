@@ -12,43 +12,36 @@
  *  Copyright (c) 2014-2019. All rights reserved.
  */
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment-timezone'
 import { updateSetting } from 'actions/settings'
+import { useTranslation } from '../../i18n'
 
 import SettingItem from 'components/Settings/SettingItem'
 
 import InputWithSave from 'components/Settings/InputWithSave'
 import SingleSelect from 'components/SingleSelect'
-import EnableSwitch from 'components/Settings/EnableSwitch'
 import SettingSubItem from 'components/Settings/SettingSubItem'
 import Zone from 'components/ZoneBox/zone'
 import ZoneBox from 'components/ZoneBox'
 
-class GeneralSettings extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+const GeneralSettings = ({ active, settings, viewdata, updateSetting }) => {
+  const { t } = useTranslation()
 
-  componentDidMount () {}
-  componentWillUnmount () {}
+  const getSettingsValue = useCallback(
+    name => {
+      const value = settings.getIn(['settings', name, 'value'])
+      return value || ''
+    },
+    [settings]
+  )
 
-  getSettingsValue (name) {
-    return this.props.settings.getIn(['settings', name, 'value'])
-      ? this.props.settings.getIn(['settings', name, 'value'])
-      : ''
-  }
-
-  updateSetting (stateName, name, value) {
-    this.props.updateSetting({ stateName, name, value })
-  }
-
-  getTimezones () {
+  const timezones = useMemo(() => {
     return moment.tz
       .names()
-      .map(function (name) {
+      .map(name => {
         const year = new Date().getUTCFullYear()
         const timezoneAtBeginningOfyear = moment.tz(year + '-01-01', name)
         return {
@@ -57,125 +50,123 @@ class GeneralSettings extends React.Component {
           value: name
         }
       })
-      .sort(function (a, b) {
-        return a.utc - b.utc
-      })
-  }
+      .sort((a, b) => a.utc - b.utc)
+  }, [])
 
-  onTimezoneChange (e) {
-    if (e.target.value) this.updateSetting('timezone', 'gen:timezone', e.target.value)
-  }
+  const handleTimezoneChange = useCallback(
+    e => {
+      if (e.target.value) {
+        updateSetting({ stateName: 'timezone', name: 'gen:timezone', value: e.target.value })
+      }
+    },
+    [updateSetting]
+  )
 
-  render () {
-    const { active } = this.props
+  const siteTitleMarkup = useMemo(() => {
+    return { __html: t('settings.general.siteTitle.subtitle', { defaultTitle: 'Trudesk' }) }
+  }, [t])
 
-    const SiteTitle = (
-      <InputWithSave
-        stateName='siteTitle'
-        settingName='gen:sitetitle'
-        initialValue={this.getSettingsValue('siteTitle')}
+  const hostUrl = viewdata ? viewdata.get('hosturl') : ''
+  const siteUrlMarkup = useMemo(() => {
+    return { __html: t('settings.general.siteUrl.subtitle', { example: hostUrl || '' }) }
+  }, [hostUrl, t])
+
+  const SiteTitle = (
+    <InputWithSave
+      stateName='siteTitle'
+      settingName='gen:sitetitle'
+      initialValue={getSettingsValue('siteTitle')}
+    />
+  )
+
+  const SiteUrl = (
+    <InputWithSave stateName='siteUrl' settingName='gen:siteurl' initialValue={getSettingsValue('siteUrl')} />
+  )
+
+  const Timezone = (
+    <SingleSelect
+      stateName='timezone'
+      settingName='gen:timezone'
+      items={timezones}
+      defaultValue={getSettingsValue('timezone')}
+      onSelectChange={handleTimezoneChange}
+      showTextbox={true}
+    />
+  )
+
+  return (
+    <div className={active ? 'active' : 'hide'}>
+      <SettingItem
+        title={t('settings.general.siteTitle.title')}
+        subtitle={<div dangerouslySetInnerHTML={siteTitleMarkup} />}
+        component={SiteTitle}
       />
-    )
-
-    const SiteUrl = (
-      <InputWithSave stateName='siteUrl' settingName='gen:siteurl' initialValue={this.getSettingsValue('siteUrl')} />
-    )
-
-    const Timezone = (
-      <SingleSelect
-        stateName='timezone'
-        settingName='gen:timezone'
-        items={this.getTimezones()}
-        defaultValue={this.getSettingsValue('timezone')}
-        onSelectChange={e => {
-          this.onTimezoneChange(e)
-        }}
-        showTextbox={true}
+      <SettingItem
+        title={t('settings.general.siteUrl.title')}
+        subtitle={<div dangerouslySetInnerHTML={siteUrlMarkup} />}
+        component={SiteUrl}
       />
-    )
-
-    return (
-      <div className={active ? 'active' : 'hide'}>
-        <SettingItem
-          title='Site Title'
-          subtitle={
-            <div>
-              Title of site. Used as page title. <i>default: Trudesk</i>
-            </div>
-          }
-          component={SiteTitle}
-        />
-        <SettingItem
-          title='Site Url'
-          subtitle={
-            <div>
-              Publicly accessible URL of this site. <i>ex: {this.props.viewdata.get('hosturl')}</i>
-            </div>
-          }
-          component={SiteUrl}
-        />
-        <SettingItem
-          title='Server Timezone'
-          subtitle='Set the local server timezone for date display'
-          tooltip='User can override in user profile. Requires Server Restart'
-          component={Timezone}
-        />
-        <SettingItem
-          title='Time & Date Format'
-          subtitle={
-            <a href='https://momentjs.com/docs/#/displaying/format/' rel='noopener noreferrer' target='_blank'>
-              Moment.js Format Options
-            </a>
-          }
-        >
-          <Zone>
-            <ZoneBox>
-              <SettingSubItem
-                title='Time Format'
-                subtitle='Set the format for time display'
-                component={
-                  <InputWithSave
-                    stateName='timeFormat'
-                    settingName='gen:timeFormat'
-                    initialValue={this.getSettingsValue('timeFormat')}
-                    width={'60%'}
-                  />
-                }
-              />
-            </ZoneBox>
-            <ZoneBox>
-              <SettingSubItem
-                title='Short Date Format'
-                subtitle='Set the format for short dates'
-                component={
-                  <InputWithSave
-                    stateName='shortDateFormat'
-                    settingName='gen:shortDateFormat'
-                    initialValue={this.getSettingsValue('shortDateFormat')}
-                    width={'60%'}
-                  />
-                }
-              />
-            </ZoneBox>
-            <ZoneBox>
-              <SettingSubItem
-                title='Long Date Format'
-                subtitle='Set the format for long dates'
-                component={
-                  <InputWithSave
-                    stateName='longDateFormat'
-                    settingName='gen:longDateFormat'
-                    initialValue={this.getSettingsValue('longDateFormat')}
-                    width={'60%'}
-                  />
-                }
-              />
-            </ZoneBox>
-          </Zone>
-        </SettingItem>
-      </div>
-    )
-  }
+      <SettingItem
+        title={t('settings.general.serverTimezone.title')}
+        subtitle={t('settings.general.serverTimezone.subtitle')}
+        tooltip={t('settings.general.serverTimezone.tooltip')}
+        component={Timezone}
+      />
+      <SettingItem
+        title={t('settings.general.timeDate.title')}
+        subtitle={
+          <a href='https://momentjs.com/docs/#/displaying/format/' rel='noopener noreferrer' target='_blank'>
+            {t('settings.general.timeDate.linkLabel')}
+          </a>
+        }
+      >
+        <Zone>
+          <ZoneBox>
+            <SettingSubItem
+              title={t('settings.general.timeDate.timeFormat.title')}
+              subtitle={t('settings.general.timeDate.timeFormat.subtitle')}
+              component={
+                <InputWithSave
+                  stateName='timeFormat'
+                  settingName='gen:timeFormat'
+                  initialValue={getSettingsValue('timeFormat')}
+                  width={'60%'}
+                />
+              }
+            />
+          </ZoneBox>
+          <ZoneBox>
+            <SettingSubItem
+              title={t('settings.general.timeDate.shortDateFormat.title')}
+              subtitle={t('settings.general.timeDate.shortDateFormat.subtitle')}
+              component={
+                <InputWithSave
+                  stateName='shortDateFormat'
+                  settingName='gen:shortDateFormat'
+                  initialValue={getSettingsValue('shortDateFormat')}
+                  width={'60%'}
+                />
+              }
+            />
+          </ZoneBox>
+          <ZoneBox>
+            <SettingSubItem
+              title={t('settings.general.timeDate.longDateFormat.title')}
+              subtitle={t('settings.general.timeDate.longDateFormat.subtitle')}
+              component={
+                <InputWithSave
+                  stateName='longDateFormat'
+                  settingName='gen:longDateFormat'
+                  initialValue={getSettingsValue('longDateFormat')}
+                  width={'60%'}
+                />
+              }
+            />
+          </ZoneBox>
+        </Zone>
+      </SettingItem>
+    </div>
+  )
 }
 
 GeneralSettings.propTypes = {

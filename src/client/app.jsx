@@ -25,6 +25,7 @@ import TopbarContainer from './containers/Topbar/TopbarContainer'
 import Sidebar from './components/Nav/Sidebar/index.jsx'
 import ModalRoot from './containers/Modals'
 import renderer from './renderer'
+import { TranslationProvider } from './i18n'
 
 import SocketGlobal from 'containers/Global/SocketGlobal'
 import SessionLoader from 'lib2/sessionLoader'
@@ -53,48 +54,40 @@ window.react.redux = { store }
 
 sagaMiddleware.run(IndexSagas)
 
+const withProviders = children => (
+  <Provider store={store}>
+    <TranslationProvider>{children}</TranslationProvider>
+  </Provider>
+)
+
 // Mount Globals
 if (document.getElementById('globals')) {
-  const GlobalsRoot = (
-    <Provider store={store}>
-      <>
-        <SingletonHooksContainer />
-        <SessionLoader />
-        <SocketGlobal />
-        {/*<HotKeysGlobal />*/}
+  const GlobalsRoot = withProviders(
+    <>
+      <SingletonHooksContainer />
+      <SessionLoader />
+      <SocketGlobal />
+      {/*<HotKeysGlobal />*/}
 
-        <ChatDock />
-        <BackupRestoreOverlay />
-      </>
-    </Provider>
+      <ChatDock />
+      <BackupRestoreOverlay />
+    </>
   )
 
   ReactDOM.render(GlobalsRoot, document.getElementById('globals'))
 }
 
-const sidebarWithProvider = (
-  <Provider store={store}>
-    <Sidebar />
-  </Provider>
-)
+const sidebarWithProvider = withProviders(<Sidebar />)
 
 ReactDOM.render(sidebarWithProvider, document.getElementById('sidebar'))
 
 if (document.getElementById('modal-wrapper')) {
-  const RootModal = (
-    <Provider store={store}>
-      <ModalRoot />
-    </Provider>
-  )
+  const RootModal = withProviders(<ModalRoot />)
   ReactDOM.render(RootModal, document.getElementById('modal-wrapper'))
 }
 
 if (document.getElementById('topbar')) {
-  const TopbarRoot = (
-    <Provider store={store}>
-      <TopbarContainer />
-    </Provider>
-  )
+  const TopbarRoot = withProviders(<TopbarContainer />)
 
   ReactDOM.render(TopbarRoot, document.getElementById('topbar'))
 }
