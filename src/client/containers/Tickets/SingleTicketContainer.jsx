@@ -60,6 +60,7 @@ import Log from '../../logger'
 import UIkit from 'uikit'
 import moment from 'moment'
 import SpinLoader from 'components/SpinLoader'
+import { useTranslation } from 'i18n'
 
 const fetchTicket = parent => {
   axios
@@ -79,13 +80,8 @@ const fetchTicket = parent => {
     })
 }
 
-const showPriorityConfirm = () => {
-  UIkit.modal.confirm(
-    'Selected Priority does not exist for this ticket type. Priority has reset to the default for this type.' +
-      '<br><br><strong>Please select a new priority</strong>',
-    () => {},
-    { cancelButtonClass: 'uk-hidden' }
-  )
+const showPriorityConfirm = message => {
+  UIkit.modal.confirm(message, () => {}, { cancelButtonClass: 'uk-hidden' })
 }
 
 @observer
@@ -261,6 +257,7 @@ class SingleTicketContainer extends React.Component {
   }
 
   render () {
+    const { t } = this.props
     const mappedGroups = this.props.groupsState
       ? this.props.groupsState.groups.map(group => {
           return { text: group.get('name'), value: group.get('_id') }
@@ -299,7 +296,7 @@ class SingleTicketContainer extends React.Component {
                 style={{ width: 360, maxWidth: 360, minWidth: 360 }}
               >
                 <div className='page-title-border-right relative' style={{ padding: '0 30px' }}>
-                  <p>Ticket #{this.ticket.uid}</p>
+                  <p>{t('pageTitle', { id: this.ticket.uid })}</p>
                   <StatusSelector
                     ticketId={this.ticket._id}
                     status={this.ticket.status._id}
@@ -314,12 +311,12 @@ class SingleTicketContainer extends React.Component {
                 <div className='page-content-left full-height scrollable'>
                   <div className='ticket-details-wrap uk-position-relative uk-clearfix'>
                     <div className='ticket-assignee-wrap uk-clearfix' style={{ paddingRight: 30 }}>
-                      <h4>Assignee</h4>
+                      <h4>{t('assignee.title')}</h4>
                       <div className='ticket-assignee uk-clearfix'>
                         {hasTicketUpdate && (
                           <a
                             role='button'
-                            title='Set Assignee'
+                            title={t('assignee.setAssignee')}
                             style={{ float: 'left' }}
                             className='relative no-ajaxy'
                             onClick={() => this.props.socket.emit(TICKETS_ASSIGNEE_LOAD)}
@@ -342,7 +339,7 @@ class SingleTicketContainer extends React.Component {
                           />
                         )}
                         <div className='ticket-assignee-details'>
-                          {!this.ticket.assignee && <h3>No User Assigned</h3>}
+                          {!this.ticket.assignee && <h3>{t('assignee.none')}</h3>}
                           {this.ticket.assignee && (
                             <Fragment>
                               <h3>{this.ticket.assignee.fullname}</h3>
@@ -373,7 +370,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Type */}
                         <div className='uk-width-1-2 uk-float-left nopadding'>
                           <div className='marginright5'>
-                            <span>Type</span>
+                              <span>{t('details.type')}</span>
                             {hasTicketUpdate && (
                               <select
                                 value={this.ticket.type._id}
@@ -392,7 +389,7 @@ class SingleTicketContainer extends React.Component {
                                       value: type.get('priorities').find(() => true)
                                     })
 
-                                    showPriorityConfirm()
+                                      showPriorityConfirm(t('modals.priorityReset.message'))
                                   }
 
                                   this.props.socket.emit(TICKETS_TYPE_SET, {
@@ -415,7 +412,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Priority */}
                         <div className='uk-width-1-2 uk-float-left nopadding'>
                           <div className='marginleft5'>
-                            <span>Priority</span>
+                              <span>{t('details.priority')}</span>
                             {hasTicketUpdate && (
                               <select
                                 name='tPriority'
@@ -442,7 +439,7 @@ class SingleTicketContainer extends React.Component {
                         </div>
                         {/*  Group */}
                         <div className='uk-width-1-1 nopadding uk-clearfix'>
-                          <span>Group</span>
+                          <span>{t('details.group')}</span>
                           {hasTicketUpdate && (
                             <select
                               value={this.ticket.group._id}
@@ -465,7 +462,7 @@ class SingleTicketContainer extends React.Component {
                         </div>
                         {/*  Due Date */}
                         <div className='uk-width-1-1 p-0'>
-                          <span>Due Date</span> {hasTicketUpdate && <span>-&nbsp;</span>}
+                          <span>{t('details.dueDate')}</span> {hasTicketUpdate && <span>-&nbsp;</span>}
                           {hasTicketUpdate && (
                             <div className={'uk-display-inline'}>
                               <a
@@ -478,7 +475,7 @@ class SingleTicketContainer extends React.Component {
                                   })
                                 }}
                               >
-                                Clear
+                                {t('details.clear')}
                               </a>
                               <DatePicker
                                 name={'ticket_due_date'}
@@ -505,7 +502,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Tags */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>
-                            Tags
+                            {t('details.tags')}
                             {hasTicketUpdate && (
                               <Fragment>
                                 <span> - </span>
@@ -521,7 +518,7 @@ class SingleTicketContainer extends React.Component {
                                       })
                                     }}
                                   >
-                                    Edit Tags
+                                    {t('details.editTags')}
                                   </a>
                                 </div>
                               </Fragment>
@@ -542,7 +539,7 @@ class SingleTicketContainer extends React.Component {
                     {helpers.canUser('agent:*', true) && (
                       <div className='uk-width-1-1 padding-left-right-15'>
                         <div className='tru-card ticket-details pr-0 pb-0' style={{ height: 250 }}>
-                          Ticket History
+                          {t('history.title')}
                           <hr style={{ padding: 0, margin: 0 }} />
                           <div className='history-items scrollable' style={{ paddingTop: 12 }}>
                             {this.ticket.history &&
@@ -552,7 +549,7 @@ class SingleTicketContainer extends React.Component {
                                     dateTime={helpers.formatDate(item.date, this.props.common.get('longDateFormat'))}
                                   />
                                   <em>
-                                    Action by: <span>{item.owner.fullname}</span>
+                                    {t('history.actionBy')} <span>{item.owner.fullname}</span>
                                   </em>
                                   <p>{item.description}</p>
                                 </div>
@@ -577,7 +574,7 @@ class SingleTicketContainer extends React.Component {
                           this.transferToThirdParty(e)
                         }}
                       >
-                        Transfer to ThirdParty
+                        {t('actions.transferThirdParty')}
                       </a>
                     </div>
                   )}
@@ -590,7 +587,7 @@ class SingleTicketContainer extends React.Component {
                         helpers.scrollToBottom('.page-content-right', true)
                       }}
                     >
-                      Add Comment
+                      {t('actions.addComment')}
                     </a>
                   </div>
                   <div
@@ -649,21 +646,21 @@ class SingleTicketContainer extends React.Component {
                         <TruTabSelectors style={{ marginLeft: 110 }}>
                           <TruTabSelector
                             selectorId={0}
-                            label='All'
+                            label={t('tabs.all')}
                             active={true}
                             showBadge={true}
                             badgeText={this.commentsAndNotes.length}
                           />
                           <TruTabSelector
                             selectorId={1}
-                            label='Comments'
+                            label={t('tabs.comments')}
                             showBadge={true}
                             badgeText={this.ticket ? this.ticket.comments && this.ticket.comments.length : 0}
                           />
                           {helpers.canUser('tickets:notes', true) && (
                             <TruTabSelector
                               selectorId={2}
-                              label='Notes'
+                              label={t('tabs.notes')}
                               showBadge={true}
                               badgeText={this.ticket ? this.ticket.notes && this.ticket.notes.length : 0}
                             />
@@ -794,12 +791,12 @@ class SingleTicketContainer extends React.Component {
                           <TruTabWrapper style={{ paddingLeft: 85 }}>
                             <TruTabSelectors showTrack={false}>
                               {helpers.canUser('comments:create', true) && (
-                                <TruTabSelector selectorId={0} label={'Comment'} active={true} />
+                                <TruTabSelector selectorId={0} label={t('tabs.comment')} active={true} />
                               )}
                               {helpers.canUser('tickets:notes', true) && (
                                 <TruTabSelector
                                   selectorId={1}
-                                  label={'Internal Note'}
+                                  label={t('tabs.internalNote')}
                                   active={!helpers.canUser('comments:create', true)}
                                 />
                               )}
@@ -823,7 +820,7 @@ class SingleTicketContainer extends React.Component {
                                       className='uk-button uk-button-accent'
                                       style={{ padding: '10px 15px' }}
                                     >
-                                      Post Comment
+                                      {t('actions.postComment')}
                                     </button>
                                   </div>
                                 </div>
@@ -848,7 +845,7 @@ class SingleTicketContainer extends React.Component {
                                       className='uk-button uk-button-accent'
                                       style={{ padding: '10px 15px' }}
                                     >
-                                      Save Note
+                                      {t('actions.saveNote')}
                                     </button>
                                   </div>
                                 </div>
@@ -861,7 +858,7 @@ class SingleTicketContainer extends React.Component {
                 </div>
               </div>
             </div>
-            <OffCanvasEditor primaryLabel={'Save Edit'} ref={r => (this.editorWindow = r)} />
+            <OffCanvasEditor primaryLabel={t('actions.saveEdit')} ref={r => (this.editorWindow = r)} />
           </Fragment>
         )}
       </div>
@@ -884,7 +881,8 @@ SingleTicketContainer.propTypes = {
   showModal: PropTypes.func.isRequired,
   transferToThirdParty: PropTypes.func,
   ticketStatuses: PropTypes.object.isRequired,
-  fetchTicketStatus: PropTypes.func.isRequired
+  fetchTicketStatus: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -897,6 +895,11 @@ const mapStateToProps = state => ({
   groupsState: state.groupsState
 })
 
+const SingleTicketContainerWithTranslation = props => {
+  const { t } = useTranslation('ticket')
+  return <SingleTicketContainer {...props} t={t} />
+}
+
 export default connect(mapStateToProps, {
   fetchTicketTypes,
   fetchGroups,
@@ -904,4 +907,4 @@ export default connect(mapStateToProps, {
   unloadGroups,
   showModal,
   transferToThirdParty
-})(SingleTicketContainer)
+})(SingleTicketContainerWithTranslation)

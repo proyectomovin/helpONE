@@ -1,0 +1,40 @@
+{
+  "pageTitle": "Ticket #{{id}}",
+  "assignee": {
+    "title": "Assignee",
+    "setAssignee": "Set Assignee",
+    "none": "No User Assigned"
+  },
+  "details": {
+    "type": "Type",
+    "priority": "Priority",
+    "group": "Group",
+    "dueDate": "Due Date",
+    "clear": "Clear",
+    "tags": "Tags",
+    "editTags": "Edit Tags"
+  },
+  "history": {
+    "title": "Ticket History",
+    "actionBy": "Action by:"
+  },
+  "actions": {
+    "transferThirdParty": "Transfer to ThirdParty",
+    "addComment": "Add Comment",
+    "postComment": "Post Comment",
+    "saveNote": "Save Note",
+    "saveEdit": "Save Edit"
+  },
+  "tabs": {
+    "all": "All",
+    "comments": "Comments",
+    "notes": "Notes",
+    "comment": "Comment",
+    "internalNote": "Internal Note"
+  },
+  "modals": {
+    "priorityReset": {
+      "message": "Selected Priority does not exist for this ticket type. Priority has reset to the default for this type.<br><br><strong>Please select a new priority</strong>"
+    }
+  }
+}
