@@ -15,7 +15,6 @@
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { I18nextProvider } from 'react-i18next'
 
 import DashboardContainer from 'containers/Dashboard'
 import TicketsContainer from 'containers/Tickets/TicketsContainer'
@@ -31,19 +30,13 @@ import ProfileContainer from 'containers/Profile'
 import MessagesContainer from 'containers/Messages'
 import ReportsContainer from 'containers/Reports'
 import AboutContainer from 'containers/About'
-import i18n from './i18n'
-
-const withProviders = (store, component) => (
-  <I18nextProvider i18n={i18n}>
-    <Provider store={store}>{component}</Provider>
-  </I18nextProvider>
-)
+import { TranslationProvider } from './i18n'
 
 let storeReference
 
-const withProviders = children => (
-  <Provider store={storeReference}>
-    <TranslationProvider>{children}</TranslationProvider>
+const withProviders = (store, component) => (
+  <Provider store={store}>
+    <TranslationProvider>{component}</TranslationProvider>
   </Provider>
 )
 
