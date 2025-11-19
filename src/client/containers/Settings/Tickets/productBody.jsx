@@ -60,12 +60,12 @@ class ProductBody extends React.Component {
     axios
       .put(`/api/v1/products/${id}`, { name, description, enabled })
       .then(res => {
-        helpers.UI.showSnackbar('Product updated successfully')
+        helpers.UI.showSnackbar('Producto actualizado exitosamente')
         if (this.props.onUpdate) this.props.onUpdate()
       })
       .catch(err => {
         console.error(err)
-        const errorText = err.response?.data?.error || 'Error updating product'
+        const errorText = err.response?.data?.error || 'Error al actualizar producto'
         helpers.UI.showSnackbar(`Error: ${errorText}`, true)
       })
   }
@@ -83,42 +83,42 @@ class ProductBody extends React.Component {
             <h2 className='text-light'>General</h2>
             <hr style={{ margin: '5px 0 25px 0' }} />
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Product Name</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Nombre del Producto</label>
               <Input defaultValue={this.productName} onChange={v => (this.productName = v)} />
             </div>
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Description</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Descripción</label>
               <Input defaultValue={this.productDescription} onChange={v => (this.productDescription = v)} />
             </div>
           </div>
-          <h2 className='text-light mt-25'>Properties</h2>
+          <h2 className='text-light mt-25'>Propiedades</h2>
           <hr style={{ margin: '5px 0 25px 0' }} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <h4 className={'uk-width-1-2'} style={{ flexGrow: 1 }}>
-              Enabled
+              Habilitado
             </h4>
             <EnableSwitch
               stateName={`productEnabled_${this.props.product._id}`}
-              label={'Yes'}
+              label={'Sí'}
               checked={this.productEnabled}
               onChange={e => (this.productEnabled = e.target.checked)}
             />
           </div>
           <div className={'uk-margin-large-top'} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button text={'Save Product'} style={'success'} onClick={e => this.onSaveClicked(e)} />
+            <Button text={'Guardar Producto'} style={'success'} onClick={e => this.onSaveClicked(e)} />
           </div>
         </form>
         <div className={'uk-margin-large-top'} style={{ display: 'block', height: 15 }} />
         <div className={'uk-margin-large-top'}>
-          <h2 className='text-light'>Danger Zone</h2>
+          <h2 className='text-light'>Zona Peligrosa</h2>
           <div className='danger-zone'>
             <div className='dz-box uk-clearfix'>
               <div className='uk-float-left'>
-                <h5>Delete this product</h5>
-                <p>Once you delete a product, there is no going back. Please be certain.</p>
+                <h5>Eliminar este producto</h5>
+                <p>Una vez que elimines un producto, no hay vuelta atrás. Por favor, asegúrate.</p>
               </div>
               <div className='uk-float-right' style={{ paddingTop: '10px' }}>
-                <Button text={'Delete'} small={true} style={'danger'} onClick={e => this.showDeleteProductModal(e)} />
+                <Button text={'Eliminar'} small={true} style={'danger'} onClick={e => this.showDeleteProductModal(e)} />
               </div>
             </div>
           </div>

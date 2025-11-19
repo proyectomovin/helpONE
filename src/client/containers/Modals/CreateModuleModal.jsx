@@ -72,13 +72,13 @@ class CreateModuleModal extends React.Component {
         product: this.product || null
       })
       .then(res => {
-        helpers.UI.showSnackbar(`Module "${this.name}" created successfully`)
+        helpers.UI.showSnackbar(`Módulo "${this.name}" creado exitosamente`)
         this.props.hideModal()
         // Reload the page to refresh the modules list
         window.location.reload()
       })
       .catch(err => {
-        const errorText = err.response?.data?.error || 'Error creating module'
+        const errorText = err.response?.data?.error || 'Error al crear módulo'
         helpers.UI.showSnackbar(`Error: ${errorText}`, true)
       })
   }
@@ -89,7 +89,7 @@ class CreateModuleModal extends React.Component {
 
   render () {
     const mappedProducts = [
-      { text: 'None (Independent Module)', value: '' },
+      { text: 'Ninguno (Módulo Independiente)', value: '' },
       ...this.products.map(p => ({ text: p.name, value: p._id }))
     ]
 
@@ -97,14 +97,14 @@ class CreateModuleModal extends React.Component {
       <BaseModal {...this.props}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onCreateModuleSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Create Module</h2>
+            <h2>Crear Módulo</h2>
           </div>
 
           <div>
             <div className='uk-clearfix'>
               <div className='z-box uk-grid uk-grid-collapse uk-clearfix'>
                 <div className='uk-width-1-1 uk-margin-small-bottom'>
-                  <label>Module Name</label>
+                  <label>Nombre del Módulo</label>
                   <input
                     type='text'
                     className={'md-input'}
@@ -112,12 +112,12 @@ class CreateModuleModal extends React.Component {
                     onChange={e => (this.name = e.target.value)}
                     data-validation='length'
                     data-validation-length='min3'
-                    data-validation-error-msg='Invalid name (3+ characters)'
+                    data-validation-error-msg='Nombre inválido (mínimo 3 caracteres)'
                   />
                 </div>
 
                 <div className='uk-width-1-1 uk-margin-small-bottom'>
-                  <label>Description</label>
+                  <label>Descripción</label>
                   <input
                     type='text'
                     className={'md-input'}
@@ -127,7 +127,7 @@ class CreateModuleModal extends React.Component {
                 </div>
 
                 <div className='uk-width-1-1 uk-margin-small-bottom'>
-                  <label>Parent Product</label>
+                  <label>Producto Padre</label>
                   <SingleSelect
                     items={mappedProducts}
                     defaultValue={''}
@@ -140,15 +140,15 @@ class CreateModuleModal extends React.Component {
                 <div className='uk-width-1-1 uk-margin-small-bottom'>
                   <EnableSwitch
                     stateName={'moduleEnabled'}
-                    label={'Enabled'}
+                    label={'Habilitado'}
                     checked={this.enabled}
                     onChange={e => (this.enabled = e.target.checked)}
                   />
                 </div>
               </div>
               <div className='uk-modal-footer uk-text-right'>
-                <Button text={'Cancel'} type={'button'} extraClass={'uk-modal-close'} flat={true} waves={true} />
-                <Button text={'Create'} type={'submit'} flat={true} waves={true} style={'success'} />
+                <Button text={'Cancelar'} type={'button'} extraClass={'uk-modal-close'} flat={true} waves={true} />
+                <Button text={'Crear'} type={'submit'} flat={true} waves={true} style={'success'} />
               </div>
             </div>
           </div>
