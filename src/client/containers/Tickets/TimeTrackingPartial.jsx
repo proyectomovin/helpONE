@@ -21,15 +21,15 @@ class TimeTrackingPartial extends React.Component {
     this.state = {
       hours: '',
       description: '',
-      estimatedHours: props.ticket.get('estimatedHours') || 0,
+      estimatedHours: props.ticket.estimatedHours || 0,
       editingEstimatedHours: false,
       showAddForm: false
     }
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.ticket.get('estimatedHours') !== this.props.ticket.get('estimatedHours')) {
-      this.setState({ estimatedHours: this.props.ticket.get('estimatedHours') || 0 })
+    if (prevProps.ticket.estimatedHours !== this.props.ticket.estimatedHours) {
+      this.setState({ estimatedHours: this.props.ticket.estimatedHours || 0 })
     }
   }
 
@@ -63,12 +63,12 @@ class TimeTrackingPartial extends React.Component {
   }
 
   calculateTotalHours = () => {
-    const timeEntries = this.props.ticket.get('timeEntries')
-    if (!timeEntries || timeEntries.size === 0) return 0
+    const timeEntries = this.props.ticket.timeEntries
+    if (!timeEntries || timeEntries.length === 0) return 0
 
     return timeEntries.reduce((total, entry) => {
-      if (!entry.get('deleted')) {
-        return total + (entry.get('hours') || 0)
+      if (!entry.deleted) {
+        return total + (entry.hours || 0)
       }
       return total
     }, 0)
@@ -77,10 +77,10 @@ class TimeTrackingPartial extends React.Component {
   render () {
     const { ticket, dateFormat, onEditTimeEntry, onRemoveTimeEntry } = this.props
     const { hours, description, estimatedHours, editingEstimatedHours, showAddForm } = this.state
-    const timeEntries = ticket.get('timeEntries')
+    const timeEntries = ticket.timeEntries
     const totalHours = this.calculateTotalHours()
-    const ticketStatus = ticket.get('status')
-    const isResolved = ticketStatus ? ticketStatus.get('isResolved') : false
+    const ticketStatus = ticket.status
+    const isResolved = ticketStatus ? ticketStatus.isResolved : false
 
     return (
       <div className='time-tracking-section' style={{ marginTop: 20 }}>
@@ -127,7 +127,7 @@ class TimeTrackingPartial extends React.Component {
                   <button
                     onClick={() => this.setState({
                       editingEstimatedHours: false,
-                      estimatedHours: ticket.get('estimatedHours') || 0
+                      estimatedHours: ticket.estimatedHours || 0
                     })}
                     style={{
                       padding: '5px 10px',
@@ -318,20 +318,19 @@ class TimeTrackingPartial extends React.Component {
           {/* Time Entries List */}
           <div>
             <h4 style={{ marginBottom: 15, fontSize: 16 }}>Time Entries</h4>
-            {timeEntries && timeEntries.size > 0 ? (
+            {timeEntries && timeEntries.length > 0 ? (
               timeEntries
-                .filter(entry => !entry.get('deleted'))
+                .filter(entry => !entry.deleted)
                 .map((entry, index) => (
                   <TimeEntryPartial
-                    key={index}
-                    timeEntry={entry.toJS()}
+                    key={entry._id || index}
+                    timeEntry={entry}
                     dateFormat={dateFormat}
                     ticketStatus={ticketStatus}
-                    onEditClick={() => onEditTimeEntry(entry.get('_id'))}
-                    onRemoveClick={() => onRemoveTimeEntry(entry.get('_id'))}
+                    onEditClick={() => onEditTimeEntry(entry._id)}
+                    onRemoveClick={() => onRemoveTimeEntry(entry._id)}
                   />
                 ))
-                .toArray()
             ) : (
               <div style={{ padding: 20, textAlign: 'center', color: '#999', fontSize: 14 }}>
                 No time entries yet. Add your first time entry to start tracking!

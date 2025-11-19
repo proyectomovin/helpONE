@@ -51,7 +51,7 @@ class TimeEntryPartial extends React.Component {
                 }}>
                   {timeEntry.hours}h
                 </div>
-                {ticketStatus && ticketStatus.get && ticketStatus.get('isResolved') === false && (
+                {ticketStatus && ticketStatus.isResolved === false && (
                   <div style={{ display: 'flex', gap: 5 }}>
                     {helpers.hasPermOverRole(timeEntry.owner.role, null, 'tickets:update', true) && (
                       <div className='edit-comment' onClick={onEditClick} style={{ cursor: 'pointer' }}>
