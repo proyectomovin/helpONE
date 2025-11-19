@@ -19,15 +19,7 @@ import { observer } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import union from 'lodash/union'
 
-import {
-  transferToThirdParty,
-  fetchTicketTypes,
-  fetchTicketStatus,
-  setEstimatedHours,
-  addTimeEntry,
-  updateTimeEntry,
-  deleteTimeEntry
-} from 'actions/tickets'
+import { transferToThirdParty, fetchTicketTypes, fetchTicketStatus } from 'actions/tickets'
 import { fetchGroups, unloadGroups } from 'actions/groups'
 import { showModal } from 'actions/common'
 
@@ -45,7 +37,11 @@ import {
   TICKETS_DUEDATE_SET,
   TICKETS_UI_TAGS_UPDATE,
   TICKETS_COMMENT_NOTE_REMOVE,
-  TICKETS_COMMENT_NOTE_SET
+  TICKETS_COMMENT_NOTE_SET,
+  TICKETS_UI_TIMETRACKING_UPDATE,
+  TICKETS_ESTIMATEDHOURS_SET,
+  TICKETS_TIMEENTRY_ADD,
+  TICKETS_TIMEENTRY_DELETE
 } from 'serverSocket/socketEventConsts'
 
 import AssigneeDropdownPartial from 'containers/Tickets/AssigneeDropdownPartial'
@@ -150,6 +146,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.on(TICKETS_UI_GROUP_UPDATE, this.onUpdateTicketGroup)
     this.props.socket.on(TICKETS_UI_DUEDATE_UPDATE, this.onUpdateTicketDueDate)
     this.props.socket.on(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
+    this.props.socket.on(TICKETS_UI_TIMETRACKING_UPDATE, this.onUpdateTimeTracking)
 
     fetchTicket(this)
     this.props.fetchTicketTypes()
@@ -170,6 +167,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.off(TICKETS_UI_GROUP_UPDATE, this.onUpdateTicketGroup)
     this.props.socket.off(TICKETS_UI_DUEDATE_UPDATE, this.onUpdateTicketDueDate)
     this.props.socket.off(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
+    this.props.socket.off(TICKETS_UI_TIMETRACKING_UPDATE, this.onUpdateTimeTracking)
 
     this.props.unloadGroups()
   }
@@ -266,11 +264,18 @@ class SingleTicketContainer extends React.Component {
   }
 
   handleUpdateEstimatedHours = hours => {
-    this.props.setEstimatedHours({ uid: this.ticket.uid, hours })
+    this.props.socket.emit(TICKETS_ESTIMATEDHOURS_SET, {
+      _id: this.ticket._id,
+      hours: hours
+    })
   }
 
   handleAddTimeEntry = (hours, description) => {
-    this.props.addTimeEntry({ uid: this.ticket.uid, hours, description })
+    this.props.socket.emit(TICKETS_TIMEENTRY_ADD, {
+      _id: this.ticket._id,
+      hours: hours,
+      description: description
+    })
   }
 
   handleEditTimeEntry = timeEntryId => {
@@ -280,8 +285,19 @@ class SingleTicketContainer extends React.Component {
 
   handleRemoveTimeEntry = timeEntryId => {
     UIkit.modal.confirm('Are you sure you want to delete this time entry?', () => {
-      this.props.deleteTimeEntry({ uid: this.ticket.uid, timeEntryId })
+      this.props.socket.emit(TICKETS_TIMEENTRY_DELETE, {
+        _id: this.ticket._id,
+        timeEntryId: timeEntryId
+      })
     })
+  }
+
+  onUpdateTimeTracking (data) {
+    if (this.ticket._id === data.tid) {
+      this.ticket.estimatedHours = data.estimatedHours
+      this.ticket.timeEntries = data.timeEntries
+      this.ticket.history = data.history
+    }
   }
 
   transferToThirdParty (e) {
