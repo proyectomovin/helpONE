@@ -512,6 +512,39 @@ api.webhooks.test = ({ _id, ...body }) => {
   })
 }
 
+api.automationRules = {}
+api.automationRules.fetch = () => {
+  return axios.get('/api/v1/automation-rules').then(res => {
+    return res.data
+  })
+}
+api.automationRules.fetchEvents = () => {
+  return axios.get('/api/v1/automation-rules/events').then(res => {
+    return res.data
+  })
+}
+api.automationRules.create = payload => {
+  return axios.post('/api/v1/automation-rules/create', payload).then(res => {
+    return res.data
+  })
+}
+api.automationRules.update = payload => {
+  const { _id, ...body } = payload
+  return axios.put(`/api/v1/automation-rules/${_id}`, body).then(res => {
+    return res.data
+  })
+}
+api.automationRules.toggle = ({ _id, isActive }) => {
+  return axios.put(`/api/v1/automation-rules/${_id}/toggle`, { isActive }).then(res => {
+    return res.data
+  })
+}
+api.automationRules.delete = ({ _id }) => {
+  return axios.delete(`/api/v1/automation-rules/${_id}`).then(res => {
+    return res.data
+  })
+}
+
 api.common = {}
 api.common.getSessionUser = () => {
   return axios.get('/api/v2/login').then(res => {

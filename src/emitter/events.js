@@ -26,6 +26,7 @@ const socketEvents = require('../socketio/socketEventConsts')
 const notifications = require('../notifications') // Load Push Events
 
 const eventTicketCreated = require('./events/event_ticket_created')
+const automationEngine = require('../automation/ticketStatusRuleEngine')
 
 ;(function () {
   webhooks.init().catch(err => {
@@ -34,8 +35,56 @@ const eventTicketCreated = require('./events/event_ticket_created')
 
   notifications.init(emitter)
 
+  // Ticket Created - ejecuta automation rules Y lógica original
   emitter.on('ticket:created', async function (data) {
+    // Ejecutar automation rules
+    if (data && data.ticket && data.owner) {
+      try {
+        await automationEngine.processAutomationRules('ticket_created', data.ticket, data.owner)
+      } catch (err) {
+        winston.error('Failed to process automation rules for ticket:created', err)
+      }
+    }
+    // Ejecutar lógica original
     await eventTicketCreated(data)
+  })
+
+  // Automation Rules - Ticket Comment Added
+  emitter.on('ticket:comment:added', async function (data) {
+    if (data && data.ticket && data.comment && data.comment.owner) {
+      try {
+        await automationEngine.processAutomationRules('ticket_new_comment', data.ticket, data.comment.owner)
+      } catch (err) {
+        winston.error('Failed to process automation rules for ticket:comment:added', err)
+      }
+    }
+  })
+
+  // Automation Rules - Ticket Note Added
+  emitter.on('ticket:note:added', async function (data) {
+    if (data && data.ticket && data.note && data.note.owner) {
+      try {
+        await automationEngine.processAutomationRules('ticket_note_added', data.ticket, data.note.owner)
+      } catch (err) {
+        winston.error('Failed to process automation rules for ticket:note:added', err)
+      }
+    }
+  })
+
+  // Automation Rules - Ticket Updated
+  emitter.on('ticket:updated', async function (data) {
+    // Este evento ya se usa para otras cosas, vamos a procesarlo también para automation
+    if (data && data._id) {
+      try {
+        // Necesitamos obtener el usuario que hizo el update (del contexto si está disponible)
+        // Por ahora, solo procesaremos si tenemos información del actor
+        if (data.updatedBy) {
+          await automationEngine.processAutomationRules('ticket_updated', data, data.updatedBy)
+        }
+      } catch (err) {
+        winston.error('Failed to process automation rules for ticket:updated', err)
+      }
+    }
   })
 
   function sendPushNotification (tpsObj, data) {

@@ -30,6 +30,7 @@ import noticesState from './noticesReducer'
 import searchState from './searchReducer'
 import messagesState from './messagesReducer'
 import webhooksState from './webhooksReducer'
+import automationRulesState from './automationRulesReducer'
 
 // const IndexReducer = (state = {}, action) => {
 //   return {
@@ -63,7 +64,8 @@ const IndexReducer = combineReducers({
   settings,
   tagsSettings,
   messagesState,
-  webhooksState
+  webhooksState,
+  automationRulesState
 })
 
 export default IndexReducer

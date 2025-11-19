@@ -28,6 +28,7 @@ import PermissionsSettingsContainer from './Permissions'
 import TicketsSettings from './Tickets'
 import MailerSettingsContainer from './Mailer'
 import WebhooksSettingsContainer from './Webhooks'
+import AutomationRulesContainer from './AutomationRules'
 import ElasticsearchSettingsContainer from './Elasticsearch'
 // import TPSSettingsContainer from './TPS'
 import BackupRestoreSettingsContainer from './BackupRestore'
@@ -135,6 +136,13 @@ class SettingsContainer extends React.Component {
                 }}
               />
               <MenuItem
+                title='Reglas de Automatización'
+                active={this.state.activeCategory === 'settings-automation-rules'}
+                onClick={e => {
+                  this.onMenuItemClick(e, 'automation-rules')
+                }}
+              />
+              <MenuItem
                 title={t('nav.elasticsearch')}
                 active={this.state.activeCategory === 'settings-elasticsearch'}
                 onClick={e => {
@@ -179,6 +187,7 @@ class SettingsContainer extends React.Component {
               <TicketsSettings active={this.state.activeCategory === 'settings-tickets'} />
               <MailerSettingsContainer active={this.state.activeCategory === 'settings-mailer'} />
               <WebhooksSettingsContainer active={this.state.activeCategory === 'settings-webhooks'} />
+              <AutomationRulesContainer active={this.state.activeCategory === 'settings-automation-rules'} />
               <ElasticsearchSettingsContainer active={this.state.activeCategory === 'settings-elasticsearch'} />
               <BackupRestoreSettingsContainer active={this.state.activeCategory === 'settings-backup'} />
               <ServerSettingsController active={this.state.activeCategory === 'settings-server'} />
