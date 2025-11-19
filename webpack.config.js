@@ -92,7 +92,8 @@ module.exports = {
       api: path.resolve(__dirname, 'src/client/api'),
       lib: path.resolve(__dirname, 'src/public/js/modules'),
       lib2: path.resolve(__dirname, 'src/client/lib'),
-      serverSocket: path.resolve(__dirname, 'src/socketio')
+      serverSocket: path.resolve(__dirname, 'src/socketio'),
+      helpers: path.resolve(__dirname, 'src/helpers')
     },
 
     extensions: ['.js', '.jsx', '.ts', 'tsx']

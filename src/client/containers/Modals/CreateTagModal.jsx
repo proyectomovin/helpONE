@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
+import { t } from 'helpers/i18n'
 
 import { createTag } from 'actions/tickets'
 
@@ -47,24 +48,24 @@ class CreateTagModal extends React.Component {
       <BaseModal>
         <form className='uk-form-stacked' onSubmit={e => this.onSubmit(e)}>
           <div>
-            <h2 className={'nomargin mb-5'}>Create Tag</h2>
-            <p className='uk-text-muted'>Tags categorize tickets, making it easy to identify issues</p>
+            <h2 className={'nomargin mb-5'}>{t('modals.createTag')}</h2>
+            <p className='uk-text-muted'>{t('modals.tagsCategorizeTickets')}</p>
 
-            <label>Tag Name</label>
+            <label>{t('tags.tagName')}</label>
             <input
               type='text'
               className={'md-input'}
               name={'name'}
               data-validation='length'
               data-validation-length='min2'
-              data-validation-error-msg='Please enter a valid tag name. Tag name must contain at least 2 characters.'
+              data-validation-error-msg={t('modals.invalidTagName')}
               value={this.state.name}
               onChange={e => this.onNameChange(e)}
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} extraClass={'uk-modal-close'} flat={true} waves={true} />
-            <Button text={'Create'} type={'submit'} flat={true} waves={true} style={'success'} />
+            <Button text={t('actions.close')} extraClass={'uk-modal-close'} flat={true} waves={true} />
+            <Button text={t('actions.create')} type={'submit'} flat={true} waves={true} style={'success'} />
           </div>
         </form>
       </BaseModal>

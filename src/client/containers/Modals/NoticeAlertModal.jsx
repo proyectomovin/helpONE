@@ -15,6 +15,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { t } from 'helpers/i18n'
 
 import { hideModal } from 'actions/common'
 
@@ -61,10 +62,10 @@ class NoticeAlertModal extends React.Component {
             <p style={{ marginTop: '50px', color: '#222', fontSize: '18px', paddingBottom: '15px' }}>
               {helpers.formatDate(notice.activeDate, dateFormat)}
               <br />
-              Important: {notice.message}
+              {t('modals.important')} {notice.message}
             </p>
             <Button
-              text={'Confirm'}
+              text={t('actions.confirm')}
               flat={true}
               style={'success'}
               extraClass={'uk-float-right'}

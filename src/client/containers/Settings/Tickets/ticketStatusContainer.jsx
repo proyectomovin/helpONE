@@ -19,6 +19,7 @@ import { observer } from 'mobx-react'
 import { showModal, hideModal } from 'actions/common'
 import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import Button from 'components/Button'
+import { t } from 'helpers/i18n'
 
 import $ from 'jquery'
 import axios from 'axios'
@@ -49,11 +50,11 @@ class TicketStatusContainer extends React.Component {
     return (
       <div>
         <SplitSettingsPanel
-          title={'Ticket Status'}
-          subtitle={'Ticket status sets the state of a ticket. (Active, Pending, Resolved, etc.)'}
+          title={t('settingsTickets.ticketStatus')}
+          subtitle={t('settingsTickets.ticketStatusSubtitle')}
           rightComponent={
             <Button
-              text={'Create'}
+              text={t('actions.create')}
               style={'success'}
               flat={true}
               waves={true}

@@ -17,6 +17,7 @@ import ReactHtmlParser from 'react-html-parser'
 import Avatar from 'components/Avatar/Avatar'
 
 import helpers from 'lib/helpers'
+import { t } from 'helpers/i18n'
 
 const setupImages = parent => {
   const imagesEl = parent.body.querySelectorAll('img:not(.hasLinked)')
@@ -48,7 +49,7 @@ class CommentNotePartial extends React.Component {
       <div className='ticket-comment'>
         <Avatar image={comment.owner.image} userId={comment.owner._id} />
         <div className='issue-text'>
-          <h3>Re: {ticketSubject}</h3>
+          <h3>{t('tickets.re')}: {ticketSubject}</h3>
           <a className='comment-email-link' href={`mailto:${comment.owner.email}`}>
             {comment.owner.fullname} &lt;{comment.owner.email}&gt;
           </a>
@@ -58,7 +59,7 @@ class CommentNotePartial extends React.Component {
           </time>
 
           <br />
-          {isNote && <span className='uk-badge uk-badge-small nomargin-left-right text-white'>NOTE</span>}
+          {isNote && <span className='uk-badge uk-badge-small nomargin-left-right text-white'>{t('tickets.note')}</span>}
 
           <div className='comment-body' style={{ marginTop: 10 }} ref={r => (this.body = r)}>
             {isNote && <Fragment>{ReactHtmlParser(comment.note)}</Fragment>}

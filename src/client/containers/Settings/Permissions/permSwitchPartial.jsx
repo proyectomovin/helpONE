@@ -14,6 +14,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { t } from 'helpers/i18n'
 
 class PermSwitchPartial extends React.Component {
   render () {
@@ -28,7 +29,7 @@ class PermSwitchPartial extends React.Component {
             <div className='right' style={{ position: 'relative' }}>
               <div className='md-switch md-green' style={{ margin: '18px 0 0 0' }}>
                 <label>
-                  Allow
+                  {t('settingsPermissions.allow')}
                   <input type='checkbox' checked={checked} onChange={onChange} disabled={disabled} />
                   <span className='lever' />
                 </label>

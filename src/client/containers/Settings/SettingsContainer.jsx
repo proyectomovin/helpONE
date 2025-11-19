@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { fetchSettings } from 'actions/settings'
+import { t } from 'helpers/i18n'
 
 import Menu from 'components/Settings/Menu'
 import MenuItem from 'components/Settings/MenuItem'
@@ -39,7 +40,7 @@ class SettingsContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      title: 'Settings',
+      title: t('nav.settings'),
       activeCategory: 'settings-general'
     }
   }
@@ -85,77 +86,77 @@ class SettingsContainer extends React.Component {
           <div className='page-content-left noborder full-height'>
             <Menu>
               <MenuItem
-                title='General'
+                title={t('nav.general')}
                 active={this.state.activeCategory === 'settings-general'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'general')
                 }}
               />
               <MenuItem
-                title='Accounts'
+                title={t('nav.accounts')}
                 active={this.state.activeCategory === 'settings-accounts'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'accounts')
                 }}
               />
               <MenuItem
-                title='Appearance'
+                title={t('nav.appearance')}
                 active={this.state.activeCategory === 'settings-appearance'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'appearance')
                 }}
               />
               <MenuItem
-                title='Permissions'
+                title={t('nav.permissions')}
                 active={this.state.activeCategory === 'settings-permissions'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'permissions')
                 }}
               />
               <MenuItem
-                title='Tickets'
+                title={t('nav.tickets')}
                 active={this.state.activeCategory === 'settings-tickets'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'tickets')
                 }}
               />
               <MenuItem
-                title='Mailer'
+                title={t('nav.mailer')}
                 active={this.state.activeCategory === 'settings-mailer'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'mailer')
                 }}
               />
               <MenuItem
-                title='Webhooks'
+                title={t('nav.webhooks')}
                 active={this.state.activeCategory === 'settings-webhooks'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'webhooks')
                 }}
               />
               <MenuItem
-                title={'Elasticsearch'}
+                title={t('nav.elasticsearch')}
                 active={this.state.activeCategory === 'settings-elasticsearch'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'elasticsearch')
                 }}
               />
               <MenuItem
-                title='Backup/Restore'
+                title={t('nav.backupRestore')}
                 active={this.state.activeCategory === 'settings-backup'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'backup')
                 }}
               />
               <MenuItem
-                title='Server'
+                title={t('nav.server')}
                 active={this.state.activeCategory === 'settings-server'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'server')
                 }}
               />
               <MenuItem
-                title='Legal'
+                title={t('nav.legal')}
                 active={this.state.activeCategory === 'settings-legal'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'legal')

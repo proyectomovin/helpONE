@@ -27,6 +27,7 @@ import EnableSwitch from 'components/Settings/EnableSwitch'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import UIKit from 'uikit'
+import { t } from 'helpers/i18n'
 
 @observer
 class AccountsSettingsContainer extends React.Component {
@@ -77,7 +78,7 @@ class AccountsSettingsContainer extends React.Component {
         helpers.hideLoader()
         Log.error(error.responseText)
         Log.error('Unable to restart server. Server must run under PM2 and Account must have admin rights.')
-        helpers.UI.showSnackbar('Unable to restart server. Are you an Administrator?', true)
+        helpers.UI.showSnackbar(t('settingsAccounts.restartServerError'), true)
       })
       .then(() => {
         this.setState({ restarting: false })
@@ -99,12 +100,12 @@ class AccountsSettingsContainer extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Allow User Registration'
-          subtitle='Allow users to create accounts on the login screen.'
+          title={t('settingsAccounts.allowUserRegistration')}
+          subtitle={t('settingsAccounts.allowUserRegistrationHelp')}
           component={
             <EnableSwitch
               stateName='allowUserRegistration'
-              label='Enable'
+              label={t('settingsAccounts.enable')}
               checked={this.allowUserRegistrationEnabled}
               onChange={e => {
                 this.updateSetting('allowUserRegistration', 'allowUserRegistration:enable', e.target.checked)
@@ -113,13 +114,13 @@ class AccountsSettingsContainer extends React.Component {
           }
         />
         <SettingItem
-          title={'Password Complexity'}
-          subtitle={'Require users passwords to meet minimum password complexity'}
-          tooltip={'Minimum 8 characters with uppercase and numeric.'}
+          title={t('settingsAccounts.passwordComplexity')}
+          subtitle={t('settingsAccounts.passwordComplexityHelp')}
+          tooltip={t('settingsAccounts.passwordComplexityTooltip')}
           component={
             <EnableSwitch
               stateName={'accountsPasswordComplexity'}
-              label={'Enable'}
+              label={t('settingsAccounts.enable')}
               checked={this.passwordComplexityEnabled}
               onChange={e => {
                 this.updateSetting('accountsPasswordComplexity', 'accountsPasswordComplexity:enable', e.target.checked)

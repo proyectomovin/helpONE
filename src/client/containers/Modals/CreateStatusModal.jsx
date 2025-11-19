@@ -21,6 +21,7 @@ import { createStatus } from 'actions/tickets'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
 import ColorSelector from 'components/ColorSelector'
+import { t } from 'helpers/i18n'
 
 import $ from 'jquery'
 import helpers from 'lib/helpers'
@@ -62,14 +63,14 @@ class CreateStatusModal extends React.Component {
       <BaseModal {...this.props} large={true}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onCreateStatusSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Create Status</h2>
+            <h2>{t('modals.createStatus')}</h2>
           </div>
 
           <div>
             <div className='uk-clearfix'>
               <div className='z-box uk-grid uk-grid-collpase uk-clearfix'>
                 <div className='uk-width-1-4'>
-                  <label>Status Name</label>
+                  <label>{t('modals.statusName')}</label>
                   <input
                     type='text'
                     className={'md-input'}
@@ -77,7 +78,7 @@ class CreateStatusModal extends React.Component {
                     onChange={e => (this.name = e.target.value)}
                     data-validation='length'
                     data-validation-length='min3'
-                    data-validation-error-msg='Invalid name (3+ characters)'
+                    data-validation-error-msg={t('modals.invalidNameMin3')}
                   />
                 </div>
 
@@ -109,8 +110,8 @@ class CreateStatusModal extends React.Component {
                 </div>
               </div>
               <div className='uk-modal-footer uk-text-right'>
-                <Button text={'Cancel'} type={'button'} extraClass={'uk-modal-close'} flat={true} waves={true} />
-                <Button text={'Create'} type={'submit'} flat={true} waves={true} style={'success'} />
+                <Button text={t('actions.cancel')} type={'button'} extraClass={'uk-modal-close'} flat={true} waves={true} />
+                <Button text={t('actions.create')} type={'submit'} flat={true} waves={true} style={'success'} />
               </div>
             </div>
           </div>
