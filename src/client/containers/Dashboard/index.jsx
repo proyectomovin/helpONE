@@ -8,7 +8,8 @@ import {
   fetchDashboardData,
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
-  fetchDashboardOverdueTickets
+  fetchDashboardOverdueTickets,
+  fetchDashboardTimeTrackingStats
 } from 'actions/dashboard'
 
 import Grid from 'components/Grid'
@@ -42,6 +43,7 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardTopGroups({ timespan: this.timespan })
     this.props.fetchDashboardTopTags({ timespan: this.timespan })
     this.props.fetchDashboardOverdueTickets()
+    this.props.fetchDashboardTimeTrackingStats({ timespan: this.timespan })
   }
 
   onTimespanChange = e => {
@@ -50,6 +52,7 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardData({ timespan: e.target.value })
     this.props.fetchDashboardTopGroups({ timespan: e.target.value })
     this.props.fetchDashboardTopTags({ timespan: e.target.value })
+    this.props.fetchDashboardTimeTrackingStats({ timespan: e.target.value })
   }
 
   render () {
@@ -321,6 +324,81 @@ class DashboardContainer extends React.Component {
                 }
               />
             </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTimeTrackingStats}
+                animateLoader={true}
+                style={{ minHeight: 250 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>
+                      Time Tracking (Last {this.timespan.toString()}d)
+                    </h6>
+                  </div>
+                }
+                content={
+                  <div className='uk-overflow-container'>
+                    <div className='uk-margin-bottom' style={{ padding: '0 15px' }}>
+                      <div className='uk-grid uk-grid-small'>
+                        <div className='uk-width-1-3'>
+                          <div className='uk-text-center'>
+                            <span className='uk-text-muted uk-text-small'>Estimated Hours</span>
+                            <h3 className='uk-margin-remove'>
+                              {this.props.dashboardState.timeTrackingStats.get('totalEstimated') || 0}h
+                            </h3>
+                          </div>
+                        </div>
+                        <div className='uk-width-1-3'>
+                          <div className='uk-text-center'>
+                            <span className='uk-text-muted uk-text-small'>Consumed Hours</span>
+                            <h3 className='uk-margin-remove'>
+                              {this.props.dashboardState.timeTrackingStats.get('totalConsumed') || 0}h
+                            </h3>
+                          </div>
+                        </div>
+                        <div className='uk-width-1-3'>
+                          <div className='uk-text-center'>
+                            <span className='uk-text-muted uk-text-small'>Progress</span>
+                            <h3 className='uk-margin-remove'>
+                              {this.props.dashboardState.timeTrackingStats.get('percentageComplete') || 0}%
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <table className='uk-table'>
+                      <thead>
+                        <tr>
+                          <th className='uk-text-nowrap'>Top Consultants</th>
+                          <th className='uk-text-nowrap uk-text-right'>Hours</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.dashboardState.timeTrackingStats.get('topConsultants') &&
+                        this.props.dashboardState.timeTrackingStats.get('topConsultants').size > 0 ? (
+                          this.props.dashboardState.timeTrackingStats.get('topConsultants').map((consultant, idx) => (
+                            <tr key={idx} className='uk-table-middle'>
+                              <td className='uk-width-6-10 uk-text-nowrap uk-text-small'>
+                                {consultant.get('name')}
+                              </td>
+                              <td className='uk-width-4-10 uk-text-right uk-text-small'>
+                                {Math.round(consultant.get('hours') * 10) / 10}h
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan='2' className='uk-text-center uk-text-muted uk-text-small'>
+                              No time tracking data available
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              />
+            </GridItem>
           </Grid>
         </PageContent>
       </div>
@@ -333,6 +411,7 @@ DashboardContainer.propTypes = {
   fetchDashboardTopGroups: PropTypes.func.isRequired,
   fetchDashboardTopTags: PropTypes.func.isRequired,
   fetchDashboardOverdueTickets: PropTypes.func.isRequired,
+  fetchDashboardTimeTrackingStats: PropTypes.func.isRequired,
   dashboardState: PropTypes.object.isRequired
 }
 
@@ -344,5 +423,6 @@ export default connect(mapStateToProps, {
   fetchDashboardData,
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
-  fetchDashboardOverdueTickets
+  fetchDashboardOverdueTickets,
+  fetchDashboardTimeTrackingStats
 })(DashboardContainer)

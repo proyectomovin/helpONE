@@ -369,4 +369,81 @@ ticketsV2.deleteTimeEntry = async (req, res) => {
   }
 }
 
+// Time Tracking Stats
+ticketsV2.getTimeTrackingStats = async (req, res) => {
+  try {
+    const timespan = parseInt(req.params.timespan) || 30
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - timespan)
+
+    // Get all tickets with time tracking data in the timespan
+    const tickets = await Models.Ticket.find({
+      $or: [
+        { estimatedHours: { $exists: true, $gt: 0 } },
+        { 'timeEntries.0': { $exists: true } }
+      ],
+      date: { $gte: startDate },
+      deleted: false
+    }).populate('timeEntries.owner', 'fullname email image')
+
+    // Calculate statistics
+    let totalEstimated = 0
+    let totalConsumed = 0
+    let ticketsWithTracking = 0
+    const consultantStats = {}
+
+    tickets.forEach(ticket => {
+      if (ticket.estimatedHours > 0 || (ticket.timeEntries && ticket.timeEntries.length > 0)) {
+        ticketsWithTracking++
+
+        if (ticket.estimatedHours) {
+          totalEstimated += ticket.estimatedHours
+        }
+
+        if (ticket.timeEntries && ticket.timeEntries.length > 0) {
+          ticket.timeEntries.forEach(entry => {
+            if (!entry.deleted) {
+              totalConsumed += entry.hours
+
+              // Track per consultant
+              if (entry.owner) {
+                const ownerId = entry.owner._id.toString()
+                if (!consultantStats[ownerId]) {
+                  consultantStats[ownerId] = {
+                    name: entry.owner.fullname,
+                    email: entry.owner.email,
+                    hours: 0,
+                    entries: 0
+                  }
+                }
+                consultantStats[ownerId].hours += entry.hours
+                consultantStats[ownerId].entries++
+              }
+            }
+          })
+        }
+      }
+    })
+
+    // Get top 5 consultants by hours
+    const topConsultants = Object.values(consultantStats)
+      .sort((a, b) => b.hours - a.hours)
+      .slice(0, 5)
+
+    const stats = {
+      totalEstimated: Math.round(totalEstimated * 10) / 10,
+      totalConsumed: Math.round(totalConsumed * 10) / 10,
+      percentageComplete: totalEstimated > 0 ? Math.round((totalConsumed / totalEstimated) * 100) : 0,
+      ticketsWithTracking,
+      topConsultants,
+      timespan
+    }
+
+    return res.json({ success: true, stats })
+  } catch (error) {
+    logger.error('Error getting time tracking stats:', error)
+    return apiUtils.sendApiError(res, 500, error.message)
+  }
+}
+
 module.exports = ticketsV2

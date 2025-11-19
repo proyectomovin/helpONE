@@ -56,6 +56,7 @@ module.exports = function (middleware, router, controllers) {
   router.post('/api/v2/tickets/:uid/timeentries', apiv2Auth, canUser('tickets:update'), apiv2.tickets.addTimeEntry)
   router.put('/api/v2/tickets/:uid/timeentries/:timeEntryId', apiv2Auth, canUser('tickets:update'), apiv2.tickets.updateTimeEntry)
   router.delete('/api/v2/tickets/:uid/timeentries/:timeEntryId', apiv2Auth, canUser('tickets:update'), apiv2.tickets.deleteTimeEntry)
+  router.get('/api/v2/tickets/timetracking/stats/:timespan', apiv2Auth, canUser('tickets:view'), apiv2.tickets.getTimeTrackingStats)
 
   // Groups
   router.get('/api/v2/groups', apiv2Auth, apiv2.groups.get)
