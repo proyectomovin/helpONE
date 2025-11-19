@@ -19,7 +19,8 @@ import {
   FETCH_DASHBOARD_DATA,
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
-  FETCH_DASHBOARD_TOP_TAGS
+  FETCH_DASHBOARD_TOP_TAGS,
+  FETCH_DASHBOARD_TIMETRACKING_STATS
 } from 'actions/types'
 
 const initialState = {
@@ -41,7 +42,16 @@ const initialState = {
   topTags: List([]),
 
   loadingOverdueTickets: false,
-  overdueTickets: List([])
+  overdueTickets: List([]),
+
+  loadingTimeTrackingStats: false,
+  timeTrackingStats: Map({
+    totalEstimated: 0,
+    totalConsumed: 0,
+    percentageComplete: 0,
+    ticketsWithTracking: 0,
+    topConsultants: List([])
+  })
 }
 
 const reducer = handleActions(
@@ -124,6 +134,21 @@ const reducer = handleActions(
         ...state,
         loadingOverdueTickets: false,
         overdueTickets: fromJS(action.response.tickets)
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING]: state => {
+      return {
+        ...state,
+        loadingTimeTrackingStats: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_STATS.SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        loadingTimeTrackingStats: false,
+        timeTrackingStats: fromJS(action.response.stats)
       }
     }
   },

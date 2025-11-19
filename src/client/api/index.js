@@ -44,6 +44,12 @@ api.dashboard.getOverdueTickets = () => {
     return res.data
   })
 }
+api.dashboard.getTimeTrackingStats = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v2/tickets/timetracking/stats/${timespan}`).then(res => {
+    return res.data
+  })
+}
 
 api.tickets = {}
 api.tickets.getWithPage = payload => {
