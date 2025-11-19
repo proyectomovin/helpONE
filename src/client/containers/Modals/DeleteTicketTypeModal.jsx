@@ -19,6 +19,7 @@ import { deleteTicketType } from 'actions/tickets'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
 import SingleSelect from 'components/SingleSelect'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 
@@ -45,7 +46,7 @@ class DeleteTicketTypeModal extends React.Component {
   onFormSubmit (e) {
     e.preventDefault()
     if (!this.state.selectedType) {
-      helpers.UI.showSnackbar('Unable to get new ticket type. Aborting...', true)
+      helpers.UI.showSnackbar(t('modals.unableToGetType'), true)
       return true
     }
 
@@ -65,15 +66,15 @@ class DeleteTicketTypeModal extends React.Component {
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Remove Ticket Type</h2>
+            <h2>{t('modals.removeTicketType')}</h2>
             <span>
-              Please select the ticket type you wish to reassign tickets to in order to delete this ticket type.
+              {t('modals.selectTypeReassign')}
             </span>
             {/*<hr style={{ margin: '10px 0' }} />*/}
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <div className='uk-float-left' style={{ width: '100%' }}>
-              <label className={'uk-form-label nopadding nomargin'}>Type</label>
+              <label className={'uk-form-label nopadding nomargin'}>{t('modals.type')}</label>
               <SingleSelect
                 showTextbox={false}
                 items={mappedTypes}
@@ -84,15 +85,14 @@ class DeleteTicketTypeModal extends React.Component {
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <span className='uk-text-danger'>
-              WARNING: This will change all tickets with type <strong>{type.get('name')}</strong> to the selected ticket
-              type.
+              {t('modals.warningChangeType')} <strong>{type.get('name')}</strong> {t('modals.toSelectedType')}
               <br />
-              <strong>This is permanent!</strong>
+              <strong>{t('modals.thisIsPermanent')}</strong>
             </span>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Cancel'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Delete'} style={'danger'} flat={true} type={'submit'} />
+            <Button text={t('actions.cancel')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('actions.delete')} style={'danger'} flat={true} type={'submit'} />
           </div>
         </form>
       </BaseModal>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { observer } from 'mobx-react'
 import { observable } from 'mobx'
+import { t } from 'helpers/i18n'
 
 import { hideModal } from 'actions/common'
 
@@ -44,17 +45,17 @@ class PasswordPromptModal extends React.Component {
     return (
       <BaseModal options={{ bgclose: false }}>
         <div>
-          <h2>{titleOverride || 'Confirm Password'}</h2>
-          <p>{textOverride || 'Please confirm your password.'}</p>
+          <h2>{titleOverride || t('modals.confirmPassword')}</h2>
+          <p>{textOverride || t('modals.pleaseConfirmPassword')}</p>
         </div>
         <div className={'uk-margin-medium-bottom'}>
-          <label>Current Password</label>
+          <label>{t('modals.currentPassword')}</label>
           <Input name={'current-password'} type={'password'} onChange={val => (this.confirmPassword = val)} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button text={'Cancel'} small={true} flat={true} waves={false} onClick={() => this.props.hideModal()} />
+          <Button text={t('actions.cancel')} small={true} flat={true} waves={false} onClick={() => this.props.hideModal()} />
           <Button
-            text={'Verify Password'}
+            text={t('modals.verifyPassword')}
             style={'primary'}
             small={true}
             waves={true}

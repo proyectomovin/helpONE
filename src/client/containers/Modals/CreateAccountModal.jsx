@@ -30,6 +30,7 @@ import MultiSelect from 'components/MultiSelect'
 
 import $ from 'jquery'
 import helpers from 'lib/helpers'
+import { t } from 'helpers/i18n'
 
 @observer
 class CreateAccountModal extends React.Component {
@@ -151,8 +152,8 @@ class CreateAccountModal extends React.Component {
             </div>
             <div className='user-heading-content'>
               <h2>
-                <span className={'uk-text-truncate'}>Create Account</span>
-                <span className='sub-heading'>Please provide account details below</span>
+                <span className={'uk-text-truncate'}>{t('accountModal.createAccount')}</span>
+                <span className='sub-heading'>{t('accountModal.createAccountSubtitle')}</span>
               </h2>
             </div>
           </div>
@@ -160,7 +161,7 @@ class CreateAccountModal extends React.Component {
         <div style={{ margin: '24px 24px 0 24px' }}>
           <form className='uk-form-stacked' onSubmit={e => this.onFormSubmit(e)}>
             <div className='uk-margin-medium-bottom'>
-              <label className='uk-form-label'>Username</label>
+              <label className='uk-form-label'>{t('accountModal.username')}</label>
               <input
                 type='text'
                 className={'md-input'}
@@ -168,12 +169,12 @@ class CreateAccountModal extends React.Component {
                 onChange={e => this.onInputChanged(e, 'username')}
                 data-validation={'length'}
                 data-validation-length={'min4'}
-                data-validation-error-msg={'Username must contain at least 4 characters.'}
+                data-validation-error-msg={t('accountModal.usernameValidation')}
               />
             </div>
             <div className='uk-margin-medium-bottom uk-clearfix'>
               <div className='uk-float-left' style={{ width: '50%', paddingRight: '20px' }}>
-                <label className={'uk-form-label'}>Name</label>
+                <label className={'uk-form-label'}>{t('accountModal.name')}</label>
                 <input
                   type='text'
                   className={'md-input'}
@@ -181,11 +182,11 @@ class CreateAccountModal extends React.Component {
                   onChange={e => this.onInputChanged(e, 'fullname')}
                   data-validation={'length'}
                   data-validation-length={'min1'}
-                  data-validation-error-msg={'Name must contain at least 1 character.'}
+                  data-validation-error-msg={t('accountModal.nameValidation')}
                 />
               </div>
               <div className='uk-float-left uk-width-1-2'>
-                <label className={'uk-form-label'}>Title</label>
+                <label className={'uk-form-label'}>{t('accountModal.title')}</label>
                 <input
                   type='text'
                   className={'md-input'}
@@ -196,7 +197,7 @@ class CreateAccountModal extends React.Component {
             </div>
             <div className='uk-margin-medium-bottom uk-clearfix'>
               <div className='uk-float-left' style={{ width: '50%', paddingRight: '20px' }}>
-                <label className={'uk-form-label'}>Password</label>
+                <label className={'uk-form-label'}>{t('accountModal.password')}</label>
                 <input
                   type='password'
                   className={'md-input'}
@@ -206,7 +207,7 @@ class CreateAccountModal extends React.Component {
                 />
               </div>
               <div className='uk-float-left uk-width-1-2'>
-                <label className={'uk-form-label'}>Confirm Password</label>
+                <label className={'uk-form-label'}>{t('accountModal.confirmPassword')}</label>
                 <input
                   type='password'
                   className={'md-input'}
@@ -214,12 +215,12 @@ class CreateAccountModal extends React.Component {
                   value={this.passwordConfirm}
                   onChange={e => this.onInputChanged(e, 'passwordConfirm')}
                   data-validation='confirmation'
-                  data-validation-error-msg={'Password does not match'}
+                  data-validation-error-msg={t('validation.passwordMismatch')}
                 />
               </div>
             </div>
             <div className='uk-margin-medium-bottom'>
-              <label className='uk-form-label'>Email</label>
+              <label className='uk-form-label'>{t('accountModal.email')}</label>
               <input
                 type='email'
                 className={'md-input'}
@@ -229,7 +230,7 @@ class CreateAccountModal extends React.Component {
               />
             </div>
             <div className='uk-margin-medium-bottom'>
-              <label className={'uk-form-label'}>Role</label>
+              <label className={'uk-form-label'}>{t('accountModal.role')}</label>
               <SingleSelect
                 items={roles}
                 width={'100'}
@@ -241,13 +242,13 @@ class CreateAccountModal extends React.Component {
                 style={{ display: 'inline-block', marginTop: '10px', fontWeight: 'bold', color: '#d85030' }}
                 ref={r => (this.roleSelectErrorMessage = r)}
               >
-                Please select a role for this user
+                {t('accountModal.roleValidation')}
               </span>
             </div>
             {!this.isAgentRole && (
               <div>
                 <div className='uk-margin-medium-bottom'>
-                  <label className='uk-form-label'>Groups</label>
+                  <label className='uk-form-label'>{t('accountModal.groups')}</label>
                   <MultiSelect
                     items={groups}
                     onChange={e => this.onGroupSelectChange(e)}
@@ -258,7 +259,7 @@ class CreateAccountModal extends React.Component {
                     style={{ display: 'inline-block', marginTop: '3px', fontWeight: 'bold', color: '#d85030' }}
                     ref={r => (this.groupSelectErrorMessage = r)}
                   >
-                    Please select a group for this user.
+                    {t('accountModal.groupValidation')}
                   </span>
                 </div>
               </div>
@@ -266,14 +267,14 @@ class CreateAccountModal extends React.Component {
             {this.isAgentRole && (
               <div>
                 <div className='uk-margin-medium-bottom'>
-                  <label className='uk-form-label'>Teams</label>
+                  <label className='uk-form-label'>{t('accountModal.teams')}</label>
                   <MultiSelect items={teams} onChange={() => {}} ref={r => (this.teamSelect = r)} />
                 </div>
               </div>
             )}
             <div className='uk-modal-footer uk-text-right'>
-              <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-              <Button text={'Create Account'} flat={true} waves={true} style={'success'} type={'submit'} />
+              <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+              <Button text={t('accountModal.createAccount')} flat={true} waves={true} style={'success'} type={'submit'} />
             </div>
           </form>
         </div>

@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import { connect } from 'react-redux'
+import { t } from 'helpers/i18n'
 
 import { createRole } from 'actions/settings'
 
@@ -47,25 +48,25 @@ class CreateRoleModal extends React.Component {
       <BaseModal>
         <div className={'uk-form-stacked'}>
           <div>
-            <h2 className={'nomargin mb-5'}>Create Role</h2>
-            <p className='uk-text-muted'>Once created, the role will become editable in the permission editor</p>
+            <h2 className={'nomargin mb-5'}>{t('modals.createRole')}</h2>
+            <p className='uk-text-muted'>{t('modals.roleEditableAfterCreate')}</p>
 
-            <label>Role Name</label>
+            <label>{t('modals.roleName')}</label>
             <input
               type='text'
               className={'md-input'}
               name={'name'}
               data-validation='length'
               data-validation-length='min3'
-              data-validation-error-msg='Please enter a valid role name. Role name must contain at least 3 characters.'
+              data-validation-error-msg={t('modals.invalidRoleName')}
               value={this.name}
               onChange={e => this.onNameChange(e)}
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} extraClass={'uk-modal-close'} flat={true} waves={true} />
+            <Button text={t('actions.close')} extraClass={'uk-modal-close'} flat={true} waves={true} />
             <Button
-              text={'Create'}
+              text={t('actions.create')}
               type={'button'}
               flat={true}
               waves={true}

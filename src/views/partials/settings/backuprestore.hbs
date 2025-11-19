@@ -2,14 +2,14 @@
     <div class="setting-item-wrap uk-margin-medium-bottom" ng-show="showNoTools">
         <div class="panel trupanel nopadding no-hover-shadow uk-clearfix" style="min-height: 60px;">
             <div class="uk-width-1-1">
-                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">MongoDB Tools Not Found</h6>
+                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Herramientas de MongoDB No Encontradas</h6>
                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                    Unable to locate MongoDB tools. Please make sure MongoDB tools are installed. <br />
+                    No se pueden localizar las herramientas de MongoDB. Por favor asegúrese de que las herramientas de MongoDB estén instaladas. <br />
                 </h5>
                 <hr />
                 <div style="padding: 0 15px; margin: 15px 0;">
-                    <h4>Installing MongoDB Tools</h4>
-                    <p style="margin: 0 0 5px 0; font-size: 13px;">MongoDB Tools are required to perform backup and restore. See below for instructions on installing the MongoDB Tools.</p>
+                    <h4>Instalando Herramientas de MongoDB</h4>
+                    <p style="margin: 0 0 5px 0; font-size: 13px;">Las herramientas de MongoDB son necesarias para realizar copias de seguridad y restaurar. Vea a continuación las instrucciones para instalar las herramientas de MongoDB.</p>
                     <br />
                     <h5><strong>Ubuntu 16.04</strong></h5>
                     <pre style="white-space: pre-line">
@@ -43,17 +43,17 @@
     <div class="setting-item-wrap uk-margin-medium-bottom" ng-show="hasTools">
         <div class="panel trupanel nopadding no-hover-shadow uk-clearfix" style="min-height: 60px;">
             <div class="left">
-                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Backup Now</h6>
+                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Respaldar Ahora</h6>
                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                    Backup all site data. (Database, Attachments, Profile Pictures)
+                    Respaldar todos los datos del sitio. (Base de Datos, Adjuntos, Fotos de Perfil)
                 </h5>
             </div>
             <div class="right uk-width-1-3 uk-clearfix" style="position:relative; margin-right: 15px; margin-top: 5px;">
                 <div class="uk-width-2-3 uk-float-right" style="margin-top: 10px; text-align: right;">
                     <div class="uk-progress uk-progress-success uk-progress-striped uk-active hide" style="height: 31px; background: transparent;">
-                        <div class="uk-progress-bar" style="width: 115px; line-height: 31px; font-size: 11px; text-transform: uppercase; float: right !important;">Please Wait...</div>
+                        <div class="uk-progress-bar" style="width: 115px; line-height: 31px; font-size: 11px; text-transform: uppercase; float: right !important;">Espere por favor...</div>
                     </div>
-                    <button class="md-btn md-btn-small md-btn-success" style="width: 115px;" ng-click="startbackup($event);">Backup Now</button>
+                    <button class="md-btn md-btn-small md-btn-success" style="width: 115px;" ng-click="startbackup($event);">Respaldar Ahora</button>
                 </div>
             </div>
         </div>
@@ -62,9 +62,9 @@
     <div class="setting-item-wrap uk-margin-medium-bottom" ng-show="hasTools">
         <div class="panel trupanel nopadding no-hover-shadow uk-overflow-hidden" style="min-height: 60px; height: auto;">
             <div class="left">
-                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Backups</h6>
+                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Respaldos</h6>
                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                    Current Stored Backups
+                    Respaldos Almacenados Actualmente
                 </h5>
             </div>
             <div class="right uk-width-1-3 uk-clearfix" style="position:relative; margin-right: 15px; margin-top: 5px;">
@@ -73,7 +73,7 @@
                         <div class="uk-progress-bar" style="width: 0; line-height: 31px; font-size: 11px;">0%</div>
                     </div>
                     <form class="uk-form-stacked">
-                        <button class="md-btn md-btn-small md-btn-primary uk-form-file no-ajaxy" style="width: 85px;">Upload<input id="backup-upload-select" type="file" /></button>
+                        <button class="md-btn md-btn-small md-btn-primary uk-form-file no-ajaxy" style="width: 85px;">Subir<input id="backup-upload-select" type="file" /></button>
                     </form>
                 </div>
             </div>
@@ -82,15 +82,15 @@
                 <div class="uk-position-relative">
                     <div class="zone" ng-show="!backupFiles.length">
                         <div class="z-box uk-clearfix">
-                            <h2 class="uk-text-muted uk-text-center">No Backups</h2>
+                            <h2 class="uk-text-muted uk-text-center">Sin Respaldos</h2>
                         </div>
                     </div>
 
                     <table class="uk-table mt-0" ng-show="backupFiles.length">
                         <thead>
                             <tr>
-                                <th>Filename</th>
-                                <th>Size</th>
+                                <th>Nombre de Archivo</th>
+                                <th>Tamaño</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -100,9 +100,9 @@
                                 <td class="valign-middle">{[{file.sizeFormat}]}</td>
                                 <td class="uk-text-right valign-middle">
                                     <div class="md-btn-group">
-                                        <a href="/backups/{[{file.filename}]}" class="md-btn md-btn-small md-btn-wave no-ajaxy" target="_blank">Download</a>
-                                        <button class="md-btn md-btn-small md-btn-wave" ng-click="restoreFile($index);">Restore</button>
-                                        <button class="md-btn md-btn-small md-btn-wave md-btn-danger" ng-click="deleteBackup($index);">Delete</button>
+                                        <a href="/backups/{[{file.filename}]}" class="md-btn md-btn-small md-btn-wave no-ajaxy" target="_blank">Descargar</a>
+                                        <button class="md-btn md-btn-small md-btn-wave" ng-click="restoreFile($index);">Restaurar</button>
+                                        <button class="md-btn md-btn-small md-btn-wave md-btn-danger" ng-click="deleteBackup($index);">Eliminar</button>
                                     </div>
                                 </td>
                             </tr>
@@ -116,9 +116,9 @@
     <div class="setting-item-wrap uk-margin-medium-bottom">
         <div class="panel trupanel nopadding no-hover-shadow uk-overflow-hidden" style="min-height: 60px; height: auto;">
             <div class="left">
-                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Restore Deleted Tickets</h6>
+                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Restaurar Tickets Eliminados</h6>
                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                    Tickets marked as deleted are shown below.
+                    Los tickets marcados como eliminados se muestran a continuación.
                 </h5>
             </div>
             <div class="right uk-width-1-3 uk-clearfix" style="position:relative; margin-right: 15px; margin-top: 5px;">
@@ -129,7 +129,7 @@
                 <div class="uk-position-relative">
                     <div class="zone mb-10" ng-show="!deletedTickets.length">
                         <div class="z-box uk-clearfix">
-                            <h2 class="uk-text-muted uk-text-center">No Deleted Tickets</h2>
+                            <h2 class="uk-text-muted uk-text-center">Sin Tickets Eliminados</h2>
                         </div>
                     </div>
 
@@ -137,9 +137,9 @@
                         <thead>
                         <tr>
                             <th>UID</th>
-                            <th>Subject</th>
-                            <th>Group</th>
-                            <th>Date</th>
+                            <th>Asunto</th>
+                            <th>Grupo</th>
+                            <th>Fecha</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -151,7 +151,7 @@
                             <td class="valign-middle" style="width: 30%">{[{ticket.date}]}</td>
                             <td class="uk-text-right valign-middle">
                                 <div class="md-btn-group">
-                                    <button class="md-btn md-btn-small md-btn-wave" ng-click="restoreDeletedTicket($index);">Restore</button>
+                                    <button class="md-btn md-btn-small md-btn-wave" ng-click="restoreDeletedTicket($index);">Restaurar</button>
                                 </div>
                             </td>
                         </tr>
