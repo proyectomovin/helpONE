@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment-timezone'
 import { updateSetting } from 'actions/settings'
+import { t } from 'helpers/i18n'
 
 import SettingItem from 'components/Settings/SettingItem'
 
@@ -97,42 +98,42 @@ class GeneralSettings extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Site Title'
+          title={t('settingsGeneral.siteTitle')}
           subtitle={
             <div>
-              Title of site. Used as page title. <i>default: Trudesk</i>
+              {t('settingsGeneral.siteTitleHelp')}
             </div>
           }
           component={SiteTitle}
         />
         <SettingItem
-          title='Site Url'
+          title={t('settingsGeneral.siteUrl')}
           subtitle={
             <div>
-              Publicly accessible URL of this site. <i>ex: {this.props.viewdata.get('hosturl')}</i>
+              {t('settingsGeneral.siteUrlHelp')}
             </div>
           }
           component={SiteUrl}
         />
         <SettingItem
-          title='Server Timezone'
-          subtitle='Set the local server timezone for date display'
-          tooltip='User can override in user profile. Requires Server Restart'
+          title={t('settingsGeneral.serverTimezone')}
+          subtitle={t('settingsGeneral.serverTimezoneHelp')}
+          tooltip={t('settingsGeneral.timezoneOverride')}
           component={Timezone}
         />
         <SettingItem
-          title='Time & Date Format'
+          title={t('settingsGeneral.timeDateFormat')}
           subtitle={
             <a href='https://momentjs.com/docs/#/displaying/format/' rel='noopener noreferrer' target='_blank'>
-              Moment.js Format Options
+              {t('settingsGeneral.momentFormatOptions')}
             </a>
           }
         >
           <Zone>
             <ZoneBox>
               <SettingSubItem
-                title='Time Format'
-                subtitle='Set the format for time display'
+                title={t('settingsGeneral.timeFormat')}
+                subtitle={t('settingsGeneral.timeFormatHelp')}
                 component={
                   <InputWithSave
                     stateName='timeFormat'
@@ -145,8 +146,8 @@ class GeneralSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Short Date Format'
-                subtitle='Set the format for short dates'
+                title={t('settingsGeneral.shortDateFormat')}
+                subtitle={t('settingsGeneral.shortDateFormatHelp')}
                 component={
                   <InputWithSave
                     stateName='shortDateFormat'
@@ -159,8 +160,8 @@ class GeneralSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Long Date Format'
-                subtitle='Set the format for long dates'
+                title={t('settingsGeneral.longDateFormat')}
+                subtitle={t('settingsGeneral.longDateFormatHelp')}
                 component={
                   <InputWithSave
                     stateName='longDateFormat'

@@ -21,6 +21,7 @@ import { updateSetting } from 'actions/settings'
 
 import helpers from 'lib/helpers'
 import SettingItem from 'components/Settings/SettingItem'
+import { t } from 'helpers/i18n'
 
 class LegalSettingsContainer extends React.Component {
   constructor (props) {
@@ -47,7 +48,7 @@ class LegalSettingsContainer extends React.Component {
         noSnackbar: true
       })
       .then(() => {
-        helpers.UI.showSnackbar('Privacy Policy Updated')
+        helpers.UI.showSnackbar(t('settingsLegal.privacyPolicyUpdated'))
       })
   }
 
@@ -55,7 +56,7 @@ class LegalSettingsContainer extends React.Component {
     const { active } = this.props
     return (
       <div className={!active ? 'hide' : ''}>
-        <SettingItem title={'Privacy Policy'} subtitle={'Paste in HTML/Text of your privacy policy.'}>
+        <SettingItem title={t('settingsLegal.privacyPolicy')} subtitle={t('settingsLegal.privacyPolicyHelp')}>
           <div>
             <EasyMDE
               defaultValue={this.getSetting('privacyPolicy')}
@@ -64,7 +65,7 @@ class LegalSettingsContainer extends React.Component {
           </div>
           <div className='uk-clearfix'>
             <Button
-              text={'Save'}
+              text={t('actions.save')}
               extraClass={'uk-float-right'}
               flat={true}
               style={'success'}

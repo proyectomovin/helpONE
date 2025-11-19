@@ -18,6 +18,7 @@ import { connect } from 'react-redux'
 import { createTicketType } from 'actions/tickets'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
+import { t } from 'helpers/i18n'
 
 import $ from 'jquery'
 import helpers from 'lib/helpers'
@@ -55,9 +56,9 @@ class CreateTicketTypeModal extends React.Component {
       <BaseModal {...this.props} ref={i => (this.base = i)}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onCreateTicketTypeSubmit(e)}>
           <div>
-            <h2 className='nomargin mb-5'>Create Ticket Type</h2>
-            <p className='uk-text-small uk-text-muted'>Create a ticket type</p>
-            <label htmlFor='typeName'>Type name</label>
+            <h2 className='nomargin mb-5'>{t('modals.createTicketType')}</h2>
+            <p className='uk-text-small uk-text-muted'>{t('modals.createTicketTypeDesc')}</p>
+            <label htmlFor='typeName'>{t('modals.typeName')}</label>
             <input
               value={this.state.typeName}
               onChange={e => this.onTypeNameChanged(e)}
@@ -66,12 +67,12 @@ class CreateTicketTypeModal extends React.Component {
               name={'typeName'}
               data-validation='length'
               data-validation-length='min3'
-              data-validation-error-msg='Please enter a valid type name. Type name must contain at least 3 characters'
+              data-validation-error-msg={t('modals.invalidTypeName')}
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Create'} style={'success'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('actions.create')} style={'success'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

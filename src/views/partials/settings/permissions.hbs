@@ -3,21 +3,21 @@
     <div class="setting-item-wrap uk-margin-medium-bottom">
         <div class="panel trupanel nopadding no-hover-shadow uk-overflow-hidden" style="min-height: 60px; height: auto;">
             <div class="left">
-                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Permissions
+                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Permisos
                     <i class="material-icons"
                        style="color: #888;
                               font-size: 16px;
                               cursor: pointer;
                               line-height: 18px;"
-                       data-uk-tooltip="{cls:'long-text'}" title="Permission order is top down. ex: Admins at top; Users at bottom">help</i>
+                       data-uk-tooltip="{cls:'long-text'}" title="El orden de permisos es de arriba hacia abajo. ej: Administradores arriba; Usuarios abajo">help</i>
                 </h6>
                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                    Create / Modify User Permissions
+                    Crear / Modificar Permisos de Usuario
                 </h5>
             </div>
             <div class="right" style="position:relative;">
                 <div style="margin: 12px 15px 0 0;">
-                    <button class="uk-float-right md-btn md-btn-flat md-btn-flat-success md-btn-wave-light" ng-click="showCreateRoleWindow($event);">Create</button>
+                    <button class="uk-float-right md-btn md-btn-flat md-btn-flat-success md-btn-wave-light" ng-click="showCreateRoleWindow($event);">Crear</button>
                 </div>
             </div>
             <hr class="nomargin-top clear">
@@ -42,23 +42,23 @@
                                     <div class="setting-item-wrap uk-margin-medium-bottom">
                                         <div class="panel trupanel nopadding no-hover-shadow" style="min-height: 60px;">
                                             <div class="left">
-                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Admin
+                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Administrador
                                                     <i class="material-icons"
                                                        style="color: #888;
                                                               font-size: 16px;
                                                               cursor: pointer;
                                                               line-height: 18px;"
-                                                       data-uk-tooltip="{cls:'long-text'}" title="Role is considered an admin. Enabling management of the trudesk instance.">help</i>
+                                                       data-uk-tooltip="{cls:'long-text'}" title="El rol se considera como administrador. Habilita la gestión de la instancia trudesk.">help</i>
                                                 </h6>
                                                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                                                    Is this role defined as an admin role?
+                                                    ¿Este rol está definido como rol de administrador?
                                                 </h5>
                                             </div>
                                             <div class="right" style="position:relative;">
                                                 <!-- Switch -->
                                                 <div class="md-switch md-green" style="margin: 20px 0 0 0;">
                                                     <label>
-                                                        Yes
+                                                        Sí
                                                         <input type="checkbox" id="perm-is-admin-{{id}}" name="perm-is-admin" {{#compare isAdmin '===' true}} checked {{/compare}}>
                                                         <span class="lever"></span>
                                                     </label>
@@ -70,16 +70,16 @@
                                     <div class="setting-item-wrap uk-margin-medium-bottom">
                                         <div class="panel trupanel nopadding no-hover-shadow" style="min-height: 60px;">
                                             <div class="left">
-                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Support Agent
+                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Agente de Soporte
                                                     <i class="material-icons"
                                                        style="color: #888;
                                                               font-size: 16px;
                                                               cursor: pointer;
                                                               line-height: 18px;"
-                                                       data-uk-tooltip="{cls:'long-text'}" title="Role is considered an agent role. Enabling agent views and displaying in agent lists.">help</i>
+                                                       data-uk-tooltip="{cls:'long-text'}" title="El rol se considera como rol de agente. Habilita las vistas de agente y se muestra en las listas de agentes.">help</i>
                                                 </h6>
                                                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                                                    Is this role defined as an agent role?
+                                                    ¿Este rol está definido como rol de agente?
                                                 </h5>
                                             </div>
                                             <div class="right" style="position:relative;">
@@ -98,16 +98,16 @@
                                     <div class="setting-item-wrap uk-margin-medium-bottom">
                                         <div class="panel trupanel nopadding no-hover-shadow" style="min-height: 60px;">
                                             <div class="left">
-                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Enable Hierarchy</h6>
+                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Habilitar Jerarquía</h6>
                                                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                                                    Allow this role to manage resources owned by roles defined under it
+                                                    Permitir que este rol administre recursos pertenecientes a roles definidos debajo de él
                                                 </h5>
                                             </div>
                                             <div class="right" style="position:relative;">
                                                 <!-- Switch -->
                                                 <div class="md-switch md-green" style="margin: 20px 0 0 0;">
                                                     <label>
-                                                        Enabled
+                                                        Habilitado
                                                         <input type="checkbox" id="perm-enable-hierarchy-{{id}}" name="perm-enable-hierarchy" {{#compare hierarchy '===' true}} checked {{/compare}}>
                                                         <span class="lever"></span>
                                                     </label>
@@ -122,14 +122,14 @@
                                             <div class="left">
                                                 <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Tickets</h6>
                                                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                                                    Ticket Permissions
+                                                    Permisos de Tickets
                                                 </h5>
                                             </div>
                                             <div class="right" style="position:relative;">
                                                 <!-- Switch -->
                                                 <div class="md-switch md-green" style="margin: 18px 0 0 0;">
                                                     <label>
-                                                        All
+                                                        Todos
                                                         <input type="checkbox" id="perm-tickets-all-{{id}}" name="perm-tickets-all" {{#canUserRole _id 'ticket:*'}} checked {{/canUserRole}}>
                                                         <span class="lever"></span>
                                                     </label>
@@ -140,13 +140,13 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Create</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Crear</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
                                                         <div class="md-switch md-green" style="margin: 18px 0 0 0;">
                                                             <label>
-                                                                Allow
+                                                                Permitir
                                                                 <input type="checkbox" id="perm-tickets-create-{{id}}" name="perm-tickets-create" {{#canUserRole _id "ticket:create"}} checked {{/canUserRole}}>
                                                                 <span class="lever"></span>
                                                             </label>
@@ -160,7 +160,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">View</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Ver</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -180,7 +180,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Edit</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Editar</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -200,7 +200,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Delete</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Eliminar</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -222,9 +222,9 @@
                                     <div class="setting-item-wrap uk-margin-medium-bottom">
                                         <div class="panel trupanel nopadding no-hover-shadow uk-overflow-hidden" style="min-height: 60px; height: auto;">
                                             <div class="left">
-                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Accounts</h6>
+                                                <h6 style="padding: 0 0 0 15px; margin: 15px 0 0 0; font-size: 16px; line-height: 14px;">Cuentas</h6>
                                                 <h5 style="padding: 0 0 10px 15px; margin: 2px 0 0 0; font-size: 12px;" class="uk-text-muted">
-                                                    Account Permissions
+                                                    Permisos de Cuentas
                                                 </h5>
                                             </div>
                                             <div class="right" style="position:relative;">
@@ -243,7 +243,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Create</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Crear</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -263,7 +263,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">View</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Ver</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -283,7 +283,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Edit</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Editar</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -303,7 +303,7 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Delete</h6>
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Eliminar</h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
                                                         <!-- Switch -->
@@ -324,7 +324,7 @@
                                             <div class="panel-body2 bg-warn" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 class="text-dark" style="padding: 0 0 0 15px; margin: 20px 0; font-size: 18px; line-height: 14px;">Special Permissions</h6>
+                                                        <h6 class="text-dark" style="padding: 0 0 0 15px; margin: 20px 0; font-size: 18px; line-height: 14px;">Permisos Especiales</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -335,13 +335,13 @@
                                             <div class="panel-body2" style="padding: 0 10px;">
                                                 <div class="uk-clearfix">
                                                     <div class="left">
-                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Import
+                                                        <h6 style="padding: 0 0 0 15px; margin: 20px 0; font-size: 16px; line-height: 14px;">Importar
                                                             <i class="material-icons"
                                                                style="color: #888;
                                                               font-size: 14px;
                                                               cursor: pointer;
                                                               vertical-align: middle;"
-                                                               data-uk-tooltip="{cls:'long-text'}" title="Requires Create Permission">help</i>
+                                                               data-uk-tooltip="{cls:'long-text'}" title="Requiere Permiso de Creación">help</i>
                                                         </h6>
                                                     </div>
                                                     <div class="right" style="position:relative;">
@@ -363,7 +363,7 @@
                                     <div style="margin-top: 25px;">
                                         <div class="box uk-clearfix">
                                             <div class="uk-float-right" style="padding-top: 10px;">
-                                                <button type="submit" class="md-btn md-btn-success">Save</button>
+                                                <button type="submit" class="md-btn md-btn-success">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -371,15 +371,15 @@
                                     <hr class="mt-10 mb-10" />
 
                                     <div style="margin-top: 25px;">
-                                        <h2 class="text-light">Danger Zone</h2>
+                                        <h2 class="text-light">Zona de Peligro</h2>
                                         <div class="danger-zone">
                                             <div class="dz-box uk-clearfix">
                                                 <div class="uk-float-left">
-                                                    <h5>Delete this Role</h5>
-                                                    <p>Once you delete this permission role, there is no going back. <br /> All users with this role will need a new role during deletion.</p>
+                                                    <h5>Eliminar este Rol</h5>
+                                                    <p>Una vez que elimine este rol de permiso, no hay vuelta atrás. <br /> Todos los usuarios con este rol necesitarán un nuevo rol durante la eliminación.</p>
                                                 </div>
                                                 <div class="uk-float-right" style="padding-top: 10px;">
-                                                    <button type="button" class="md-btn md-btn-small md-btn-danger" ng-click="showDeleteTicketType('{{_id}}', true)">Delete</button>
+                                                    <button type="button" class="md-btn md-btn-small md-btn-danger" ng-click="showDeleteTicketType('{{_id}}', true)">Eliminar</button>
                                                 </div>
                                             </div>
                                         </div>

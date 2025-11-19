@@ -274,54 +274,54 @@
 <div class="wrapper">
     <div class="slides">
         <div class="slide">
-            <h2 style="margin-bottom: 18px;">Create Account</h2>
+            <h2 style="margin-bottom: 18px;">Crear Cuenta</h2>
             <p style="text-align: left;">
-                This wizard will walk you through the process of creating an account to access trudesk.
+                Este asistente le guiará a través del proceso de crear una cuenta para acceder a trudesk.
             </p>
 
-            <button class="btn md-btn md-btn-wave md-btn-success" data-next>Lets Get Started</button>
+            <button class="btn md-btn md-btn-wave md-btn-success" data-next>Comencemos</button>
         </div>
 
         <div id="userInfoSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">User Information</h2>
+            <h2 style="margin-bottom: 25px;">Información del Usuario</h2>
             <p style="text-align: left;">
-                Please fill out the information below. All fields are required.
+                Por favor complete la información a continuación. Todos los campos son obligatorios.
             </p>
             <form id="userInfo" class="uk-form-stacked uk-clearfix">
                 <div class="uk-margin-medium-bottom">
-                    <label for="user-fullname">Full Name</label>
+                    <label for="user-fullname">Nombre Completo</label>
                     <input id="user-fullname" name="user-fullname" class="md-input" type="text" required />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="user-email">Email</label>
+                    <label for="user-email">Correo Electrónico</label>
                     <input id="user-email" name="user-email" class="md-input" type="email" required />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="user-password">Password</label>
+                    <label for="user-password">Contraseña</label>
                     <input id="user-password" name="user-password" class="md-input" type="password" required />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="user-cPassword">Confirm Password</label>
+                    <label for="user-cPassword">Confirmar Contraseña</label>
                     <input id="user-cPassword" name="user-cPassword" class="md-input" type="password" required />
                 </div>
                 <div class="uk-margin-medium-bottom">
                     <div id="captchaImage" style="margin-bottom: 10px;"></div>
-                    <label for="captcha">Please enter the letters you see above.</label>
+                    <label for="captcha">Por favor ingrese las letras que ve arriba.</label>
                     <input type="text" id="captcha" name="captcha" class="md-input" required />
                 </div>
                 <div style="width: 25%; float: left;">
-                    <button class="btn md-btn md-btn-wave md-btn-primary1" type="button" data-prev>Back</button>
+                    <button class="btn md-btn md-btn-wave md-btn-primary1" type="button" data-prev>Atrás</button>
                 </div>
                 <div style="width: 70%; float: right;">
-                    <button id="checkEmail" class="btn md-btn md-btn-wave md-btn-success" type="button">Next</button>
+                    <button id="checkEmail" class="btn md-btn md-btn-wave md-btn-success" type="button">Siguiente</button>
                 </div>
             </form>
 
-            <a href="#" class="no-ajaxy" id="privacyPolicyBtn">Privacy Policy</a>
+            <a href="#" class="no-ajaxy" id="privacyPolicyBtn">Política de Privacidad</a>
         </div>
         <div class="slide hide">
-            <h2 style="margin-bottom: 25px;">Creating Account...</h2>
-            <p style="text-align: center;">Please wait while we create your account.</p>
+            <h2 style="margin-bottom: 25px;">Creando Cuenta...</h2>
+            <p style="text-align: center;">Por favor espere mientras creamos su cuenta.</p>
             <div class="loader">
                 <svg style="width: 140px; " viewBox="0 0 288.9 70.1">
                     <line class="l1" x1="0" y1="0" x2="288" y2="0"></line>
@@ -329,55 +329,55 @@
             </div>
         </div>
         <div id="errorSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Crap! Something funky happened.</h2>
+            <h2 style="margin-bottom: 25px;">¡Vaya! Algo extraño sucedió.</h2>
             <p style="text-align: justify;">
-                Something didn't work out the way it should. Please try again or submit a bug report below.
+                Algo no funcionó como debería. Por favor intente de nuevo o envíe un reporte de error a continuación.
             </p>
             <pre style="text-align: left; font-size: 11px; font-weight: normal; margin-bottom: 15px;"></pre>
             <div style="width: 100%;">
                 <a href="https://www.github.com/polonel/trudesk/issues/new" target="_blank" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">I think I should submit this issue.</button>
+                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">Creo que debería enviar este problema.</button>
                 </a>
-                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="width: 100%; margin-bottom: 10px !important;" onclick="location.reload();">I think i will start over.</button>
+                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="width: 100%; margin-bottom: 10px !important;" onclick="location.reload();">Creo que empezaré de nuevo.</button>
                 <a href="https://github.com/polonel/trudesk/blob/master/README.md" target="_blank" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;">or maybe i should read the docs!</button>
+                    <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;">¡o tal vez debería leer la documentación!</button>
                 </a>
             </div>
         </div>
         <div id="emailExistsSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Email Already Exists</h2>
+            <h2 style="margin-bottom: 25px;">El Correo Electrónico Ya Existe</h2>
             <p style="text-align: justify;">
-                The email <span id="emailSpan" style="font-weight: bold;">email@email.com</span> already exists. If you already have an account using this email please login and submit your ticket.
+                El correo electrónico <span id="emailSpan" style="font-weight: bold;">email@email.com</span> ya existe. Si ya tiene una cuenta usando este correo electrónico, por favor inicie sesión y envíe su ticket.
             </p>
             <div style="width: 100%; margin-top: 50px;">
                 <a href="/login" class="no-ajaxy" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Login</button>
+                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Iniciar Sesión</button>
                 </a>
-                <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;" data-prev>Back</button>
+                <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;" data-prev>Atrás</button>
             </div>
         </div>
         <div id="accountCreatedSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px; text-align: left;">Thank you <span id="spanfullname" style="color: #2196f3;">[fullname]</span>,</h2>
+            <h2 style="margin-bottom: 25px; text-align: left;">Gracias <span id="spanfullname" style="color: #2196f3;">[fullname]</span>,</h2>
             <p style="text-align: justify;">
-                Your account has been created.
+                Su cuenta ha sido creada.
             </p>
             <p style="text-align: justify;">
-                Please click the button below in order to login with your email (<span id="spanemail" style="color: #2196f3">[EMAIL]</span>).
+                Por favor haga clic en el botón a continuación para iniciar sesión con su correo electrónico (<span id="spanemail" style="color: #2196f3">[EMAIL]</span>).
             </p>
             <div style="width: 100%; margin-top: 50px;">
                 <a href="/login" class="no-ajaxy" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Login</button>
+                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Iniciar Sesión</button>
                 </a>
             </div>
         </div>
         <div id="accountCreateError" class="hide">
-            <h2 style="margin-bottom: 25px; text-align: left;">An Error has occurred</h2>
+            <h2 style="margin-bottom: 25px; text-align: left;">Ha Ocurrido un Error</h2>
             <p style="text-align: justify;">
-                An Unknown Error has occurred
+                Ha ocurrido un error desconocido
             </p>
             <div style="width: 100%; margin-top: 50px;">
                 <a href="/signup" class="no-ajaxy" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">Start Over</button>
+                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">Empezar de Nuevo</button>
                 </a>
             </div>
         </div>
@@ -388,7 +388,7 @@
     <div class="white-box" style="margin-bottom: 15px;">
         {{{data.privacyPolicy}}}
     </div>
-    <button id="privacyPolicyBackBtn" class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Back</button>
+    <button id="privacyPolicyBackBtn" class="btn md-btn md-btn-wave md-btn-primary" type="button" style="width: 100%; margin-bottom: 10px !important;">Atrás</button>
 </div>
 
 
@@ -531,20 +531,20 @@
                         captcha: $('#captcha').val()
                     },
                     error: function(e) {
-                        $checkEmailBtn.prop('disabled', false).text('Next');
+                        $checkEmailBtn.prop('disabled', false).text('Siguiente');
                         window.Snackbar.show({
-                            text: 'Invalid Captcha',
+                            text: 'Captcha Inválido',
                             actionTextColor: 'red'
                         });
 
                         console.error(e);
                     },
                     success: function(data) {
-                        $checkEmailBtn.prop('disabled', false).text('Next');
+                        $checkEmailBtn.prop('disabled', false).text('Siguiente');
                         if (!data.success) {
-                            $checkEmailBtn.prop('disabled', false).text('Next');
+                            $checkEmailBtn.prop('disabled', false).text('Siguiente');
                             window.Snackbar.show({
-                                text: 'An Error occurred.',
+                                text: 'Ocurrió un error.',
                                 actionTextColor: 'red'
                             });
                         } else {

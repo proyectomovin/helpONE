@@ -16,6 +16,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import $ from 'jquery'
+import { t } from 'helpers/i18n'
 
 import ColorSelector from 'components/ColorSelector'
 import Button from 'components/Button'
@@ -79,11 +80,11 @@ class EditPriorityPartial extends React.Component {
         <form onSubmit={e => this.onSubmitEditPriority(e, priority)}>
           <div className='uk-grid uk-grid-collapse uk-clearfix'>
             <div className='uk-width-1-4'>
-              <label>Priority Name</label>
+              <label>{t('settingsTickets.priorityName')}</label>
               <input name={'name'} type='text' className={'md-input'} defaultValue={priority.get('name')} />
             </div>
             <div className='uk-width-1-4 uk-padding-small-sides'>
-              <label>SLA Overdue (minutes)</label>
+              <label>{t('settingsTickets.slaOverdueMinutes')}</label>
               <input name={'overdueIn'} type='text' className={'md-input'} defaultValue={priority.get('overdueIn')} />
             </div>
             <div className='uk-width-1-4 uk-padding-small-sides'>
@@ -96,8 +97,8 @@ class EditPriorityPartial extends React.Component {
             </div>
             <div className='uk-width-1-4'>
               <div className='md-btn-group uk-float-right uk-text-right mt-5'>
-                <Button small={true} text={'Cancel'} onClick={() => this.toggleEditPriority()} />
-                <Button text={'Save'} small={true} style={'success'} type={'submit'} />
+                <Button small={true} text={t('actions.cancel')} onClick={() => this.toggleEditPriority()} />
+                <Button text={t('actions.save')} small={true} style={'success'} type={'submit'} />
               </div>
             </div>
           </div>

@@ -11,6 +11,7 @@ import { createNotice } from 'actions/notices'
 
 import helpers from 'lib/helpers'
 import $ from 'jquery'
+import { t } from 'helpers/i18n'
 
 @observer
 class CreateNoticeModal extends React.Component {
@@ -63,11 +64,11 @@ class CreateNoticeModal extends React.Component {
     return (
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <div className={'mb-25'}>
-          <h2>Create Notice</h2>
+          <h2>{t('notices.createNotice')}</h2>
         </div>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Name</label>
+            <label>{t('table.name')}</label>
             <input
               type='text'
               className={'md-input'}
@@ -75,22 +76,22 @@ class CreateNoticeModal extends React.Component {
               onChange={e => this.onInputChange('name', e)}
               data-validation='length'
               data-validation-length={'min2'}
-              data-validation-error-msg={'Please enter a notice name. (Must contain 2 characters)'}
+              data-validation-error-msg={t('notices.noticeNameValidation')}
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Message</label>
+            <label>{t('notices.message')}</label>
             <textarea
               className={'md-input'}
               value={this.message}
               onChange={e => this.onInputChange('message', e)}
               data-validation='length'
               data-validation-length={'min10'}
-              data-validation-error-msg={'Please enter a notice message. (Must contain 10 characters)'}
+              data-validation-error-msg={t('notices.messageValidation')}
             />
           </div>
           <div>
-            <span style={{ display: 'inline-block', float: 'left', paddingTop: 5 }}>Background Color</span>
+            <span style={{ display: 'inline-block', float: 'left', paddingTop: 5 }}>{t('notices.backgroundColor')}</span>
             <PopoverColorPicker
               color={this.color}
               onChange={c => {
@@ -98,7 +99,7 @@ class CreateNoticeModal extends React.Component {
               }}
               style={{ float: 'left', marginLeft: 5, marginRight: 15 }}
             />
-            <span style={{ display: 'inline-block', float: 'left', paddingTop: 5 }}>Font Color</span>
+            <span style={{ display: 'inline-block', float: 'left', paddingTop: 5 }}>{t('notices.fontColor')}</span>
             <PopoverColorPicker
               color={this.fontColor}
               onChange={c => {
@@ -109,8 +110,8 @@ class CreateNoticeModal extends React.Component {
           </div>
 
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Create Notice'} flat={true} waves={true} style={'primary'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('notices.createNotice')} flat={true} waves={true} style={'primary'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

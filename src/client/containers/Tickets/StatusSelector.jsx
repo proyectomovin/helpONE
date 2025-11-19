@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 
 import { TICKETS_STATUS_SET, TICKETS_UI_STATUS_UPDATE } from 'serverSocket/socketEventConsts'
 import { fetchTicketStatus } from 'actions/tickets'
+import { t } from 'helpers/i18n'
 
 @observer
 class StatusSelector extends React.Component {
@@ -91,13 +92,13 @@ class StatusSelector extends React.Component {
     return (
       <div className='floating-ticket-status'>
         <div
-          title='Change Status'
+          title={t('tickets.changeStatus')}
           className={clsx(`ticket-status`, this.props.hasPerm && `cursor-pointer`)}
           style={{ color: 'white', background: currentStatus != null ? currentStatus.get('htmlColor') : '#000000' }}
           onClick={e => this.toggleDropMenu(e)}
           ref={r => (this.selectorButton = r)}
         >
-          <span>{currentStatus != null ? currentStatus.get('name') : 'Unknown'}</span>
+          <span>{currentStatus != null ? currentStatus.get('name') : t('common.unknown')}</span>
         </div>
 
         {this.props.hasPerm && (

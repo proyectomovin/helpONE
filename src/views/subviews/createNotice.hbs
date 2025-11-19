@@ -19,50 +19,50 @@
                                     <div class="right">
                                         <div class="md-switch md-green" style="position: absolute; top: 5px; right: -15px; z-index: 99;">
                                             <label>
-                                                Alert Window
+                                                Ventana de Alerta
                                                 <input id="nAlertWindow" name="nAlertWindow" type="checkbox" {{#compare data.notice.alertWindow '==' true}} checked {{/compare}}>
                                                 <span class="lever"></span>
                                             </label>
                                         </div>
                                     </div>
-                                    <label for="nName">Name</label>
+                                    <label for="nName">Nombre</label>
                                     <input id="nName" class="md-input md-input-width-medium" name="nName" type="text" value="{{data.notice.name}}" />
 
                                 </div>
                                 <div class="uk-margin-medium-bottom">
-                                    <label for="nMessage">Message</label>
+                                    <label for="nMessage">Mensaje</label>
                                     <input id="nMessage" class="md-input md-input-width-medium" name="nMessage" type="text" value="{{data.notice.message}}" />
                                 </div>
 
                                 <div class="uk-margin-medium-bottom">
-                                    <label for="nFontColor">Font Color:</label>
+                                    <label for="nFontColor">Color de Fuente:</label>
                                     <select name="nFontColor" id="nFontColor">
-                                        <option value="#f6f6f6">White</option>
-                                        <option value="#000000">Black</option>
+                                        <option value="#f6f6f6">Blanco</option>
+                                        <option value="#000000">Negro</option>
                                     </select>
                                 </div>
                                 <div class="uk-margin-medium-bottom">
-                                    <label for="nColor" style="margin-right: 23px;" class="uk-form-label">Notice Color:</label>
+                                    <label for="nColor" style="margin-right: 23px;" class="uk-form-label">Color del Aviso:</label>
                                     <select id="nColor" name="nColor">
-                                        <option value="#7bd148" {{#compare data.notice.color '==' '#7bd148'}} selected {{/compare}}>Green</option>
-                                        <option value="#5484ed" {{#compare data.notice.color '==' '#5484ed'}} selected {{/compare}}>Bold blue</option>
-                                        <option value="#a4bdfc" {{#compare data.notice.color '==' '#a4bdfc'}} selected {{/compare}}>Blue</option>
-                                        <option value="#46d6db" {{#compare data.notice.color '==' '#46d6db'}} selected {{/compare}}>Turquoise</option>
-                                        <option value="#7ae7bf" {{#compare data.notice.color '==' '#7ae7bf'}} selected {{/compare}}>Light green</option>
-                                        <option value="#51b749" {{#compare data.notice.color '==' '#51b749'}} selected {{/compare}}>Bold green</option>
-                                        <option value="#fbd75b" {{#compare data.notice.color '==' '#fbd75b'}} selected {{/compare}}>Yellow</option>
-                                        <option value="#ffb878" {{#compare data.notice.color '==' '#ffb878'}} selected {{/compare}}>Orange</option>
-                                        <option value="#ff887c" {{#compare data.notice.color '==' '#ff887c'}} selected {{/compare}}>Red</option>
-                                        <option value="#e74c3c" {{#compare data.notice.color '==' '#e74c3c'}} selected {{/compare}}>Bold red</option>
-                                        <option value="#dbadff" {{#compare data.notice.color '==' '#dbadff'}} selected {{/compare}}>Purple</option>
-                                        <option value="#e1e1e1" {{#compare data.notice.color '==' '#e1e1e1'}} selected {{/compare}}>Gray</option>
+                                        <option value="#7bd148" {{#compare data.notice.color '==' '#7bd148'}} selected {{/compare}}>Verde</option>
+                                        <option value="#5484ed" {{#compare data.notice.color '==' '#5484ed'}} selected {{/compare}}>Azul fuerte</option>
+                                        <option value="#a4bdfc" {{#compare data.notice.color '==' '#a4bdfc'}} selected {{/compare}}>Azul</option>
+                                        <option value="#46d6db" {{#compare data.notice.color '==' '#46d6db'}} selected {{/compare}}>Turquesa</option>
+                                        <option value="#7ae7bf" {{#compare data.notice.color '==' '#7ae7bf'}} selected {{/compare}}>Verde claro</option>
+                                        <option value="#51b749" {{#compare data.notice.color '==' '#51b749'}} selected {{/compare}}>Verde fuerte</option>
+                                        <option value="#fbd75b" {{#compare data.notice.color '==' '#fbd75b'}} selected {{/compare}}>Amarillo</option>
+                                        <option value="#ffb878" {{#compare data.notice.color '==' '#ffb878'}} selected {{/compare}}>Naranja</option>
+                                        <option value="#ff887c" {{#compare data.notice.color '==' '#ff887c'}} selected {{/compare}}>Rojo</option>
+                                        <option value="#e74c3c" {{#compare data.notice.color '==' '#e74c3c'}} selected {{/compare}}>Rojo fuerte</option>
+                                        <option value="#dbadff" {{#compare data.notice.color '==' '#dbadff'}} selected {{/compare}}>Púrpura</option>
+                                        <option value="#e1e1e1" {{#compare data.notice.color '==' '#e1e1e1'}} selected {{/compare}}>Gris</option>
                                     </select>
                                 </div>
 
 
                                 <div class="uk-clearfix">
-                                    <button type="submit" class="uk-margin-left uk-float-right md-btn md-btn-success md-btn-wave-light" id="createNoticeSubmit" ng-click="submitCreateNoticeForm($event);">Save</button>
-                                    <a href="/notices" class="uk-float-right md-btn md-btn-wave-light">Back</a>
+                                    <button type="submit" class="uk-margin-left uk-float-right md-btn md-btn-success md-btn-wave-light" id="createNoticeSubmit" ng-click="submitCreateNoticeForm($event);">Guardar</button>
+                                    <a href="/notices" class="uk-float-right md-btn md-btn-wave-light">Atrás</a>
                                 </div>
                             </div>
                         </form>

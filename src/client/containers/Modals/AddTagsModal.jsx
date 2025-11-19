@@ -24,6 +24,7 @@ import Log from '../../logger'
 import axios from 'axios'
 import $ from 'jquery'
 import helpers from 'lib/helpers'
+import { t } from 'helpers/i18n'
 
 import { TICKETS_UI_TAGS_UPDATE } from 'serverSocket/socketEventConsts'
 
@@ -98,7 +99,7 @@ class AddTagsModal extends React.Component {
     return (
       <BaseModal options={{ bgclose: false }}>
         <div className={'uk-clearfix'}>
-          <h5 style={{ fontWeight: 300 }}>Add Tags</h5>
+          <h5 style={{ fontWeight: 300 }}>{t('tags.addTags')}</h5>
           <div>
             <form className='nomargin' onSubmit={e => this.onSubmit(e)}>
               <div className='search-container'>
@@ -108,7 +109,7 @@ class AddTagsModal extends React.Component {
                   className='chosen-select'
                   multiple
                   data-placeholder=' '
-                  data-noresults='No Tags Found for '
+                  data-noresults={t('tags.noTagsFound')}
                   ref={r => (this.select = r)}
                 >
                   {mappedTags.map(tag => (
@@ -127,7 +128,7 @@ class AddTagsModal extends React.Component {
               <div className='left' style={{ marginTop: 15 }}>
                 <Button
                   type={'button'}
-                  text={'Clear'}
+                  text={t('actions.clear')}
                   small={true}
                   flat={true}
                   style={'danger'}
@@ -137,7 +138,7 @@ class AddTagsModal extends React.Component {
               <div className='right' style={{ marginTop: 15 }}>
                 <Button
                   type={'button'}
-                  text={'Cancel'}
+                  text={t('actions.cancel')}
                   style={'secondary'}
                   small={true}
                   flat={true}
@@ -145,7 +146,7 @@ class AddTagsModal extends React.Component {
                   extraClass={'uk-modal-close'}
                   ref={r => (this.closeButton = r)}
                 />
-                <Button type={'submit'} text={'Save Tags'} style={'success'} small={true} waves={true} />
+                <Button type={'submit'} text={t('tags.saveTags')} style={'success'} small={true} waves={true} />
               </div>
             </form>
           </div>

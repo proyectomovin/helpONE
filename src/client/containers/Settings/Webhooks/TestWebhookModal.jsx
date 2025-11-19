@@ -7,6 +7,7 @@ import Button from 'components/Button'
 import SingleSelect from 'components/SingleSelect'
 
 import { testWebhook } from 'actions/webhooks'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 import { DEFAULT_WEBHOOK_EVENTS } from './constants'
@@ -63,7 +64,7 @@ class TestWebhookModal extends React.Component {
     e.preventDefault()
     const { selectedEvent, payload } = this.state
     if (!selectedEvent) {
-      helpers.UI.showSnackbar('Please select an event to test.', true)
+      helpers.UI.showSnackbar(t('settingsWebhooks.selectEventTest'), true)
       return
     }
 
@@ -72,7 +73,7 @@ class TestWebhookModal extends React.Component {
       try {
         parsedPayload = JSON.parse(payload)
       } catch (err) {
-        helpers.UI.showSnackbar('Payload must be valid JSON.', true)
+        helpers.UI.showSnackbar(t('settingsWebhooks.payloadValidJson'), true)
         return
       }
     }
@@ -88,11 +89,11 @@ class TestWebhookModal extends React.Component {
       <BaseModal>
         <form onSubmit={this.handleSubmit} className='uk-form-stacked'>
           <div className='uk-margin-medium-bottom'>
-            <h2>Send Test Event</h2>
-            <p className='uk-margin-small-top'>Trigger a sample webhook delivery to verify your integration.</p>
+            <h2>{t('settingsWebhooks.sendTestEvent')}</h2>
+            <p className='uk-margin-small-top'>{t('settingsWebhooks.testDescription')}</p>
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label className='uk-form-label'>Event</label>
+            <label className='uk-form-label'>{t('settingsWebhooks.event')}</label>
             <SingleSelect
               key={selectedEvent || 'webhook-test-event'}
               items={eventOptions}
@@ -103,19 +104,19 @@ class TestWebhookModal extends React.Component {
             />
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label htmlFor='webhook-payload'>Custom Payload (JSON)</label>
+            <label htmlFor='webhook-payload'>{t('settingsWebhooks.customPayload')}</label>
             <textarea
               id='webhook-payload'
               className='md-input'
               rows='5'
               value={payload}
               onChange={this.handleInputChange}
-              placeholder='Optional JSON payload override'
+              placeholder={t('settingsWebhooks.customPayloadPlaceholder')}
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text='Cancel' flat waves extraClass='uk-modal-close' />
-            <Button text='Send Test' flat waves style='primary' type='submit' />
+            <Button text={t('actions.cancel')} flat waves extraClass='uk-modal-close' />
+            <Button text={t('settingsWebhooks.sendTest')} flat waves style='primary' type='submit' />
           </div>
         </form>
       </BaseModal>
