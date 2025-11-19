@@ -14,7 +14,7 @@ import {
   fetchDashboardTopTypes,
   fetchDashboardTopAssignees,
   fetchDashboardTopPriorities,
-  fetchDashboardTopOwners
+  fetchDashboardTopOwners,
   fetchDashboardTimeTrackingStats,
   fetchDashboardTimeTrackingByGroup
 } from 'actions/dashboard'
