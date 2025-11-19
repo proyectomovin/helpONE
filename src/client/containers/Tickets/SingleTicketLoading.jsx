@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 import helpers from 'lib/helpers'
 import socket from 'lib/socket'
 import Avatar from 'components/Avatar/Avatar'
+import { t } from 'helpers/i18n'
 import IssuePartial from 'containers/Tickets/IssuePartial'
 import TruTabWrapper from 'components/TruTabs/TruTabWrapper'
 import TruTabSelectors from 'components/TruTabs/TruTabSelectors'
@@ -34,13 +35,13 @@ class SingleTicketLoading extends React.Component {
             style={{ width: 360, maxWidth: 360, minWidth: 360 }}
           >
             <div className='page-title-border-right relative' style={{ padding: '0 30px' }}>
-              <p>Ticket </p>
+              <p>{t('tickets.ticket')} </p>
             </div>
             {/*  Left Side */}
             <div className='page-content-left full-height scrollable'>
               <div className='ticket-details-wrap uk-position-relative uk-clearfix'>
                 <div className='ticket-assignee-wrap uk-clearfix' style={{ paddingRight: 30 }}>
-                  <h4>Assignee</h4>
+                  <h4>{t('tickets.assignee')}</h4>
                   <div className='ticket-assignee uk-clearfix'>
                     <Avatar image={undefined} showOnlineBubble={false} />
                     <div className='ticket-assignee-details'>
@@ -62,7 +63,7 @@ class SingleTicketLoading extends React.Component {
                     {/* Type */}
                     <div className='uk-width-1-2 uk-float-left nopadding'>
                       <div className='marginright5'>
-                        <span>Type</span>
+                        <span>{t('table.type')}</span>
                         <div className='input-box' style={{ paddingTop: 8 }}>
                           <div className={'loadingTextAnimation'} />
                         </div>
@@ -71,24 +72,24 @@ class SingleTicketLoading extends React.Component {
                     {/* Priority */}
                     <div className='uk-width-1-2 uk-float-left nopadding'>
                       <div className='marginleft5'>
-                        <span>Priority</span>
+                        <span>{t('table.priority')}</span>
                         <div className='input-box'>---</div>
                       </div>
                     </div>
                     {/*  Group */}
                     <div className='uk-width-1-1 nopadding uk-clearfix'>
-                      <span>Group</span>
+                      <span>{t('table.group')}</span>
                       <div className='input-box'>---</div>
                     </div>
                     {/*  Due Date */}
                     <div className='uk-width-1-1 p-0'>
-                      <span>Due Date</span>
+                      <span>{t('table.dueDate')}</span>
                       <div className='input-box'>---</div>
                     </div>
 
                     {/* Tags */}
                     <div className='uk-width-1-1 nopadding'>
-                      <span>Tags</span>
+                      <span>{t('tags.title')}</span>
                       <div className='tag-list uk-clearfix' />
                     </div>
                   </div>
@@ -102,7 +103,7 @@ class SingleTicketLoading extends React.Component {
           <div className='page-title-right noshadow'>
             <div className='page-top-comments uk-float-right'>
               <a role='button' className='btn no-ajaxy'>
-                Add Comment
+                {t('tickets.addComment')}
               </a>
             </div>
             <div

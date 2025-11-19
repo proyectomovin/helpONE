@@ -28,6 +28,7 @@ import Button from 'components/Button'
 import MultiSelect from 'components/MultiSelect'
 import $ from 'jquery'
 import SpinLoader from 'components/SpinLoader'
+import { t } from 'helpers/i18n'
 
 @observer
 class EditTeamModal extends React.Component {
@@ -89,11 +90,11 @@ class EditTeamModal extends React.Component {
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <SpinLoader active={this.props.accountsLoading} />
         <div className={'mb-25'}>
-          <h2>Edit Team</h2>
+          <h2>{t('teams.editTeam')}</h2>
         </div>
         <form className={'uk-form-stacked'} onSubmit={e => this.onSaveTeamEdit(e)}>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Team Name</label>
+            <label>{t('teams.teamName')}</label>
             <input
               type='text'
               className={'md-input'}
@@ -101,11 +102,11 @@ class EditTeamModal extends React.Component {
               onChange={e => this.onInputChange(e)}
               data-validation='length'
               data-validation-length={'2-25'}
-              data-validation-error-msg={'Please enter a valid Team name. (Must contain 2 characters)'}
+              data-validation-error-msg={t('teams.teamNameValidation')}
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Team Members</label>
+            <label style={{ marginBottom: 5 }}>{t('teams.teamMembers')}</label>
             <MultiSelect
               items={mappedAccounts}
               initialSelected={selectedMembers}
@@ -114,8 +115,8 @@ class EditTeamModal extends React.Component {
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Save Team'} flat={true} waves={true} style={'primary'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('teams.saveTeam')} flat={true} waves={true} style={'primary'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

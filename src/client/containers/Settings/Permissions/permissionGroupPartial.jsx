@@ -22,6 +22,7 @@ import { without, uniq } from 'lodash'
 import SettingItem from 'components/Settings/SettingItem'
 import EnableSwitch from 'components/Settings/EnableSwitch'
 import PermSwitchPartial from './permSwitchPartial'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 
@@ -119,32 +120,32 @@ class PermissionGroupPartial extends React.Component {
           component={
             <EnableSwitch
               stateName={`all_perm_${title}_${role.get('_id')}`}
-              label={'All'}
+              label={t('settingsPermissions.all')}
               checked={this.all}
               onChange={e => this.onEnableSwitchChanged(e, 'all')}
             />
           }
         >
           <PermSwitchPartial
-            title={'Create'}
+            title={t('settingsPermissions.create')}
             checked={this.create}
             onChange={e => this.onEnableSwitchChanged(e, 'create')}
             disabled={this.all}
           />
           <PermSwitchPartial
-            title={'View'}
+            title={t('settingsPermissions.view')}
             onChange={e => this.onEnableSwitchChanged(e, 'view')}
             checked={this.view}
             disabled={this.all}
           />
           <PermSwitchPartial
-            title={'Update'}
+            title={t('settingsPermissions.update')}
             onChange={e => this.onEnableSwitchChanged(e, 'update')}
             checked={this.update}
             disabled={this.all}
           />
           <PermSwitchPartial
-            title={'Delete'}
+            title={t('settingsPermissions.delete')}
             onChange={e => this.onEnableSwitchChanged(e, 'delete')}
             checked={this.delete}
             disabled={this.all}
@@ -160,7 +161,7 @@ class PermissionGroupPartial extends React.Component {
                       className='text-dark'
                       style={{ padding: '0 0 0 15px', margin: '20px 0', fontSize: '18px', lineHeight: '14px' }}
                     >
-                      Special Permissions
+                      {t('settingsPermissions.specialPermissions')}
                     </h6>
                   </div>
                 </div>

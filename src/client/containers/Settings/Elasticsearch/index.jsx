@@ -18,6 +18,7 @@ import { connect } from 'react-redux'
 import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import { updateSetting, updateMultipleSettings } from 'actions/settings'
+import { t } from 'helpers/i18n'
 
 import Button from 'components/Button'
 import SettingItem from 'components/Settings/SettingItem'
@@ -30,10 +31,10 @@ import UIKit from 'uikit'
 
 @observer
 class ElasticsearchSettingsContainer extends React.Component {
-  @observable esStatus = 'Not Configured'
+  @observable esStatus = t('settingsElasticsearch.notConfigured')
   @observable esStatusClass = ''
   @observable indexCount = 0
-  @observable inSyncText = 'Not Configured'
+  @observable inSyncText = t('settingsElasticsearch.notConfigured')
   @observable inSyncClass = ''
   @observable disableRebuild = false
 
@@ -104,9 +105,9 @@ class ElasticsearchSettingsContainer extends React.Component {
           })
         } else {
           this.setState({ configured: false }, () => {
-            self.esStatus = 'Not Configured'
+            self.esStatus = t('settingsElasticsearch.notConfigured')
             self.esStatusClass = ''
-            self.inSyncText = 'Not Configured'
+            self.inSyncText = t('settingsElasticsearch.notConfigured')
             self.inSyncClass = ''
             self.indexCount = 0
           })
@@ -149,7 +150,7 @@ class ElasticsearchSettingsContainer extends React.Component {
       .then(res => {
         const data = res.data
         if (data.status.isRebuilding) {
-          self.esStatus = 'Rebuilding...'
+          self.esStatus = t('settingsElasticsearch.rebuilding')
           self.esStatusClass = ''
         } else self.esStatus = data.status.esStatus
         if (self.esStatus.toLowerCase() === 'connected') self.esStatusClass = 'text-success'
@@ -157,10 +158,10 @@ class ElasticsearchSettingsContainer extends React.Component {
 
         self.indexCount = data.status.indexCount.toLocaleString()
         if (data.status.inSync) {
-          self.inSyncText = 'In Sync'
+          self.inSyncText = t('settingsElasticsearch.inSync')
           self.inSyncClass = 'bg-success'
         } else {
-          self.inSyncText = 'Out of Sync'
+          self.inSyncText = t('settingsElasticsearch.outOfSync')
           self.inSyncClass = 'bg-warn'
         }
 
@@ -170,12 +171,12 @@ class ElasticsearchSettingsContainer extends React.Component {
         } else self.disableRebuild = false
       })
       .catch(err => {
-        this.esStatus = 'Error'
+        this.esStatus = t('common.error')
         this.esStatusClass = 'text-danger'
-        this.inSyncText = 'Unknown'
+        this.inSyncText = t('settingsElasticsearch.unknown')
         this.inSyncClass = ''
-        if (err.error && err.error.message) helpers.UI.showSnackbar('Error: ' + err.error.message, true)
-        else helpers.UI.showSnackbar('Error: An unknown error occurred. Check Console.', true)
+        if (err.error && err.error.message) helpers.UI.showSnackbar(t('common.error') + ': ' + err.error.message, true)
+        else helpers.UI.showSnackbar(t('settingsElasticsearch.unknownError'), true)
         Log.error(err)
       })
   }
@@ -183,28 +184,28 @@ class ElasticsearchSettingsContainer extends React.Component {
   rebuildIndex () {
     const self = this
     UIKit.modal.confirm(
-      'Are you sure you want to rebuild the index?',
+      t('settingsElasticsearch.rebuildConfirm'),
       function () {
-        self.esStatus = 'Rebuilding...'
-        self.inSyncText = 'Out of Sync'
+        self.esStatus = t('settingsElasticsearch.rebuilding')
+        self.inSyncText = t('settingsElasticsearch.outOfSync')
         self.inSyncClass = 'bg-warn'
         self.indexCount = 0
         axios
           .get('/api/v2/es/rebuild')
           .then(() => {
-            self.esStatus = 'Rebuilding...'
+            self.esStatus = t('settingsElasticsearch.rebuilding')
             // $scope.esStatusClass = 'text-warning';
-            helpers.UI.showSnackbar('Rebuilding Index...', false)
+            helpers.UI.showSnackbar(t('settingsElasticsearch.rebuildingIndex'), false)
             self.disableRebuild = true
             setTimeout(self.getStatus, 3000)
           })
           .catch(function (err) {
             Log.error('[trudesk:settings:es:RebuildIndex]', err)
-            helpers.UI.showSnackbar('Error: An unknown error occurred. Check Console.', true)
+            helpers.UI.showSnackbar(t('settingsElasticsearch.unknownError'), true)
           })
       },
       {
-        labels: { Ok: 'Yes', Cancel: 'No' },
+        labels: { Ok: t('actions.yes'), Cancel: t('actions.no') },
         confirmButtonClass: 'md-btn-danger'
       }
     )
@@ -214,41 +215,41 @@ class ElasticsearchSettingsContainer extends React.Component {
     return (
       <div className={this.props.active ? '' : 'hide'}>
         <SettingItem
-          title={'Elasticsearch - Beta'}
-          subtitle={'Enable the Elasticsearch engine'}
+          title={t('settingsElasticsearch.title')}
+          subtitle={t('settingsElasticsearch.enableEngine')}
           component={
             <EnableSwitch
               stateName={'elasticSearchEnabled'}
-              label={'Enable'}
+              label={t('actions.enable')}
               checked={this.getSetting('elasticSearchEnabled')}
               onChange={e => this.onEnableChanged(e)}
             />
           }
         />
         <SettingItem
-          title={'Connection Status'}
-          subtitle={'Current connection status to the Elasticsearch server.'}
+          title={t('settingsElasticsearch.connectionStatus')}
+          subtitle={t('settingsElasticsearch.connectionStatusSubtitle')}
           component={<h4 className={`right mr-15 mt-15 ${this.esStatusClass}`}>{this.esStatus}</h4>}
         />
         <SettingItem
-          title={'Indexed Documents'}
-          subtitle={'Current count of indexed documents.'}
+          title={t('settingsElasticsearch.indexedDocuments')}
+          subtitle={t('settingsElasticsearch.indexedDocumentsSubtitle')}
           component={<h4 className={'right mr-15 mt-15'}>{this.indexCount}</h4>}
         />
         <SettingItem
-          title={'Index Status'}
-          subtitle={'Current status of the index. if the status is not green, the index may need rebuilding.'}
+          title={t('settingsElasticsearch.indexStatus')}
+          subtitle={t('settingsElasticsearch.indexStatusSubtitle')}
           extraClass={this.inSyncClass}
           component={<h4 className={'right mr-15 mt-15'}>{this.inSyncText}</h4>}
         />
         <SettingItem
-          title={'Elasticsearch Server Configuration'}
-          tooltip={'Changing server settings will require a rebuild of the index and server restart.'}
-          subtitle={'The connection settings to the Elasticsearch server.'}
+          title={t('settingsElasticsearch.serverConfiguration')}
+          tooltip={t('settingsElasticsearch.serverConfigurationTooltip')}
+          subtitle={t('settingsElasticsearch.serverConfigurationSubtitle')}
         >
           <form onSubmit={e => this.onFormSubmit(e)}>
             <div className='uk-margin-medium-bottom'>
-              <label>Server</label>
+              <label>{t('settingsElasticsearch.server')}</label>
               <input
                 type='text'
                 className={'md-input md-input-width-medium'}
@@ -258,7 +259,7 @@ class ElasticsearchSettingsContainer extends React.Component {
               />
             </div>
             <div className='uk-margin-medium-bottom'>
-              <label>Port</label>
+              <label>{t('settingsElasticsearch.port')}</label>
               <input
                 type='text'
                 className={'md-input md-input-width-medium'}
@@ -269,7 +270,7 @@ class ElasticsearchSettingsContainer extends React.Component {
             </div>
             <div className='uk-clearfix'>
               <Button
-                text={'Apply'}
+                text={t('actions.apply')}
                 type={'submit'}
                 flat={true}
                 waves={true}
@@ -281,14 +282,12 @@ class ElasticsearchSettingsContainer extends React.Component {
           </form>
         </SettingItem>
         <SettingItem
-          title={'Rebuild Index'}
-          subtitle={'Wipe index and rebuild'}
-          tooltip={
-            'Rebuilding the index should only occur if the index is out of sync with the database, or has not been initialized. Rebuilding will take some time.'
-          }
+          title={t('settingsElasticsearch.rebuildIndex')}
+          subtitle={t('settingsElasticsearch.rebuildIndexSubtitle')}
+          tooltip={t('settingsElasticsearch.rebuildIndexTooltip')}
           component={
             <Button
-              text={'Rebuild'}
+              text={t('settingsElasticsearch.rebuild')}
               flat={false}
               waves={true}
               style={'primary'}

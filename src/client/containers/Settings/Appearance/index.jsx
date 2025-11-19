@@ -25,6 +25,7 @@ import SingleSelect from 'components/SingleSelect'
 import ColorSelector from 'components/ColorSelector'
 import Zone from 'components/ZoneBox/zone'
 import ZoneBox from 'components/ZoneBox'
+import { t } from 'helpers/i18n'
 
 const colorMap = {
   light: {
@@ -179,15 +180,15 @@ class AppearanceSettings extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Site Logo'
+          title={t('settingsAppearance.siteLogo')}
           subtitle={
             <div>
-              Upload site logo to display in top navigation. <i>Note: Resize to max width of 140px</i>
+              {t('settingsAppearance.siteLogoHelp')} <i>{t('settingsAppearance.siteLogoNote')}</i>
             </div>
           }
           component={
             <UploadButtonWithX
-              buttonText={'Upload Logo'}
+              buttonText={t('settingsAppearance.uploadLogo')}
               uploadAction={'/settings/general/uploadlogo'}
               extAllowed={'*.(jpg|jpeg|gif|png)'}
               showX={this.getSettingsValue('hasCustomLogo')}
@@ -202,15 +203,15 @@ class AppearanceSettings extends React.Component {
         />
 
         <SettingItem
-          title='Page Logo'
+          title={t('settingsAppearance.pageLogo')}
           subtitle={
             <div>
-              Upload logo to display within page views. <i>Note: Used on login page (min-width: 400px)</i>
+              {t('settingsAppearance.pageLogoHelp')} <i>{t('settingsAppearance.pageLogoNote')}</i>
             </div>
           }
           component={
             <UploadButtonWithX
-              buttonText={'Upload Logo'}
+              buttonText={t('settingsAppearance.uploadLogo')}
               uploadAction={'/settings/general/uploadpagelogo'}
               extAllowed={'*.(jpg|jpeg|gif|png)'}
               showX={this.getSettingsValue('hasCustomPageLogo')}
@@ -222,11 +223,11 @@ class AppearanceSettings extends React.Component {
         />
 
         <SettingItem
-          title='Favicon'
-          subtitle={'Upload a custom favicon'}
+          title={t('settingsAppearance.favicon')}
+          subtitle={t('settingsAppearance.faviconHelp')}
           component={
             <UploadButtonWithX
-              buttonText={'Upload Favicon'}
+              buttonText={t('settingsAppearance.uploadFavicon')}
               uploadAction={'/settings/general/uploadfavicon'}
               extAllowed={'*.(jpg|jpeg|gif|png|ico)'}
               showX={this.getSettingsValue('hasCustomFavicon')}
@@ -240,11 +241,11 @@ class AppearanceSettings extends React.Component {
           }
         />
         <SettingItem
-          title='Color Scheme'
-          subtitle='Select the colors for your color scheme.'
+          title={t('settingsAppearance.colorScheme')}
+          subtitle={t('settingsAppearance.colorSchemeHelp')}
           component={
             <Button
-              text={'Save'}
+              text={t('actions.save')}
               flat={true}
               style={'success'}
               extraClass={'uk-float-right mt-10'}
@@ -257,21 +258,21 @@ class AppearanceSettings extends React.Component {
           <Zone>
             <ZoneBox>
               <SettingSubItem
-                title='Built-in Color Scheme'
-                subtitle='Select a predefined color scheme'
+                title={t('settingsAppearance.builtInColorScheme')}
+                subtitle={t('settingsAppearance.builtInColorSchemeHelp')}
                 component={
                   <SingleSelect
                     width='60%'
                     showTextbox={false}
                     items={[
-                      { text: 'Light (Default)', value: 'light' },
-                      { text: 'Dark', value: 'dark' },
-                      { text: 'Blue Jean', value: 'bluejean' },
-                      { text: 'Midnight', value: 'midnight' },
-                      { text: 'Moonlight', value: 'moonlight' },
-                      { text: 'Purple Rain', value: 'purplerain' },
-                      { text: 'Sandstone', value: 'sandstone' },
-                      { text: "Winter's Fire", value: 'winterfire' }
+                      { text: t('settingsAppearance.lightDefault'), value: 'light' },
+                      { text: t('settingsAppearance.dark'), value: 'dark' },
+                      { text: t('settingsAppearance.blueJean'), value: 'bluejean' },
+                      { text: t('settingsAppearance.midnight'), value: 'midnight' },
+                      { text: t('settingsAppearance.moonlight'), value: 'moonlight' },
+                      { text: t('settingsAppearance.purpleRain'), value: 'purplerain' },
+                      { text: t('settingsAppearance.sandstone'), value: 'sandstone' },
+                      { text: t('settingsAppearance.wintersFire'), value: 'winterfire' }
                     ]}
                     defaultValue={this.state.selectedColorScheme}
                     onSelectChange={e => {
@@ -283,8 +284,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Header Background'
-                subtitle='Background color of the header'
+                title={t('settingsAppearance.headerBackground')}
+                subtitle={t('settingsAppearance.headerBackgroundHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {
@@ -298,8 +299,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Header Primary'
-                subtitle='Text and icon color within the header'
+                title={t('settingsAppearance.headerPrimary')}
+                subtitle={t('settingsAppearance.headerPrimaryHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {
@@ -313,8 +314,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Primary'
-                subtitle='Most text and icons'
+                title={t('settingsAppearance.primary')}
+                subtitle={t('settingsAppearance.primaryHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {
@@ -328,8 +329,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Secondary'
-                subtitle='The main background color'
+                title={t('settingsAppearance.secondary')}
+                subtitle={t('settingsAppearance.secondaryHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {
@@ -343,8 +344,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Tertiary'
-                subtitle='Accent color, used for links, some buttons, and notifications'
+                title={t('settingsAppearance.tertiary')}
+                subtitle={t('settingsAppearance.tertiaryHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {
@@ -358,8 +359,8 @@ class AppearanceSettings extends React.Component {
             </ZoneBox>
             <ZoneBox>
               <SettingSubItem
-                title='Quaternary'
-                subtitle='Sidebar background color'
+                title={t('settingsAppearance.quaternary')}
+                subtitle={t('settingsAppearance.quaternaryHelp')}
                 component={
                   <ColorSelector
                     ref={cs => {

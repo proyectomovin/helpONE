@@ -18,6 +18,7 @@ import { connect } from 'react-redux'
 import some from 'lodash/some'
 import $ from 'jquery'
 import velocity from 'velocity'
+import { t } from 'helpers/i18n'
 
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
@@ -86,8 +87,8 @@ class AddPriorityToTypeModal extends React.Component {
       <BaseModal>
         <form className='uk-form-stacked'>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Add Priorities</h2>
-            <span>Please select the priorities you wish to add to type: {type.get('name')}</span>
+            <h2>{t('modals.addPriorities')}</h2>
+            <span>{t('modals.addPrioritiesDesc')} {type.get('name')}</span>
           </div>
           <div className='priority-loop zone'>
             {this.getPriorities().map(priority => {
@@ -97,7 +98,7 @@ class AddPriorityToTypeModal extends React.Component {
                     <div className='uk-float-left'>
                       <h5 style={{ color: priority.get('htmlColor'), fontWeight: 'bold' }}>{priority.get('name')}</h5>
                       <p className={'uk-text-muted'}>
-                        SLA Overdue: <strong>{priority.get('durationFormatted')}</strong>
+                        {t('modals.slaOverdue')}: <strong>{priority.get('durationFormatted')}</strong>
                       </p>
                     </div>
                     <div className='uk-float-right'>
@@ -113,7 +114,7 @@ class AddPriorityToTypeModal extends React.Component {
                     <div className='uk-float-left'>
                       <h5 style={{ color: priority.get('htmlColor'), fontWeight: 'bold' }}>{priority.get('name')}</h5>
                       <p className={'uk-text-muted'}>
-                        SLA Overdue: <strong>{priority.get('durationFormatted')}</strong>
+                        {t('modals.slaOverdue')}: <strong>{priority.get('durationFormatted')}</strong>
                       </p>
                     </div>
                     <div className='uk-float-right'>
@@ -122,7 +123,7 @@ class AddPriorityToTypeModal extends React.Component {
                         className='uk-button uk-button-success mt-10 mr-10 no-ajaxy'
                         onClick={e => this.onAddClick(e, type, priority)}
                       >
-                        Add
+                        {t('modals.add')}
                       </a>
                       <i
                         className='material-icons uk-text-success mt-10 mr-15'
@@ -137,7 +138,7 @@ class AddPriorityToTypeModal extends React.Component {
             })}
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button type={'button'} flat={true} waves={true} text={'Close'} extraClass={'uk-modal-close'} />
+            <Button type={'button'} flat={true} waves={true} text={t('actions.close')} extraClass={'uk-modal-close'} />
           </div>
         </form>
       </BaseModal>

@@ -7,6 +7,7 @@ import Button from 'components/Button'
 import MultiSelect from 'components/MultiSelect'
 
 import { createWebhook, updateWebhook } from 'actions/webhooks'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 import { DEFAULT_WEBHOOK_EVENTS } from './constants'
@@ -136,7 +137,7 @@ class WebhookFormModal extends React.Component {
 
     const { name, targetUrl, secret, events, method, headers, isActive } = this.state
     if (!events || events.length === 0) {
-      helpers.UI.showSnackbar('Please select at least one event.', true)
+      helpers.UI.showSnackbar(t('settingsWebhooks.eventRequired'), true)
       return
     }
 
@@ -151,12 +152,12 @@ class WebhookFormModal extends React.Component {
     }
 
     if (!payload.name) {
-      helpers.UI.showSnackbar('Webhook name is required.', true)
+      helpers.UI.showSnackbar(t('settingsWebhooks.nameRequired'), true)
       return
     }
 
     if (!payload.targetUrl) {
-      helpers.UI.showSnackbar('Webhook URL is required.', true)
+      helpers.UI.showSnackbar(t('settingsWebhooks.urlRequired'), true)
       return
     }
 
@@ -191,11 +192,11 @@ class WebhookFormModal extends React.Component {
     return (
       <BaseModal>
         <div className='mb-25'>
-          <h2>{isEdit ? 'Edit Webhook' : 'Create Webhook'}</h2>
+          <h2>{isEdit ? t('settingsWebhooks.editWebhook') : t('settingsWebhooks.createWebhook')}</h2>
         </div>
         <form className='uk-form-stacked' onSubmit={this.handleSubmit}>
           <div className='uk-margin-medium-bottom'>
-            <label htmlFor='webhook-name'>Name</label>
+            <label htmlFor='webhook-name'>{t('settingsWebhooks.name')}</label>
             <input
               id='webhook-name'
               name='name'
@@ -205,11 +206,11 @@ class WebhookFormModal extends React.Component {
               onChange={this.handleInputChange}
               data-validation='length'
               data-validation-length='min2'
-              data-validation-error-msg='Please provide a valid name.'
+              data-validation-error-msg={t('settingsWebhooks.nameValidation')}
             />
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label htmlFor='webhook-url'>URL</label>
+            <label htmlFor='webhook-url'>{t('settingsWebhooks.url')}</label>
             <input
               id='webhook-url'
               name='targetUrl'
@@ -218,11 +219,11 @@ class WebhookFormModal extends React.Component {
               value={targetUrl}
               onChange={this.handleInputChange}
               data-validation='url'
-              data-validation-error-msg='Please provide a valid URL.'
+              data-validation-error-msg={t('settingsWebhooks.urlValidation')}
             />
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label htmlFor='webhook-secret'>Secret (optional)</label>
+            <label htmlFor='webhook-secret'>{t('settingsWebhooks.secret')}</label>
             <input
               id='webhook-secret'
               name='secret'
@@ -230,11 +231,11 @@ class WebhookFormModal extends React.Component {
               className='md-input'
               value={secret}
               onChange={this.handleInputChange}
-              placeholder='Shared secret used to sign webhook payloads'
+              placeholder={t('settingsWebhooks.secretPlaceholder')}
             />
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label htmlFor='webhook-method'>Method</label>
+            <label htmlFor='webhook-method'>{t('settingsWebhooks.method')}</label>
             <select
               id='webhook-method'
               name='method'
@@ -250,14 +251,14 @@ class WebhookFormModal extends React.Component {
             </select>
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label>Headers (optional)</label>
+            <label>{t('settingsWebhooks.headers')}</label>
             <div>
               {headers.map((header, index) => (
                 <div key={`header-${index}`} className='uk-flex uk-flex-middle uk-margin-small-bottom'>
                   <input
                     type='text'
                     className='md-input'
-                    placeholder='Header name'
+                    placeholder={t('settingsWebhooks.headerName')}
                     value={header.key}
                     onChange={e => this.handleHeaderChange(index, 'key', e.target.value)}
                     style={{ marginRight: 8 }}
@@ -265,13 +266,13 @@ class WebhookFormModal extends React.Component {
                   <input
                     type='text'
                     className='md-input'
-                    placeholder='Header value'
+                    placeholder={t('settingsWebhooks.headerValue')}
                     value={header.value}
                     onChange={e => this.handleHeaderChange(index, 'value', e.target.value)}
                     style={{ marginRight: 8 }}
                   />
                   <Button
-                    text='Remove'
+                    text={t('actions.remove')}
                     type='button'
                     small
                     waves
@@ -279,11 +280,11 @@ class WebhookFormModal extends React.Component {
                   />
                 </div>
               ))}
-              <Button text='Add Header' type='button' small waves onClick={this.addHeaderRow} />
+              <Button text={t('settingsWebhooks.addHeader')} type='button' small waves onClick={this.addHeaderRow} />
             </div>
           </div>
           <div className='uk-margin-medium-bottom'>
-            <label style={{ marginBottom: 5 }}>Events</label>
+            <label style={{ marginBottom: 5 }}>{t('settingsWebhooks.eventsLabel')}</label>
             <MultiSelect
               ref={ref => (this.eventsSelect = ref)}
               items={eventOptions}
@@ -300,12 +301,12 @@ class WebhookFormModal extends React.Component {
                 checked={isActive}
                 onChange={this.handleCheckboxChange}
               />
-              Active
+              {t('settingsWebhooks.active')}
             </label>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text='Cancel' flat waves extraClass='uk-modal-close' />
-            <Button text={isEdit ? 'Save Changes' : 'Create Webhook'} flat waves style='primary' type='submit' />
+            <Button text={t('actions.cancel')} flat waves extraClass='uk-modal-close' />
+            <Button text={isEdit ? t('settingsWebhooks.saveChanges') : t('settingsWebhooks.createWebhook')} flat waves style='primary' type='submit' />
           </div>
         </form>
       </BaseModal>

@@ -28,6 +28,7 @@ import Button from 'components/Button'
 import helpers from 'lib/helpers'
 import $ from 'jquery'
 import SpinLoader from 'components/SpinLoader'
+import { t } from 'helpers/i18n'
 
 @observer
 class EditGroupModal extends React.Component {
@@ -91,11 +92,11 @@ class EditGroupModal extends React.Component {
       <BaseModal>
         <SpinLoader active={this.props.accountsLoading} />
         <div className={'mb-25'}>
-          <h2>Edit Group</h2>
+          <h2>{t('groups.editGroup')}</h2>
         </div>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Group Name</label>
+            <label>{t('groups.groupName')}</label>
             <input
               type='text'
               className={'md-input'}
@@ -103,11 +104,11 @@ class EditGroupModal extends React.Component {
               onChange={e => this.onInputChange(e)}
               data-validation='length'
               data-validation-length={'min2'}
-              data-validation-error-msg={'Please enter a valid Group name. (Must contain 2 characters)'}
+              data-validation-error-msg={t('groups.groupNameValidation')}
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Group Members</label>
+            <label style={{ marginBottom: 5 }}>{t('groups.groupMembers')}</label>
             <MultiSelect
               items={mappedAccounts}
               initialSelected={selectedMembers}
@@ -116,7 +117,7 @@ class EditGroupModal extends React.Component {
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Send Notifications To</label>
+            <label style={{ marginBottom: 5 }}>{t('groups.sendNotificationsTo')}</label>
             <MultiSelect
               items={mappedAccounts}
               initialSelected={selectedSendMailTo}
@@ -125,8 +126,8 @@ class EditGroupModal extends React.Component {
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Save Group'} flat={true} waves={true} style={'primary'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('groups.saveGroup')} flat={true} waves={true} style={'primary'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

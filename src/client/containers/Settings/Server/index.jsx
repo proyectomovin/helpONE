@@ -16,6 +16,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { updateSetting, updateMultipleSettings } from 'actions/settings'
+import { t } from 'helpers/i18n'
 
 import Button from 'components/Button'
 import SettingItem from 'components/Settings/SettingItem'
@@ -74,7 +75,7 @@ class ServerSettingsController extends React.Component {
         helpers.hideLoader()
         Log.error(error.responseText)
         Log.error('Unable to restart server. Server must run under PM2 and Account must have admin rights.')
-        helpers.UI.showSnackbar('Unable to restart server. Are you an Administrator?', true)
+        helpers.UI.showSnackbar(t('settingsServer.unableToRestart'), true)
       })
       .then(() => {
         this.setState({ restarting: false })
@@ -93,9 +94,9 @@ class ServerSettingsController extends React.Component {
 
     if (val === true) {
       UIKit.modal.confirm(
-        `<h2>Are you sure?</h2>
+        `<h2>${t('settingsServer.areYouSure')}</h2>
         <p style="font-size: 15px;">
-            <span class="uk-text-danger" style="font-size: 15px;">This will force logout every user and prevent non-administrators from logging in.</span> 
+            <span class="uk-text-danger" style="font-size: 15px;">${t('settingsServer.maintenanceModeWarning')}</span>
         </p>
         `,
         () => {
@@ -111,7 +112,7 @@ class ServerSettingsController extends React.Component {
             })
         },
         {
-          labels: { Ok: 'Yes', Cancel: 'No' },
+          labels: { Ok: t('actions.yes'), Cancel: t('actions.no') },
           confirmButtonClass: 'md-btn-danger'
         }
       )
@@ -129,11 +130,11 @@ class ServerSettingsController extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title={'Restart Server'}
-          subtitle={'Restart the Trudesk Instance. '}
+          title={t('settingsServer.restartServer')}
+          subtitle={t('settingsServer.restartServerSubtitle')}
           component={
             <Button
-              text={'Restart'}
+              text={t('settingsServer.restart')}
               flat={false}
               waves={true}
               style={'danger'}
@@ -144,12 +145,12 @@ class ServerSettingsController extends React.Component {
           }
         />
         <SettingItem
-          title={'Maintenance Mode'}
-          subtitle={'Only Administrators are allowed to login.'}
+          title={t('settingsServer.maintenanceMode')}
+          subtitle={t('settingsServer.maintenanceModeSubtitle')}
           component={
             <EnableSwitch
               stateName={'maintenanceMode'}
-              label={'Enable'}
+              label={t('actions.enable')}
               checked={this.maintenanceModeEnabled}
               onChange={e => this.onMaintenanceModeChange(e)}
             />

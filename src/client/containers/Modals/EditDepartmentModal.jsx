@@ -28,6 +28,7 @@ import helpers from 'lib/helpers'
 import $ from 'jquery'
 import Button from 'components/Button'
 import MultiSelect from 'components/MultiSelect'
+import { t } from 'helpers/i18n'
 
 @observer
 class EditDepartmentModal extends React.Component {
@@ -103,11 +104,11 @@ class EditDepartmentModal extends React.Component {
     return (
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <div className={'mb-25'}>
-          <h2>Edit Department: {department.get('name')}</h2>
+          <h2>{t('departments.editDepartment')}: {department.get('name')}</h2>
         </div>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Department Name</label>
+            <label>{t('departments.departmentName')}</label>
             <input
               type='text'
               className={'md-input'}
@@ -115,11 +116,11 @@ class EditDepartmentModal extends React.Component {
               onChange={e => this.onInputChange(e)}
               data-validation='length'
               data-validation-length={'min2'}
-              data-validation-error-msg={'Please enter a valid department name. (Must contain 2 characters)'}
+              data-validation-error-msg={t('departments.departmentNameValidation')}
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Teams</label>
+            <label style={{ marginBottom: 5 }}>{t('accountModal.teams')}</label>
             <MultiSelect
               items={mappedTeams}
               initialSelected={departmentTeams ? departmentTeams.map(d => d.get('_id')).toArray() : []}
@@ -130,11 +131,11 @@ class EditDepartmentModal extends React.Component {
           <hr />
           <div className={'uk-margin-medium-bottom uk-clearfix'}>
             <div className='uk-float-left'>
-              <h4 style={{ paddingLeft: 2 }}>Access all current and new customer groups?</h4>
+              <h4 style={{ paddingLeft: 2 }}>{t('departments.allGroupsQuestion')}</h4>
             </div>
             <div className='uk-float-right md-switch md-green' style={{ marginTop: 5 }}>
               <label>
-                Yes
+                {t('actions.yes')}
                 <input
                   type='checkbox'
                   checked={this.allGroups}
@@ -151,11 +152,11 @@ class EditDepartmentModal extends React.Component {
           </div>
           <div className={'uk-margin-medium-bottom uk-clearfix'}>
             <div className='uk-float-left'>
-              <h4 style={{ paddingLeft: 2 }}>Access all current and new public groups?</h4>
+              <h4 style={{ paddingLeft: 2 }}>{t('departments.publicGroupsQuestion')}</h4>
             </div>
             <div className='uk-float-right md-switch md-green' style={{ marginTop: 1 }}>
               <label>
-                Yes
+                {t('actions.yes')}
                 <input
                   type='checkbox'
                   checked={this.publicGroups}
@@ -168,7 +169,7 @@ class EditDepartmentModal extends React.Component {
             </div>
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Customer Groups</label>
+            <label style={{ marginBottom: 5 }}>{t('nav.customerGroups')}</label>
             <MultiSelect
               items={mappedGroups}
               onChange={() => {}}
@@ -178,8 +179,8 @@ class EditDepartmentModal extends React.Component {
             />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Save Department'} flat={true} waves={true} style={'primary'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('departments.saveDepartment')} flat={true} waves={true} style={'primary'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

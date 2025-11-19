@@ -20,6 +20,10 @@ import {
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
   FETCH_DASHBOARD_TOP_TAGS,
+  FETCH_DASHBOARD_TOP_TYPES,
+  FETCH_DASHBOARD_TOP_ASSIGNEES,
+  FETCH_DASHBOARD_TOP_PRIORITIES,
+  FETCH_DASHBOARD_TOP_OWNERS
   FETCH_DASHBOARD_TIMETRACKING_STATS,
   FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
@@ -45,6 +49,17 @@ const initialState = {
   loadingOverdueTickets: false,
   overdueTickets: List([]),
 
+  loadingTopTypes: false,
+  topTypes: List([]),
+
+  loadingTopAssignees: false,
+  topAssignees: List([]),
+
+  loadingTopPriorities: false,
+  topPriorities: List([]),
+
+  loadingTopOwners: false,
+  topOwners: List([])
   loadingTimeTrackingStats: false,
   timeTrackingStats: Map({
     totalEstimated: 0,
@@ -141,6 +156,91 @@ const reducer = handleActions(
       }
     },
 
+    [FETCH_DASHBOARD_TOP_TYPES.PENDING]: state => {
+      return {
+        ...state,
+        loadingTopTypes: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_TYPES.SUCCESS]: (state, action) => {
+      const items = action.response.items
+      let topTypes = sortBy(items, i => i.count)
+        .reverse()
+        .slice(0, 10)
+
+      topTypes = map(topTypes, v => [v.name, v.count])
+
+      return {
+        ...state,
+        loadingTopTypes: false,
+        topTypes: fromJS(topTypes)
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_ASSIGNEES.PENDING]: state => {
+      return {
+        ...state,
+        loadingTopAssignees: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_ASSIGNEES.SUCCESS]: (state, action) => {
+      const items = action.response.items
+      let topAssignees = sortBy(items, i => i.count)
+        .reverse()
+        .slice(0, 10)
+
+      topAssignees = map(topAssignees, v => [v.name, v.count])
+
+      return {
+        ...state,
+        loadingTopAssignees: false,
+        topAssignees: fromJS(topAssignees)
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_PRIORITIES.PENDING]: state => {
+      return {
+        ...state,
+        loadingTopPriorities: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_PRIORITIES.SUCCESS]: (state, action) => {
+      const items = action.response.items
+      let topPriorities = sortBy(items, i => i.count)
+        .reverse()
+        .slice(0, 10)
+
+      topPriorities = map(topPriorities, v => [v.name, v.count])
+
+      return {
+        ...state,
+        loadingTopPriorities: false,
+        topPriorities: fromJS(topPriorities)
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_OWNERS.PENDING]: state => {
+      return {
+        ...state,
+        loadingTopOwners: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TOP_OWNERS.SUCCESS]: (state, action) => {
+      const items = action.response.items
+      let topOwners = sortBy(items, i => i.count)
+        .reverse()
+        .slice(0, 10)
+
+      topOwners = map(topOwners, v => [v.name, v.count])
+
+      return {
+        ...state,
+        loadingTopOwners: false,
+        topOwners: fromJS(topOwners)
     [FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING]: state => {
       return {
         ...state,
