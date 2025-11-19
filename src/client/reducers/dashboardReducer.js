@@ -59,7 +59,8 @@ const initialState = {
   topPriorities: List([]),
 
   loadingTopOwners: false,
-  topOwners: List([])
+  topOwners: List([]),
+
   loadingTimeTrackingStats: false,
   timeTrackingStats: Map({
     totalEstimated: 0,

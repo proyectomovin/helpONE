@@ -354,6 +354,12 @@ class DashboardContainer extends React.Component {
                 content={
                   <div>
                     <D3Pie data={this.props.dashboardState.topTypes.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
                 loaderActive={this.props.dashboardState.loadingTimeTrackingStats}
                 animateLoader={true}
                 style={{ minHeight: 250 }}
