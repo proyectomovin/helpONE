@@ -23,6 +23,8 @@ const apiReportsV1 = require('./api/v1/reports')
 const apiSettingsV1 = require('./api/v1/settings')
 const apiPluginsV1 = require('./api/v1/plugins')
 const apiWebhooksV1 = require('./api/v1/webhooks')
+const apiProductsV1 = require('./api/v1/products')
+const apiModulesV1 = require('./api/v1/modules')
 
 const apiController = {}
 
@@ -43,6 +45,8 @@ apiController.v1.settings = apiSettingsV1
 apiController.v1.plugins = apiPluginsV1
 apiController.v1.roles = require('./api/v1/roles')
 apiController.v1.webhooks = apiWebhooksV1
+apiController.v1.products = apiProductsV1
+apiController.v1.modules = apiModulesV1
 
 apiController.v2 = {}
 apiController.v2.common = require('./api/v2/common')

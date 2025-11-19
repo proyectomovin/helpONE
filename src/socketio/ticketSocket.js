@@ -41,6 +41,7 @@ function register (socket) {
   events.onSetTicketGroup(socket)
   events.onSetTicketDueDate(socket)
   events.onSetTicketIssue(socket)
+  events.onSetTicketBillable(socket)
   events.onCommentNoteSet(socket)
   events.onRemoveCommentNote(socket)
   events.onAttachmentsUIUpdate(socket)
@@ -294,6 +295,40 @@ events.onSetTicketDueDate = function (socket) {
 
           // emitter.emit('ticket:updated', tt)
           utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_DUEDATE_UPDATE, tt)
+        })
+      })
+    })
+  })
+}
+
+events.onSetTicketBillable = function (socket) {
+  socket.on(socketEvents.TICKETS_BILLABLE_SET, function (data) {
+    const ticketId = data._id
+    const billable = data.value
+    const ownerId = socket.request.user._id
+
+    if (_.isUndefined(ticketId) || _.isUndefined(billable)) return true
+
+    ticketSchema.getTicketById(ticketId, function (err, ticket) {
+      if (err) return true
+
+      ticket.billable = billable
+
+      const HistoryItem = {
+        action: 'ticket:set:billable',
+        description: 'Billable set to: ' + (billable ? 'Yes' : 'No'),
+        owner: ownerId
+      }
+
+      ticket.history.push(HistoryItem)
+
+      ticket.save(function (err, tt) {
+        if (err) return true
+
+        // emitter.emit('ticket:updated', tt)
+        utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_BILLABLE_UPDATE, {
+          tid: tt._id,
+          billable: tt.billable
         })
       })
     })

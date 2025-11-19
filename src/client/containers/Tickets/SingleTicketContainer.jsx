@@ -540,13 +540,13 @@ class SingleTicketContainer extends React.Component {
                         {/* Producto */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Producto</span>
-                          <div className='input-box'>{this.ticket.product || '-'}</div>
+                          <div className='input-box'>{this.ticket.product ? this.ticket.product.name : '-'}</div>
                         </div>
 
                         {/* Módulo */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Módulo</span>
-                          <div className='input-box'>{this.ticket.module || '-'}</div>
+                          <div className='input-box'>{this.ticket.module ? this.ticket.module.name : '-'}</div>
                         </div>
 
                         {/* Solicitante */}
@@ -560,12 +560,27 @@ class SingleTicketContainer extends React.Component {
                         {/* Billable */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Es Facturable</span>
-                          <div className='input-box'>
-                            {this.ticket.billable ? (
-                              <span style={{ color: '#4CAF50' }}>✓ Sí</span>
-                            ) : (
-                              <span style={{ color: '#9E9E9E' }}>✗ No</span>
-                            )}
+                          <div className='input-box' style={{ cursor: 'pointer' }}>
+                            <label style={{ cursor: 'pointer', userSelect: 'none', display: 'inline-flex', alignItems: 'center' }}>
+                              <input
+                                type='checkbox'
+                                checked={this.ticket.billable}
+                                onChange={(e) => {
+                                  const newValue = e.target.checked
+                                  this.ticket.billable = newValue
+                                  this.props.socket.emit('$trudesk:tickets:billable:set', {
+                                    _id: this.ticket._id,
+                                    value: newValue
+                                  })
+                                }}
+                                style={{ marginRight: 5 }}
+                              />
+                              {this.ticket.billable ? (
+                                <span style={{ color: '#4CAF50' }}>Sí</span>
+                              ) : (
+                                <span style={{ color: '#9E9E9E' }}>No</span>
+                              )}
+                            </label>
                           </div>
                         </div>
                       </div>
