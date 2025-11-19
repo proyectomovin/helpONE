@@ -53,6 +53,9 @@ exported.TICKETS_PRODUCT_SET = '$trudesk:tickets:product:set'
 exported.TICKETS_UI_MODULE_UPDATE = '$trudesk:tickets:ui:module:update'
 exported.TICKETS_MODULE_SET = '$trudesk:tickets:module:set'
 
+exported.TICKETS_UI_REQUESTER_UPDATE = '$trudesk:tickets:ui:requester:update'
+exported.TICKETS_REQUESTER_SET = '$trudesk:tickets:requester:set'
+
 exported.TICKETS_ASSIGNEE_LOAD = '$trudesk:tickets:assignee:load'
 exported.TICKETS_ASSIGNEE_SET = '$trudesk:tickets:assignee:set'
 exported.TICKETS_ASSIGNEE_CLEAR = '$trudesk:tickets:assignee:clear'

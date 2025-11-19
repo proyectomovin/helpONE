@@ -35,6 +35,8 @@ import {
   TICKETS_PRODUCT_SET,
   TICKETS_UI_MODULE_UPDATE,
   TICKETS_MODULE_SET,
+  TICKETS_UI_REQUESTER_UPDATE,
+  TICKETS_REQUESTER_SET,
   TICKETS_ASSIGNEE_LOAD,
   TICKETS_ASSIGNEE_UPDATE,
   TICKETS_UI_DUEDATE_UPDATE,
@@ -73,6 +75,10 @@ const fetchTicket = parent => {
       parent.ticket = res.data.ticket
       parent.isSubscribed =
         parent.ticket && parent.ticket.subscribers.findIndex(i => i._id === parent.props.shared.sessionUser._id) !== -1
+      // Load group members for the ticket's group
+      if (parent.ticket && parent.ticket.group && parent.ticket.group._id) {
+        parent.loadGroupMembers(parent.ticket.group._id)
+      }
       // }, 3000)
     })
     .catch(error => {
@@ -99,6 +105,7 @@ class SingleTicketContainer extends React.Component {
   @observable products = []
   @observable modules = []
   @observable filteredModules = []
+  @observable groupMembers = []
   assigneeDropdownPartial = createRef()
 
   constructor (props) {
@@ -116,6 +123,7 @@ class SingleTicketContainer extends React.Component {
     this.onUpdateTicketTags = this.onUpdateTicketTags.bind(this)
     this.onUpdateTicketProduct = this.onUpdateTicketProduct.bind(this)
     this.onUpdateTicketModule = this.onUpdateTicketModule.bind(this)
+    this.onUpdateTicketRequester = this.onUpdateTicketRequester.bind(this)
   }
 
   @computed
@@ -152,6 +160,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.on(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
     this.props.socket.on(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
     this.props.socket.on(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
+    this.props.socket.on(TICKETS_UI_REQUESTER_UPDATE, this.onUpdateTicketRequester)
 
     fetchTicket(this)
     this.props.fetchTicketTypes()
@@ -176,6 +185,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.off(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
     this.props.socket.off(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
     this.props.socket.off(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
+    this.props.socket.off(TICKETS_UI_REQUESTER_UPDATE, this.onUpdateTicketRequester)
 
     this.props.unloadGroups()
   }
@@ -211,7 +221,15 @@ class SingleTicketContainer extends React.Component {
   }
 
   onUpdateTicketGroup (data) {
-    if (this.ticket._id === data._id) this.ticket.group = data.group
+    if (this.ticket._id === data._id) {
+      this.ticket.group = data.group
+      // Reload group members when group changes
+      if (data.group && data.group._id) {
+        this.loadGroupMembers(data.group._id)
+      } else {
+        this.groupMembers = []
+      }
+    }
   }
 
   onUpdateTicketDueDate (data) {
@@ -238,6 +256,10 @@ class SingleTicketContainer extends React.Component {
 
   onUpdateTicketModule (data) {
     if (this.ticket._id === data._id) this.ticket.module = data.module
+  }
+
+  onUpdateTicketRequester (data) {
+    if (this.ticket._id === data._id) this.ticket.requester = data.requester
   }
 
   loadProducts () {
@@ -280,6 +302,25 @@ class SingleTicketContainer extends React.Component {
       // Product selected: show modules of this product + independent modules
       this.filteredModules = this.modules.filter(m => !m.product || (m.product._id || m.product) === productId)
     }
+  }
+
+  loadGroupMembers (groupId) {
+    if (!groupId) {
+      this.groupMembers = []
+      return
+    }
+
+    axios
+      .get(`/api/v1/groups/${groupId}`)
+      .then(res => {
+        if (res.data && res.data.group && res.data.group.members) {
+          this.groupMembers = res.data.group.members
+        }
+      })
+      .catch(err => {
+        Log.error('Error loading group members:', err)
+        this.groupMembers = []
+      })
   }
 
   onCommentNoteSubmit (e, type) {
@@ -673,9 +714,31 @@ class SingleTicketContainer extends React.Component {
                         {/* Solicitante */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Solicitante</span>
-                          <div className='input-box'>
-                            {this.ticket.requester ? this.ticket.requester.fullname : '-'}
-                          </div>
+                          {hasTicketUpdate && (
+                            <select
+                              value={this.ticket.requester ? this.ticket.requester._id : ''}
+                              onChange={e => {
+                                const requesterId = e.target.value || null
+                                this.props.socket.emit(TICKETS_REQUESTER_SET, {
+                                  _id: this.ticket._id,
+                                  value: requesterId
+                                })
+                              }}
+                            >
+                              <option value=''>- Ninguno -</option>
+                              {this.groupMembers &&
+                                this.groupMembers.map(member => (
+                                  <option key={member._id} value={member._id}>
+                                    {member.fullname}
+                                  </option>
+                                ))}
+                            </select>
+                          )}
+                          {!hasTicketUpdate && (
+                            <div className='input-box'>
+                              {this.ticket.requester ? this.ticket.requester.fullname : '-'}
+                            </div>
+                          )}
                         </div>
 
                         {/* Billable */}

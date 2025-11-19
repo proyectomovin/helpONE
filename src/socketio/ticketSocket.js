@@ -44,6 +44,7 @@ function register (socket) {
   events.onSetTicketBillable(socket)
   events.onSetTicketProduct(socket)
   events.onSetTicketModule(socket)
+  events.onSetTicketRequester(socket)
   events.onCommentNoteSet(socket)
   events.onRemoveCommentNote(socket)
   events.onAttachmentsUIUpdate(socket)
@@ -417,6 +418,43 @@ events.onSetTicketModule = function (socket) {
               module: populatedTicket.module
             })
           }
+        })
+      })
+    })
+  })
+}
+
+events.onSetTicketRequester = function (socket) {
+  socket.on(socketEvents.TICKETS_REQUESTER_SET, function (data) {
+    const ticketId = data._id
+    const requesterId = data.value
+    const ownerId = socket.request.user._id
+
+    if (_.isUndefined(ticketId)) return true
+
+    ticketSchema.getTicketById(ticketId, function (err, ticket) {
+      if (err) return true
+
+      ticket.requester = requesterId || null
+
+      const HistoryItem = {
+        action: 'ticket:set:requester',
+        description: requesterId ? 'Requester changed' : 'Requester cleared',
+        owner: ownerId
+      }
+
+      ticket.history.push(HistoryItem)
+
+      ticket.save(function (err, tt) {
+        if (err) return true
+
+        tt.populate('requester', function (err, populatedTicket) {
+          if (err) return true
+
+          utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_REQUESTER_UPDATE, {
+            _id: populatedTicket._id,
+            requester: populatedTicket.requester
+          })
         })
       })
     })
