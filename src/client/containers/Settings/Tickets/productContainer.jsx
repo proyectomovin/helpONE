@@ -64,8 +64,8 @@ class ProductContainer extends React.Component {
     if (this.loading) {
       return (
         <div>
-          <h2 className='text-light'>Products</h2>
-          <p>Loading...</p>
+          <h2 className='text-light'>Productos</h2>
+          <p>Cargando...</p>
         </div>
       )
     }
@@ -73,11 +73,11 @@ class ProductContainer extends React.Component {
     return (
       <div>
         <SplitSettingsPanel
-          title={'Products'}
-          subtitle={'Manage products that can be associated with tickets and groups'}
+          title={'Productos'}
+          subtitle={'Administrar productos que se pueden asociar con tickets y grupos'}
           rightComponent={
             <Button
-              text={'Create'}
+              text={'Crear'}
               style={'success'}
               flat={true}
               waves={true}
@@ -103,7 +103,7 @@ class ProductContainer extends React.Component {
                         fontSize: '11px'
                       }}
                     >
-                      DISABLED
+                      DESHABILITADO
                     </span>
                   )}
                 </div>

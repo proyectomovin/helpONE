@@ -80,12 +80,12 @@ class ModuleBody extends React.Component {
     axios
       .put(`/api/v1/modules/${id}`, { name, description, enabled, product })
       .then(res => {
-        helpers.UI.showSnackbar('Module updated successfully')
+        helpers.UI.showSnackbar('Módulo actualizado exitosamente')
         if (this.props.onUpdate) this.props.onUpdate()
       })
       .catch(err => {
         console.error(err)
-        const errorText = err.response?.data?.error || 'Error updating module'
+        const errorText = err.response?.data?.error || 'Error al actualizar módulo'
         helpers.UI.showSnackbar(`Error: ${errorText}`, true)
       })
   }
@@ -101,7 +101,7 @@ class ModuleBody extends React.Component {
 
   render () {
     const mappedProducts = [
-      { text: 'None (Independent Module)', value: '' },
+      { text: 'Ninguno (Módulo Independiente)', value: '' },
       ...this.products.map(p => ({ text: p.name, value: p._id }))
     ]
 
@@ -112,15 +112,15 @@ class ModuleBody extends React.Component {
             <h2 className='text-light'>General</h2>
             <hr style={{ margin: '5px 0 25px 0' }} />
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Module Name</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Nombre del Módulo</label>
               <Input defaultValue={this.moduleName} onChange={v => (this.moduleName = v)} />
             </div>
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Description</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Descripción</label>
               <Input defaultValue={this.moduleDescription} onChange={v => (this.moduleDescription = v)} />
             </div>
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Parent Product</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Producto Padre</label>
               <SingleSelect
                 items={mappedProducts}
                 defaultValue={this.moduleProduct}
@@ -130,34 +130,34 @@ class ModuleBody extends React.Component {
               />
             </div>
           </div>
-          <h2 className='text-light mt-25'>Properties</h2>
+          <h2 className='text-light mt-25'>Propiedades</h2>
           <hr style={{ margin: '5px 0 25px 0' }} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <h4 className={'uk-width-1-2'} style={{ flexGrow: 1 }}>
-              Enabled
+              Habilitado
             </h4>
             <EnableSwitch
               stateName={`moduleEnabled_${this.props.module._id}`}
-              label={'Yes'}
+              label={'Sí'}
               checked={this.moduleEnabled}
               onChange={e => (this.moduleEnabled = e.target.checked)}
             />
           </div>
           <div className={'uk-margin-large-top'} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button text={'Save Module'} style={'success'} onClick={e => this.onSaveClicked(e)} />
+            <Button text={'Guardar Módulo'} style={'success'} onClick={e => this.onSaveClicked(e)} />
           </div>
         </form>
         <div className={'uk-margin-large-top'} style={{ display: 'block', height: 15 }} />
         <div className={'uk-margin-large-top'}>
-          <h2 className='text-light'>Danger Zone</h2>
+          <h2 className='text-light'>Zona Peligrosa</h2>
           <div className='danger-zone'>
             <div className='dz-box uk-clearfix'>
               <div className='uk-float-left'>
-                <h5>Delete this module</h5>
-                <p>Once you delete a module, there is no going back. Please be certain.</p>
+                <h5>Eliminar este módulo</h5>
+                <p>Una vez que elimines un módulo, no hay vuelta atrás. Por favor, asegúrate.</p>
               </div>
               <div className='uk-float-right' style={{ paddingTop: '10px' }}>
-                <Button text={'Delete'} small={true} style={'danger'} onClick={e => this.showDeleteModuleModal(e)} />
+                <Button text={'Eliminar'} small={true} style={'danger'} onClick={e => this.showDeleteModuleModal(e)} />
               </div>
             </div>
           </div>

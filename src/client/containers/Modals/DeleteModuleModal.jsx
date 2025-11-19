@@ -34,13 +34,13 @@ class DeleteModuleModal extends React.Component {
     axios
       .delete(`/api/v1/modules/${moduleId}`)
       .then(res => {
-        helpers.UI.showSnackbar(`Module "${this.props.module.name}" deleted successfully`)
+        helpers.UI.showSnackbar(`Módulo "${this.props.module.name}" eliminado exitosamente`)
         this.props.hideModal()
         // Reload the page to refresh the modules list
         window.location.reload()
       })
       .catch(err => {
-        const errorText = err.response?.data?.error || 'Error deleting module'
+        const errorText = err.response?.data?.error || 'Error al eliminar módulo'
         helpers.UI.showSnackbar(`Error: ${errorText}`, true)
       })
   }
@@ -52,15 +52,15 @@ class DeleteModuleModal extends React.Component {
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Delete Module</h2>
-            <span>Are you sure you want to delete this module?</span>
+            <h2>Eliminar Módulo</h2>
+            <span>¿Estás seguro de que deseas eliminar este módulo?</span>
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <div className='z-box'>
               <h4>{module.name}</h4>
               {productName && (
                 <p>
-                  <strong>Product:</strong> {productName}
+                  <strong>Producto:</strong> {productName}
                 </p>
               )}
               {module.description && <p>{module.description}</p>}
@@ -68,14 +68,14 @@ class DeleteModuleModal extends React.Component {
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <span className='uk-text-danger'>
-              WARNING: This will remove the module reference from all associated tickets and groups.
+              ADVERTENCIA: Esto eliminará la referencia del módulo de todos los tickets y grupos asociados.
               <br />
-              <strong>This action cannot be undone!</strong>
+              <strong>¡Esta acción no se puede deshacer!</strong>
             </span>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Cancel'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Delete'} style={'danger'} flat={true} type={'submit'} />
+            <Button text={'Cancelar'} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={'Eliminar'} style={'danger'} flat={true} type={'submit'} />
           </div>
         </form>
       </BaseModal>

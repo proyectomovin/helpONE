@@ -34,13 +34,13 @@ class DeleteProductModal extends React.Component {
     axios
       .delete(`/api/v1/products/${productId}`)
       .then(res => {
-        helpers.UI.showSnackbar(`Product "${this.props.product.name}" deleted successfully`)
+        helpers.UI.showSnackbar(`Producto "${this.props.product.name}" eliminado exitosamente`)
         this.props.hideModal()
         // Reload the page to refresh the products list
         window.location.reload()
       })
       .catch(err => {
-        const errorText = err.response?.data?.error || 'Error deleting product'
+        const errorText = err.response?.data?.error || 'Error al eliminar producto'
         helpers.UI.showSnackbar(`Error: ${errorText}`, true)
       })
   }
@@ -51,8 +51,8 @@ class DeleteProductModal extends React.Component {
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Delete Product</h2>
-            <span>Are you sure you want to delete this product?</span>
+            <h2>Eliminar Producto</h2>
+            <span>¿Estás seguro de que deseas eliminar este producto?</span>
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <div className='z-box'>
@@ -62,14 +62,14 @@ class DeleteProductModal extends React.Component {
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <span className='uk-text-danger'>
-              WARNING: This will remove the product reference from all associated tickets, groups, and modules.
+              ADVERTENCIA: Esto eliminará la referencia del producto de todos los tickets, grupos y módulos asociados.
               <br />
-              <strong>This action cannot be undone!</strong>
+              <strong>¡Esta acción no se puede deshacer!</strong>
             </span>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Cancel'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Delete'} style={'danger'} flat={true} type={'submit'} />
+            <Button text={'Cancelar'} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={'Eliminar'} style={'danger'} flat={true} type={'submit'} />
           </div>
         </form>
       </BaseModal>

@@ -50,7 +50,7 @@ class ModuleContainer extends React.Component {
       })
       .catch(err => {
         console.error('Error loading modules:', err)
-        helpers.UI.showSnackbar('Error loading modules', true)
+        helpers.UI.showSnackbar('Error al cargar módulos', true)
         this.loading = false
       })
   }
@@ -64,8 +64,8 @@ class ModuleContainer extends React.Component {
     if (this.loading) {
       return (
         <div>
-          <h2 className='text-light'>Modules</h2>
-          <p>Loading...</p>
+          <h2 className='text-light'>Módulos</h2>
+          <p>Cargando...</p>
         </div>
       )
     }
@@ -73,11 +73,11 @@ class ModuleContainer extends React.Component {
     return (
       <div>
         <SplitSettingsPanel
-          title={'Modules'}
-          subtitle={'Manage modules that can be associated with tickets, products, and groups'}
+          title={'Módulos'}
+          subtitle={'Administrar módulos que se pueden asociar con tickets, productos y grupos'}
           rightComponent={
             <Button
-              text={'Create'}
+              text={'Crear'}
               style={'success'}
               flat={true}
               waves={true}
@@ -119,7 +119,7 @@ class ModuleContainer extends React.Component {
                         fontSize: '11px'
                       }}
                     >
-                      DISABLED
+                      DESHABILITADO
                     </span>
                   )}
                 </div>
