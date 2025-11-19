@@ -42,6 +42,8 @@ function register (socket) {
   events.onSetTicketDueDate(socket)
   events.onSetTicketIssue(socket)
   events.onSetTicketBillable(socket)
+  events.onSetTicketProduct(socket)
+  events.onSetTicketModule(socket)
   events.onCommentNoteSet(socket)
   events.onRemoveCommentNote(socket)
   events.onAttachmentsUIUpdate(socket)
@@ -329,6 +331,92 @@ events.onSetTicketBillable = function (socket) {
         utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_BILLABLE_UPDATE, {
           tid: tt._id,
           billable: tt.billable
+        })
+      })
+    })
+  })
+}
+
+events.onSetTicketProduct = function (socket) {
+  socket.on(socketEvents.TICKETS_PRODUCT_SET, function (data) {
+    const ticketId = data._id
+    const productId = data.value
+    const ownerId = socket.request.user._id
+
+    if (_.isUndefined(ticketId)) return true
+
+    ticketSchema.getTicketById(ticketId, function (err, ticket) {
+      if (err) return true
+
+      ticket.product = productId || null
+
+      const HistoryItem = {
+        action: 'ticket:set:product',
+        description: productId ? 'Product changed' : 'Product cleared',
+        owner: ownerId
+      }
+
+      ticket.history.push(HistoryItem)
+
+      ticket.save(function (err, tt) {
+        if (err) return true
+
+        tt.populate('product', function (err, populatedTicket) {
+          if (err) return true
+
+          utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_PRODUCT_UPDATE, {
+            _id: populatedTicket._id,
+            product: populatedTicket.product
+          })
+        })
+      })
+    })
+  })
+}
+
+events.onSetTicketModule = function (socket) {
+  socket.on(socketEvents.TICKETS_MODULE_SET, function (data) {
+    const ticketId = data._id
+    const moduleId = data.value
+    const ownerId = socket.request.user._id
+
+    if (_.isUndefined(ticketId)) return true
+
+    ticketSchema.getTicketById(ticketId, function (err, ticket) {
+      if (err) return true
+
+      ticket.module = moduleId || null
+
+      const HistoryItem = {
+        action: 'ticket:set:module',
+        description: moduleId ? 'Module changed' : 'Module cleared',
+        owner: ownerId
+      }
+
+      ticket.history.push(HistoryItem)
+
+      ticket.save(function (err, tt) {
+        if (err) return true
+
+        tt.populate('module', function (err, populatedTicket) {
+          if (err) return true
+
+          // Also populate module.product if exists
+          if (populatedTicket.module && populatedTicket.module.product) {
+            populatedTicket.populate('module.product', function (err, finalTicket) {
+              if (err) return true
+
+              utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_MODULE_UPDATE, {
+                _id: finalTicket._id,
+                module: finalTicket.module
+              })
+            })
+          } else {
+            utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_MODULE_UPDATE, {
+              _id: populatedTicket._id,
+              module: populatedTicket.module
+            })
+          }
         })
       })
     })

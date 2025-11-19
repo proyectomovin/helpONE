@@ -31,6 +31,10 @@ import {
   TICKETS_TYPE_SET,
   TICKETS_UI_PRIORITY_UPDATE,
   TICKETS_PRIORITY_SET,
+  TICKETS_UI_PRODUCT_UPDATE,
+  TICKETS_PRODUCT_SET,
+  TICKETS_UI_MODULE_UPDATE,
+  TICKETS_MODULE_SET,
   TICKETS_ASSIGNEE_LOAD,
   TICKETS_ASSIGNEE_UPDATE,
   TICKETS_UI_DUEDATE_UPDATE,
@@ -92,6 +96,9 @@ const showPriorityConfirm = () => {
 class SingleTicketContainer extends React.Component {
   @observable ticket = null
   @observable isSubscribed = false
+  @observable products = []
+  @observable modules = []
+  @observable filteredModules = []
   assigneeDropdownPartial = createRef()
 
   constructor (props) {
@@ -107,6 +114,8 @@ class SingleTicketContainer extends React.Component {
     this.onUpdateTicketGroup = this.onUpdateTicketGroup.bind(this)
     this.onUpdateTicketDueDate = this.onUpdateTicketDueDate.bind(this)
     this.onUpdateTicketTags = this.onUpdateTicketTags.bind(this)
+    this.onUpdateTicketProduct = this.onUpdateTicketProduct.bind(this)
+    this.onUpdateTicketModule = this.onUpdateTicketModule.bind(this)
   }
 
   @computed
@@ -141,11 +150,15 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.on(TICKETS_UI_GROUP_UPDATE, this.onUpdateTicketGroup)
     this.props.socket.on(TICKETS_UI_DUEDATE_UPDATE, this.onUpdateTicketDueDate)
     this.props.socket.on(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
+    this.props.socket.on(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
+    this.props.socket.on(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
 
     fetchTicket(this)
     this.props.fetchTicketTypes()
     this.props.fetchGroups()
     this.props.fetchTicketStatus()
+    this.loadProducts()
+    this.loadModules()
   }
 
   componentDidUpdate () {
@@ -161,6 +174,8 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.off(TICKETS_UI_GROUP_UPDATE, this.onUpdateTicketGroup)
     this.props.socket.off(TICKETS_UI_DUEDATE_UPDATE, this.onUpdateTicketDueDate)
     this.props.socket.off(TICKETS_UI_TAGS_UPDATE, this.onUpdateTicketTags)
+    this.props.socket.off(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
+    this.props.socket.off(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
 
     this.props.unloadGroups()
   }
@@ -205,6 +220,66 @@ class SingleTicketContainer extends React.Component {
 
   onUpdateTicketTags (data) {
     if (this.ticket._id === data._id) this.ticket.tags = data.tags
+  }
+
+  onUpdateTicketProduct (data) {
+    if (this.ticket._id === data._id) {
+      this.ticket.product = data.product
+      // When product changes, filter modules and reset module if not compatible
+      this.filterModulesByProduct(data.product ? data.product._id : null)
+      if (this.ticket.module) {
+        const moduleExists = this.filteredModules.find(m => m._id === this.ticket.module._id)
+        if (!moduleExists) {
+          this.ticket.module = null
+        }
+      }
+    }
+  }
+
+  onUpdateTicketModule (data) {
+    if (this.ticket._id === data._id) this.ticket.module = data.module
+  }
+
+  loadProducts () {
+    axios
+      .get('/api/v1/products/enabled')
+      .then(res => {
+        if (res.data.success && res.data.products) {
+          this.products = res.data.products
+        }
+      })
+      .catch(err => {
+        Log.error('Error loading products:', err)
+      })
+  }
+
+  loadModules () {
+    axios
+      .get('/api/v1/modules/enabled')
+      .then(res => {
+        if (res.data.success && res.data.modules) {
+          this.modules = res.data.modules
+          // Initialize filtered modules based on current ticket product
+          if (this.ticket && this.ticket.product) {
+            this.filterModulesByProduct(this.ticket.product._id)
+          } else {
+            this.filteredModules = this.modules
+          }
+        }
+      })
+      .catch(err => {
+        Log.error('Error loading modules:', err)
+      })
+  }
+
+  filterModulesByProduct (productId) {
+    if (!productId) {
+      // No product selected: show independent modules only
+      this.filteredModules = this.modules.filter(m => !m.product)
+    } else {
+      // Product selected: show modules of this product + independent modules
+      this.filteredModules = this.modules.filter(m => !m.product || (m.product._id || m.product) === productId)
+    }
   }
 
   onCommentNoteSubmit (e, type) {
@@ -540,13 +615,59 @@ class SingleTicketContainer extends React.Component {
                         {/* Producto */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Producto</span>
-                          <div className='input-box'>{this.ticket.product ? this.ticket.product.name : '-'}</div>
+                          {hasTicketUpdate && (
+                            <select
+                              value={this.ticket.product ? this.ticket.product._id : ''}
+                              onChange={e => {
+                                const productId = e.target.value || null
+                                this.props.socket.emit(TICKETS_PRODUCT_SET, {
+                                  _id: this.ticket._id,
+                                  value: productId
+                                })
+                                // Filter modules based on selected product
+                                this.filterModulesByProduct(productId)
+                              }}
+                            >
+                              <option value=''>- Ninguno -</option>
+                              {this.products &&
+                                this.products.map(product => (
+                                  <option key={product._id} value={product._id}>
+                                    {product.name}
+                                  </option>
+                                ))}
+                            </select>
+                          )}
+                          {!hasTicketUpdate && (
+                            <div className='input-box'>{this.ticket.product ? this.ticket.product.name : '-'}</div>
+                          )}
                         </div>
 
                         {/* Módulo */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>Módulo</span>
-                          <div className='input-box'>{this.ticket.module ? this.ticket.module.name : '-'}</div>
+                          {hasTicketUpdate && (
+                            <select
+                              value={this.ticket.module ? this.ticket.module._id : ''}
+                              onChange={e => {
+                                const moduleId = e.target.value || null
+                                this.props.socket.emit(TICKETS_MODULE_SET, {
+                                  _id: this.ticket._id,
+                                  value: moduleId
+                                })
+                              }}
+                            >
+                              <option value=''>- Ninguno -</option>
+                              {this.filteredModules &&
+                                this.filteredModules.map(module => (
+                                  <option key={module._id} value={module._id}>
+                                    {module.product ? `${module.name} (${module.product.name})` : module.name}
+                                  </option>
+                                ))}
+                            </select>
+                          )}
+                          {!hasTicketUpdate && (
+                            <div className='input-box'>{this.ticket.module ? this.ticket.module.name : '-'}</div>
+                          )}
                         </div>
 
                         {/* Solicitante */}
