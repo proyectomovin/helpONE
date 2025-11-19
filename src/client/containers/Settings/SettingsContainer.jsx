@@ -136,7 +136,7 @@ class SettingsContainer extends React.Component {
                 }}
               />
               <MenuItem
-                title='Reglas de Automatización'
+                title='Automatización'
                 active={this.state.activeCategory === 'settings-automation-rules'}
                 onClick={e => {
                   this.onMenuItemClick(e, 'automation-rules')
