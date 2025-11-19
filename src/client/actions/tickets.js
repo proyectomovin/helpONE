@@ -35,7 +35,11 @@ import {
   UPDATE_STATUS,
   CREATE_STATUS,
   FETCH_STATUS,
-  DELETE_STATUS
+  DELETE_STATUS,
+  SET_ESTIMATED_HOURS,
+  ADD_TIME_ENTRY,
+  UPDATE_TIME_ENTRY,
+  DELETE_TIME_ENTRY
 } from 'actions/types'
 
 export const fetchTickets = createAction(FETCH_TICKETS.ACTION)
@@ -87,3 +91,19 @@ export const createTag = createAction(CREATE_TAG.ACTION, ({ name, currentPage })
 export const transferToThirdParty = createAction(TRANSFER_TO_THIRDPARTY.ACTION, ({ uid }) => ({ uid }))
 export const fetchTicketTypes = createAction(FETCH_TICKET_TYPES.ACTION)
 export const fetchTicketStatus = createAction(FETCH_STATUS.ACTION)
+
+// Time Tracking Actions
+export const setEstimatedHours = createAction(SET_ESTIMATED_HOURS.ACTION, ({ uid, hours }) => ({ uid, hours }))
+export const addTimeEntry = createAction(ADD_TIME_ENTRY.ACTION, ({ uid, hours, description }) => ({
+  uid,
+  hours,
+  description
+}))
+export const updateTimeEntry = createAction(
+  UPDATE_TIME_ENTRY.ACTION,
+  ({ uid, timeEntryId, hours, description }) => ({ uid, timeEntryId, hours, description })
+)
+export const deleteTimeEntry = createAction(DELETE_TIME_ENTRY.ACTION, ({ uid, timeEntryId }) => ({
+  uid,
+  timeEntryId
+}))

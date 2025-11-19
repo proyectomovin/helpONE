@@ -19,7 +19,15 @@ import { observer } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import union from 'lodash/union'
 
-import { transferToThirdParty, fetchTicketTypes, fetchTicketStatus } from 'actions/tickets'
+import {
+  transferToThirdParty,
+  fetchTicketTypes,
+  fetchTicketStatus,
+  setEstimatedHours,
+  addTimeEntry,
+  updateTimeEntry,
+  deleteTimeEntry
+} from 'actions/tickets'
 import { fetchGroups, unloadGroups } from 'actions/groups'
 import { showModal } from 'actions/common'
 
@@ -49,6 +57,7 @@ import IssuePartial from 'containers/Tickets/IssuePartial'
 import OffCanvasEditor from 'components/OffCanvasEditor'
 import PDropdownTrigger from 'components/PDropdown/PDropdownTrigger'
 import StatusSelector from 'containers/Tickets/StatusSelector'
+import TimeTrackingPartial from 'containers/Tickets/TimeTrackingPartial'
 import TruTabSection from 'components/TruTabs/TruTabSection'
 import TruTabSelector from 'components/TruTabs/TruTabSelector'
 import TruTabSelectors from 'components/TruTabs/TruTabSelectors'
@@ -254,6 +263,25 @@ class SingleTicketContainer extends React.Component {
       .catch(error => {
         Log.error(error.response || error)
       })
+  }
+
+  handleUpdateEstimatedHours = hours => {
+    this.props.setEstimatedHours({ uid: this.ticket.uid, hours })
+  }
+
+  handleAddTimeEntry = (hours, description) => {
+    this.props.addTimeEntry({ uid: this.ticket.uid, hours, description })
+  }
+
+  handleEditTimeEntry = timeEntryId => {
+    helpers.UI.showSnackbar('Edit time entry functionality coming soon')
+    // TODO: Implement edit modal
+  }
+
+  handleRemoveTimeEntry = timeEntryId => {
+    UIkit.modal.confirm('Are you sure you want to delete this time entry?', () => {
+      this.props.deleteTimeEntry({ uid: this.ticket.uid, timeEntryId })
+    })
   }
 
   transferToThirdParty (e) {
@@ -857,6 +885,16 @@ class SingleTicketContainer extends React.Component {
                           </TruTabWrapper>
                         </div>
                       )}
+
+                    {/* Time Tracking Section */}
+                    <TimeTrackingPartial
+                      ticket={this.ticket}
+                      dateFormat={this.props.common.dateFormat}
+                      onAddTimeEntry={this.handleAddTimeEntry}
+                      onUpdateEstimatedHours={this.handleUpdateEstimatedHours}
+                      onEditTimeEntry={this.handleEditTimeEntry}
+                      onRemoveTimeEntry={this.handleRemoveTimeEntry}
+                    />
                   </div>
                 </div>
               </div>
@@ -903,5 +941,9 @@ export default connect(mapStateToProps, {
   fetchTicketStatus,
   unloadGroups,
   showModal,
-  transferToThirdParty
+  transferToThirdParty,
+  setEstimatedHours,
+  addTimeEntry,
+  updateTimeEntry,
+  deleteTimeEntry
 })(SingleTicketContainer)
