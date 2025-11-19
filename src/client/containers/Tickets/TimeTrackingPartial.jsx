@@ -38,12 +38,12 @@ class TimeTrackingPartial extends React.Component {
     const { hours, description } = this.state
 
     if (!hours || !description) {
-      helpers.UI.showSnackbar('Please fill in all fields', true)
+      helpers.UI.showSnackbar('Por favor complete todos los campos', true)
       return
     }
 
     if (parseFloat(hours) <= 0) {
-      helpers.UI.showSnackbar('Hours must be greater than 0', true)
+      helpers.UI.showSnackbar('Las horas deben ser mayor a 0', true)
       return
     }
 
@@ -54,7 +54,7 @@ class TimeTrackingPartial extends React.Component {
   handleUpdateEstimatedHours = () => {
     const { estimatedHours } = this.state
     if (parseFloat(estimatedHours) < 0) {
-      helpers.UI.showSnackbar('Estimated hours cannot be negative', true)
+      helpers.UI.showSnackbar('Las horas estimadas no pueden ser negativas', true)
       return
     }
 
@@ -92,7 +92,7 @@ class TimeTrackingPartial extends React.Component {
       <div className='time-tracking-section' style={{ marginTop: 20 }}>
         <div style={{ backgroundColor: '#fff', padding: 20, borderRadius: 5, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <h3 style={{ marginTop: 0, marginBottom: 20, fontSize: 18, fontWeight: 600 }}>
-            Time Tracking
+            Control de Tiempo
           </h3>
 
           {/* Summary Section */}
@@ -106,7 +106,7 @@ class TimeTrackingPartial extends React.Component {
             borderRadius: 5
           }}>
             <div>
-              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Estimated Hours</div>
+              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Horas Estimadas</div>
               {editingEstimatedHours ? (
                 <div style={{ display: 'flex', gap: 5 }}>
                   <input
@@ -128,7 +128,7 @@ class TimeTrackingPartial extends React.Component {
                       cursor: 'pointer'
                     }}
                   >
-                    Save
+                    Guardar
                   </button>
                   <button
                     onClick={() => this.setState({
@@ -144,7 +144,7 @@ class TimeTrackingPartial extends React.Component {
                       cursor: 'pointer'
                     }}
                   >
-                    Cancel
+                    Cancelar
                   </button>
                 </div>
               ) : (
@@ -165,7 +165,7 @@ class TimeTrackingPartial extends React.Component {
                         cursor: 'pointer'
                       }}
                     >
-                      Edit
+                      Editar
                     </button>
                   )}
                 </div>
@@ -173,14 +173,14 @@ class TimeTrackingPartial extends React.Component {
             </div>
 
             <div>
-              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Hours Consumed</div>
+              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Horas Consumidas</div>
               <div style={{ fontSize: 24, fontWeight: 600, color: '#4CAF50' }}>
                 {totalHours.toFixed(2)}h
               </div>
             </div>
 
             <div>
-              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Remaining</div>
+              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Restantes</div>
               <div style={{
                 fontSize: 24,
                 fontWeight: 600,
@@ -191,7 +191,7 @@ class TimeTrackingPartial extends React.Component {
             </div>
 
             <div>
-              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Progress</div>
+              <div style={{ fontSize: 12, color: '#666', marginBottom: 5 }}>Progreso</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{
                   flex: 1,
@@ -230,7 +230,7 @@ class TimeTrackingPartial extends React.Component {
                 fontWeight: 500
               }}
             >
-              + Add Time Entry
+              + Agregar Registro de Tiempo
             </button>
           )}
 
@@ -243,11 +243,11 @@ class TimeTrackingPartial extends React.Component {
               borderRadius: 5,
               border: '1px solid #e0e0e0'
             }}>
-              <h4 style={{ marginTop: 0, marginBottom: 15, fontSize: 16 }}>Add Time Entry</h4>
+              <h4 style={{ marginTop: 0, marginBottom: 15, fontSize: 16 }}>Agregar Registro de Tiempo</h4>
               <form onSubmit={this.handleAddTimeEntry}>
                 <div style={{ marginBottom: 15 }}>
                   <label style={{ display: 'block', marginBottom: 5, fontSize: 13, fontWeight: 500 }}>
-                    Hours Worked
+                    Horas Trabajadas
                   </label>
                   <input
                     type='number'
@@ -255,7 +255,7 @@ class TimeTrackingPartial extends React.Component {
                     min='0.25'
                     value={hours}
                     onChange={e => this.setState({ hours: e.target.value })}
-                    placeholder='e.g., 2.5'
+                    placeholder='ej. 2.5'
                     required
                     style={{
                       width: '100%',
@@ -268,12 +268,12 @@ class TimeTrackingPartial extends React.Component {
                 </div>
                 <div style={{ marginBottom: 15 }}>
                   <label style={{ display: 'block', marginBottom: 5, fontSize: 13, fontWeight: 500 }}>
-                    Description of Work
+                    Descripción del Trabajo
                   </label>
                   <textarea
                     value={description}
                     onChange={e => this.setState({ description: e.target.value })}
-                    placeholder='Describe what you worked on...'
+                    placeholder='Describe en qué trabajaste...'
                     required
                     rows={4}
                     style={{
@@ -299,7 +299,7 @@ class TimeTrackingPartial extends React.Component {
                       fontSize: 14
                     }}
                   >
-                    Save Time Entry
+                    Guardar Registro
                   </button>
                   <button
                     type='button'
@@ -314,7 +314,7 @@ class TimeTrackingPartial extends React.Component {
                       fontSize: 14
                     }}
                   >
-                    Cancel
+                    Cancelar
                   </button>
                 </div>
               </form>
@@ -323,7 +323,7 @@ class TimeTrackingPartial extends React.Component {
 
           {/* Time Entries List */}
           <div>
-            <h4 style={{ marginBottom: 15, fontSize: 16 }}>Time Entries</h4>
+            <h4 style={{ marginBottom: 15, fontSize: 16 }}>Registros de Tiempo</h4>
             {timeEntries && timeEntries.length > 0 ? (
               timeEntries
                 .filter(entry => !entry.deleted)
@@ -339,7 +339,7 @@ class TimeTrackingPartial extends React.Component {
                 ))
             ) : (
               <div style={{ padding: 20, textAlign: 'center', color: '#999', fontSize: 14 }}>
-                No time entries yet. Add your first time entry to start tracking!
+                No hay registros de tiempo aún. ¡Agrega tu primer registro para empezar!
               </div>
             )}
           </div>

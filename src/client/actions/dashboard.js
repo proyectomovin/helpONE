@@ -18,7 +18,8 @@ import {
   FETCH_DASHBOARD_TOP_GROUPS,
   FETCH_DASHBOARD_TOP_TAGS,
   FETCH_DASHBOARD_OVERDUE_TICKETS,
-  FETCH_DASHBOARD_TIMETRACKING_STATS
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 export const fetchDashboardData = createAction(
@@ -31,3 +32,4 @@ export const fetchDashboardTopGroups = createAction(FETCH_DASHBOARD_TOP_GROUPS.A
 export const fetchDashboardTopTags = createAction(FETCH_DASHBOARD_TOP_TAGS.ACTION, payload => payload)
 export const fetchDashboardOverdueTickets = createAction(FETCH_DASHBOARD_OVERDUE_TICKETS.ACTION)
 export const fetchDashboardTimeTrackingStats = createAction(FETCH_DASHBOARD_TIMETRACKING_STATS.ACTION, payload => payload)
+export const fetchDashboardTimeTrackingByGroup = createAction(FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ACTION, payload => payload)

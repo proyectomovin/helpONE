@@ -9,7 +9,8 @@ import {
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
   fetchDashboardOverdueTickets,
-  fetchDashboardTimeTrackingStats
+  fetchDashboardTimeTrackingStats,
+  fetchDashboardTimeTrackingByGroup
 } from 'actions/dashboard'
 
 import Grid from 'components/Grid'
@@ -44,6 +45,7 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardTopTags({ timespan: this.timespan })
     this.props.fetchDashboardOverdueTickets()
     this.props.fetchDashboardTimeTrackingStats({ timespan: this.timespan })
+    this.props.fetchDashboardTimeTrackingByGroup({ timespan: this.timespan })
   }
 
   onTimespanChange = e => {
@@ -53,6 +55,7 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardTopGroups({ timespan: e.target.value })
     this.props.fetchDashboardTopTags({ timespan: e.target.value })
     this.props.fetchDashboardTimeTrackingStats({ timespan: e.target.value })
+    this.props.fetchDashboardTimeTrackingByGroup({ timespan: e.target.value })
   }
 
   render () {
@@ -332,7 +335,7 @@ class DashboardContainer extends React.Component {
                 header={
                   <div className='uk-text-left'>
                     <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>
-                      Time Tracking (Last {this.timespan.toString()}d)
+                      Control de Tiempo (Últimos {this.timespan.toString()}d)
                     </h6>
                   </div>
                 }
@@ -342,7 +345,7 @@ class DashboardContainer extends React.Component {
                       <div className='uk-grid uk-grid-small'>
                         <div className='uk-width-1-3'>
                           <div className='uk-text-center'>
-                            <span className='uk-text-muted uk-text-small'>Estimated Hours</span>
+                            <span className='uk-text-muted uk-text-small'>Horas Estimadas</span>
                             <h3 className='uk-margin-remove'>
                               {this.props.dashboardState.timeTrackingStats.get('totalEstimated') || 0}h
                             </h3>
@@ -350,7 +353,7 @@ class DashboardContainer extends React.Component {
                         </div>
                         <div className='uk-width-1-3'>
                           <div className='uk-text-center'>
-                            <span className='uk-text-muted uk-text-small'>Consumed Hours</span>
+                            <span className='uk-text-muted uk-text-small'>Horas Consumidas</span>
                             <h3 className='uk-margin-remove'>
                               {this.props.dashboardState.timeTrackingStats.get('totalConsumed') || 0}h
                             </h3>
@@ -358,7 +361,7 @@ class DashboardContainer extends React.Component {
                         </div>
                         <div className='uk-width-1-3'>
                           <div className='uk-text-center'>
-                            <span className='uk-text-muted uk-text-small'>Progress</span>
+                            <span className='uk-text-muted uk-text-small'>Progreso</span>
                             <h3 className='uk-margin-remove'>
                               {this.props.dashboardState.timeTrackingStats.get('percentageComplete') || 0}%
                             </h3>
@@ -369,8 +372,8 @@ class DashboardContainer extends React.Component {
                     <table className='uk-table'>
                       <thead>
                         <tr>
-                          <th className='uk-text-nowrap'>Top Consultants</th>
-                          <th className='uk-text-nowrap uk-text-right'>Hours</th>
+                          <th className='uk-text-nowrap'>Top Consultores</th>
+                          <th className='uk-text-nowrap uk-text-right'>Horas</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -389,7 +392,84 @@ class DashboardContainer extends React.Component {
                         ) : (
                           <tr>
                             <td colSpan='2' className='uk-text-center uk-text-muted uk-text-small'>
-                              No time tracking data available
+                              No hay datos de control de tiempo disponibles
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              />
+            </GridItem>
+            <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTimeTrackingByGroup}
+                animateLoader={true}
+                style={{ minHeight: 250 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>
+                      Control de Tiempo por Empresa (Últimos {this.timespan.toString()}d)
+                    </h6>
+                  </div>
+                }
+                content={
+                  <div className='uk-overflow-container'>
+                    <table className='uk-table'>
+                      <thead>
+                        <tr>
+                          <th className='uk-text-nowrap'>Empresa</th>
+                          <th className='uk-text-nowrap uk-text-right'>Tickets</th>
+                          <th className='uk-text-nowrap uk-text-right'>Horas Estimadas</th>
+                          <th className='uk-text-nowrap uk-text-right'>Horas Consumidas</th>
+                          <th className='uk-text-nowrap uk-text-right'>Progreso</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.dashboardState.timeTrackingByGroup &&
+                        this.props.dashboardState.timeTrackingByGroup.size > 0 ? (
+                          this.props.dashboardState.timeTrackingByGroup.map((group, idx) => (
+                            <tr key={idx} className='uk-table-middle'>
+                              <td className='uk-width-3-10 uk-text-nowrap uk-text-small'>
+                                {group.get('groupName')}
+                              </td>
+                              <td className='uk-width-1-10 uk-text-right uk-text-small'>
+                                {group.get('ticketCount')}
+                              </td>
+                              <td className='uk-width-2-10 uk-text-right uk-text-small'>
+                                {group.get('totalEstimated')}h
+                              </td>
+                              <td className='uk-width-2-10 uk-text-right uk-text-small'>
+                                {group.get('totalConsumed')}h
+                              </td>
+                              <td className='uk-width-2-10 uk-text-right'>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end' }}>
+                                  <div style={{
+                                    width: 100,
+                                    height: 8,
+                                    backgroundColor: '#e0e0e0',
+                                    borderRadius: 4,
+                                    overflow: 'hidden'
+                                  }}>
+                                    <div style={{
+                                      height: '100%',
+                                      width: `${Math.min(group.get('percentageComplete'), 100)}%`,
+                                      backgroundColor: group.get('percentageComplete') > 100 ? '#f44336' : '#4CAF50',
+                                      transition: 'width 0.3s ease'
+                                    }} />
+                                  </div>
+                                  <span className='uk-text-small uk-text-muted' style={{ minWidth: 45 }}>
+                                    {group.get('percentageComplete')}%
+                                  </span>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan='5' className='uk-text-center uk-text-muted uk-text-small'>
+                              No hay datos de control de tiempo por empresa disponibles
                             </td>
                           </tr>
                         )}
@@ -412,6 +492,7 @@ DashboardContainer.propTypes = {
   fetchDashboardTopTags: PropTypes.func.isRequired,
   fetchDashboardOverdueTickets: PropTypes.func.isRequired,
   fetchDashboardTimeTrackingStats: PropTypes.func.isRequired,
+  fetchDashboardTimeTrackingByGroup: PropTypes.func.isRequired,
   dashboardState: PropTypes.object.isRequired
 }
 
@@ -424,5 +505,6 @@ export default connect(mapStateToProps, {
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
   fetchDashboardOverdueTickets,
-  fetchDashboardTimeTrackingStats
+  fetchDashboardTimeTrackingStats,
+  fetchDashboardTimeTrackingByGroup
 })(DashboardContainer)

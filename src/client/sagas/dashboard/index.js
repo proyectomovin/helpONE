@@ -20,7 +20,8 @@ import {
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
   FETCH_DASHBOARD_TOP_TAGS,
-  FETCH_DASHBOARD_TIMETRACKING_STATS
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 import Log from '../../logger'
@@ -106,10 +107,27 @@ function * fetchDashboardTimeTrackingStats ({ payload }) {
   }
 }
 
+function * fetchDashboardTimeTrackingByGroup ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTimeTrackingStatsByGroup, payload)
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ERROR, error })
+  }
+}
+
 export default function * watcher () {
   yield takeLatest(FETCH_DASHBOARD_DATA.ACTION, fetchDashboardData)
   yield takeLatest(FETCH_DASHBOARD_TOP_GROUPS.ACTION, fetchDashboardTopGroups)
   yield takeLatest(FETCH_DASHBOARD_TOP_TAGS.ACTION, fetchDashboardTopTags)
   yield takeLatest(FETCH_DASHBOARD_OVERDUE_TICKETS.ACTION, fetchDashboardOverdueTickets)
   yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_STATS.ACTION, fetchDashboardTimeTrackingStats)
+  yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ACTION, fetchDashboardTimeTrackingByGroup)
 }
