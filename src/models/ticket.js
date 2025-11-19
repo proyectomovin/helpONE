@@ -30,6 +30,7 @@ const noteSchema = require('./note')
 const attachmentSchema = require('./attachment')
 const historySchema = require('./history')
 const statusSchema = require('./ticketStatus')
+const timeEntrySchema = require('./timeEntry')
 require('./tag')
 require('./ticketpriority')
 require('./tickettype')
@@ -67,6 +68,8 @@ const COLLECTION = 'tickets'
  * @property {Array} attachments An Array of {@link Attachment} items
  * @property {Array} history An array of {@link History} items
  * @property {Array} subscribers An array of user _ids that receive notifications on ticket changes.
+ * @property {Number} estimatedHours Estimated hours to complete this ticket
+ * @property {Array} timeEntries An array of {@link TimeEntry} items for time tracking
  */
 const ticketSchema = mongoose.Schema({
   uid: { type: Number, unique: true, index: true },
@@ -113,7 +116,9 @@ const ticketSchema = mongoose.Schema({
   notes: [noteSchema],
   attachments: [attachmentSchema],
   history: [historySchema],
-  subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }]
+  subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }],
+  estimatedHours: { type: Number, min: 0, default: 0 },
+  timeEntries: [timeEntrySchema]
 })
 
 ticketSchema.index({ deleted: -1, group: 1, status: 1 })
@@ -211,6 +216,28 @@ ticketSchema.virtual('commentsAndNotes').get(function () {
   combined = _.sortBy(combined, 'date')
 
   return combined
+})
+
+/**
+ * Virtual property to calculate total hours consumed from time entries
+ * @virtual
+ * @memberof Ticket
+ */
+ticketSchema.virtual('totalHoursConsumed').get(function () {
+  if (!this.timeEntries || this.timeEntries.length === 0) {
+    return 0
+  }
+
+  return _.reduce(
+    this.timeEntries,
+    function (total, entry) {
+      if (!entry.deleted) {
+        return total + (entry.hours || 0)
+      }
+      return total
+    },
+    0
+  )
 })
 
 /**
@@ -706,6 +733,165 @@ ticketSchema.methods.removeSubscriber = function (userId, callback) {
   })
 
   return callback(null, self)
+}
+
+/**
+ * Sets the estimated hours for this ticket
+ * @instance
+ * @method setEstimatedHours
+ * @memberof Ticket
+ *
+ * @param {Object} ownerId Account ID preforming this action
+ * @param {Number} hours Estimated hours to complete the ticket
+ * @param {function} callback Callback with the updated ticket.
+ */
+ticketSchema.methods.setEstimatedHours = function (ownerId, hours, callback) {
+  const self = this
+  return new Promise((resolve, reject) => {
+    if (_.isUndefined(hours) || !_.isNumber(hours) || hours < 0) {
+      const error = new Error('Invalid hours value')
+      if (typeof callback === 'function') return callback(error, null)
+      return reject(error)
+    }
+
+    self.estimatedHours = hours
+
+    const historyItem = {
+      action: 'ticket:set:estimatedhours',
+      description: 'Estimated hours set to: ' + hours,
+      owner: ownerId
+    }
+
+    self.history.push(historyItem)
+
+    if (typeof callback === 'function') callback(null, self)
+    return resolve(self)
+  })
+}
+
+/**
+ * Adds a time entry to this ticket
+ * @instance
+ * @method addTimeEntry
+ * @memberof Ticket
+ *
+ * @param {Object} ownerId Account ID preforming this action
+ * @param {Number} hours Hours worked
+ * @param {String} description Description of tasks performed
+ * @param {function} callback Callback with the updated ticket.
+ */
+ticketSchema.methods.addTimeEntry = function (ownerId, hours, description, callback) {
+  const self = this
+  return new Promise((resolve, reject) => {
+    if (_.isUndefined(hours) || !_.isNumber(hours) || hours <= 0) {
+      const error = new Error('Invalid hours value')
+      if (typeof callback === 'function') return callback(error, null)
+      return reject(error)
+    }
+
+    if (_.isUndefined(description) || _.isEmpty(description)) {
+      const error = new Error('Description is required')
+      if (typeof callback === 'function') return callback(error, null)
+      return reject(error)
+    }
+
+    const timeEntry = {
+      owner: ownerId,
+      date: new Date(),
+      hours: hours,
+      description: description,
+      deleted: false
+    }
+
+    self.timeEntries.push(timeEntry)
+
+    const historyItem = {
+      action: 'ticket:timeentry:added',
+      description: 'Time entry added: ' + hours + ' hours',
+      owner: ownerId
+    }
+
+    self.history.push(historyItem)
+
+    if (typeof callback === 'function') callback(null, self)
+    return resolve(self)
+  })
+}
+
+/**
+ * Updates a time entry on this ticket
+ * @instance
+ * @method updateTimeEntry
+ * @memberof Ticket
+ *
+ * @param {Object} ownerId Account ID preforming this action
+ * @param {Object} timeEntryId Time Entry ID to update
+ * @param {Number} hours Updated hours worked
+ * @param {String} description Updated description of tasks performed
+ * @param {function} callback Callback with the updated ticket.
+ */
+ticketSchema.methods.updateTimeEntry = function (ownerId, timeEntryId, hours, description, callback) {
+  const self = this
+  return new Promise((resolve, reject) => {
+    const timeEntry = _.find(self.timeEntries, function (t) {
+      return t._id.toString() === timeEntryId.toString()
+    })
+
+    if (_.isUndefined(timeEntry)) {
+      const error = new Error('Invalid Time Entry')
+      if (typeof callback === 'function') return callback(error, null)
+      return reject(error)
+    }
+
+    if (!_.isUndefined(hours) && _.isNumber(hours) && hours > 0) {
+      timeEntry.hours = hours
+    }
+
+    if (!_.isUndefined(description) && !_.isEmpty(description)) {
+      timeEntry.description = description
+    }
+
+    const historyItem = {
+      action: 'ticket:timeentry:updated',
+      description: 'Time entry was updated: ' + timeEntryId,
+      owner: ownerId
+    }
+
+    self.history.push(historyItem)
+
+    if (typeof callback === 'function') callback(null, self)
+    return resolve(self)
+  })
+}
+
+/**
+ * Removes a time entry from this ticket
+ * @instance
+ * @method removeTimeEntry
+ * @memberof Ticket
+ *
+ * @param {Object} ownerId Account ID preforming this action
+ * @param {Object} timeEntryId Time Entry ID to remove
+ * @param {function} callback Callback with the updated ticket.
+ */
+ticketSchema.methods.removeTimeEntry = function (ownerId, timeEntryId, callback) {
+  const self = this
+  return new Promise(resolve => {
+    self.timeEntries = _.reject(self.timeEntries, function (t) {
+      return t._id.toString() === timeEntryId.toString()
+    })
+
+    const historyItem = {
+      action: 'ticket:delete:timeentry',
+      description: 'Time entry was deleted: ' + timeEntryId,
+      owner: ownerId
+    }
+
+    self.history.push(historyItem)
+
+    if (typeof callback === 'function') callback(null, self)
+    return resolve(self)
+  })
 }
 
 /**

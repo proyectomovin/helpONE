@@ -203,6 +203,31 @@ api.tickets.transferToThirdParty = ({ uid }) => {
   })
 }
 
+// Time Tracking API
+api.tickets.setEstimatedHours = ({ uid, hours }) => {
+  return axios.put(`/api/v2/tickets/${uid}/estimatedhours`, { hours }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.addTimeEntry = ({ uid, hours, description }) => {
+  return axios.post(`/api/v2/tickets/${uid}/timeentries`, { hours, description }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.updateTimeEntry = ({ uid, timeEntryId, hours, description }) => {
+  return axios.put(`/api/v2/tickets/${uid}/timeentries/${timeEntryId}`, { hours, description }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.deleteTimeEntry = ({ uid, timeEntryId }) => {
+  return axios.delete(`/api/v2/tickets/${uid}/timeentries/${timeEntryId}`).then(res => {
+    return res.data
+  })
+}
+
 api.tickets.fetchTicketTypes = () => {
   return axios.get('/api/v2/tickets/info/types').then(res => {
     return res.data

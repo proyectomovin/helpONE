@@ -275,4 +275,98 @@ ticketsV2.info.tags = async (req, res) => {
   }
 }
 
+// Time Tracking Endpoints
+ticketsV2.setEstimatedHours = async (req, res) => {
+  const uid = req.params.uid
+  const hours = req.body.hours
+
+  if (!uid || hours === undefined || hours === null) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.setEstimatedHours(req.user._id, parseFloat(hours))
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.addTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const { hours, description } = req.body
+
+  if (!uid || !hours || !description) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters - hours and description are required')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.addTimeEntry(req.user._id, parseFloat(hours), description)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.updateTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const timeEntryId = req.params.timeEntryId
+  const { hours, description } = req.body
+
+  if (!uid || !timeEntryId) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.updateTimeEntry(req.user._id, timeEntryId, parseFloat(hours), description)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.deleteTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const timeEntryId = req.params.timeEntryId
+
+  if (!uid || !timeEntryId) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.removeTimeEntry(req.user._id, timeEntryId)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
 module.exports = ticketsV2
