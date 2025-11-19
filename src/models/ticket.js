@@ -161,7 +161,7 @@ ticketSchema.post('save', async function (doc, next) {
     try {
       const savedTicket = await doc.populate([
         {
-          path: 'owner assignee comments.owner notes.owner subscribers history.owner',
+          path: 'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
           select: '_id username fullname email role image title'
         },
         { path: 'type tags' },
@@ -979,7 +979,7 @@ ticketSchema.statics.getAllByStatus = function (status, callback) {
     .model(COLLECTION)
     .find({ status: { $in: status }, deleted: false })
     .populate(
-      'owner assignee comments.owner notes.owner subscribers history.owner',
+      'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
       'username fullname email role image title'
     )
     .populate('type tags status group')
@@ -1013,7 +1013,7 @@ ticketSchema.statics.getTickets = function (grpIds, callback) {
     .model(COLLECTION)
     .find({ group: { $in: grpIds }, deleted: false })
     .populate(
-      'owner assignee comments.owner notes.owner subscribers history.owner',
+      'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
       'username fullname email role image title'
     )
     .populate('type tags status group')
@@ -1090,7 +1090,7 @@ function buildQueryWithObject (SELF, grpId, object, count) {
     query = SELF.model(COLLECTION)
       .find({ group: { $in: grpId }, deleted: false })
       .populate(
-        'owner assignee subscribers comments.owner notes.owner history.owner',
+        'owner assignee subscribers comments.owner notes.owner history.owner timeEntries.owner',
         'username fullname email role image title'
       )
       .populate('assignee', 'username fullname email role image title')
@@ -1229,7 +1229,7 @@ ticketSchema.statics.getTicketsByStatus = function (grpId, status, callback) {
     .model(COLLECTION)
     .find({ group: { $in: grpId }, status, deleted: false })
     .populate(
-      'owner assignee comments.owner notes.owner subscribers history.owner',
+      'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
       'username fullname email role image title'
     )
     .populate('type tags status group')
@@ -1256,7 +1256,7 @@ ticketSchema.statics.getTicketByUid = function (uid, callback) {
     .model(COLLECTION)
     .findOne({ uid, deleted: false })
     .populate(
-      'owner assignee comments.owner notes.owner subscribers history.owner',
+      'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
       'username fullname email role image title'
     )
     .populate('type tags status group')
@@ -1290,7 +1290,7 @@ ticketSchema.statics.getTicketById = async function (id, callback) {
         .model(COLLECTION)
         .findOne({ _id: id, deleted: false })
         .populate(
-          'owner assignee comments.owner notes.owner subscribers history.owner',
+          'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
           'username fullname email role image title'
         )
         .populate('type tags status')
@@ -1343,7 +1343,7 @@ ticketSchema.statics.getTicketsByRequester = function (userId, callback) {
     .find({ owner: userId, deleted: false })
     .limit(10000)
     .populate(
-      'owner assignee comments.owner notes.owner subscribers history.owner',
+      'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
       'username fullname email role image title'
     )
     .populate('type tags status')
@@ -1386,7 +1386,7 @@ ticketSchema.statics.getTicketsWithSearchString = function (grps, search, callba
             $where: '/^' + search + '.*/.test(this.uid)'
           })
           .populate(
-            'owner assignee comments.owner notes.owner subscribers history.owner',
+            'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
             'username fullname email role image title'
           )
           .populate('type tags status group')
@@ -1408,7 +1408,7 @@ ticketSchema.statics.getTicketsWithSearchString = function (grps, search, callba
             subject: { $regex: search, $options: 'i' }
           })
           .populate(
-            'owner assignee comments.owner notes.owner subscribers history.owner',
+            'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
             'username fullname email role image title'
           )
           .populate('type tags status group')
@@ -1430,7 +1430,7 @@ ticketSchema.statics.getTicketsWithSearchString = function (grps, search, callba
             issue: { $regex: search, $options: 'i' }
           })
           .populate(
-            'owner assignee comments.owner notes.owner subscribers history.owner',
+            'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
             'username fullname email role image title'
           )
           .populate('type tags status group')
@@ -1711,7 +1711,7 @@ ticketSchema.statics.getAssigned = function (userId, callback) {
       .model(COLLECTION)
       .find({ assignee: userId, deleted: false, status: { $in: unresolvedStatusesIds } })
       .populate(
-        'owner assignee comments.owner notes.owner subscribers history.owner',
+        'owner assignee comments.owner notes.owner subscribers history.owner timeEntries.owner',
         'username fullname email role image title'
       )
       .populate('type tags status group')

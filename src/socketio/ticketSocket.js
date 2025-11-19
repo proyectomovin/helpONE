@@ -44,6 +44,11 @@ function register (socket) {
   events.onCommentNoteSet(socket)
   events.onRemoveCommentNote(socket)
   events.onAttachmentsUIUpdate(socket)
+  // Time Tracking events
+  events.onSetEstimatedHours(socket)
+  events.onAddTimeEntry(socket)
+  events.onUpdateTimeEntry(socket)
+  events.onDeleteTimeEntry(socket)
 }
 
 function eventLoop () {}
@@ -394,6 +399,105 @@ events.onAttachmentsUIUpdate = socket => {
       utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_ATTACHMENTS_UPDATE, data)
     } catch (e) {
       // Blank
+    }
+  })
+}
+
+// Time Tracking Events
+events.onSetEstimatedHours = socket => {
+  socket.on(socketEvents.TICKETS_ESTIMATEDHOURS_SET, async data => {
+    const ticketId = data._id
+    const hours = data.hours
+    const ownerId = socket.request.user._id
+
+    try {
+      let ticket = await ticketSchema.getTicketById(ticketId)
+      ticket = await ticket.setEstimatedHours(ownerId, hours)
+      ticket = await ticket.save()
+
+      utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_TIMETRACKING_UPDATE, {
+        tid: ticket._id,
+        estimatedHours: ticket.estimatedHours,
+        timeEntries: ticket.timeEntries,
+        history: ticket.history
+      })
+    } catch (e) {
+      winston.debug(e)
+    }
+  })
+}
+
+events.onAddTimeEntry = socket => {
+  socket.on(socketEvents.TICKETS_TIMEENTRY_ADD, async data => {
+    const ticketId = data._id
+    const hours = data.hours
+    const description = data.description
+    const ownerId = socket.request.user._id
+
+    try {
+      let ticket = await ticketSchema.getTicketById(ticketId)
+      ticket = await ticket.addTimeEntry(ownerId, hours, description)
+      ticket = await ticket.save()
+
+      // Re-populate timeEntries.owner
+      ticket = await ticketSchema.getTicketById(ticket._id)
+
+      utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_TIMETRACKING_UPDATE, {
+        tid: ticket._id,
+        estimatedHours: ticket.estimatedHours,
+        timeEntries: ticket.timeEntries,
+        history: ticket.history
+      })
+    } catch (e) {
+      winston.debug(e)
+    }
+  })
+}
+
+events.onUpdateTimeEntry = socket => {
+  socket.on(socketEvents.TICKETS_TIMEENTRY_UPDATE, async data => {
+    const ticketId = data._id
+    const timeEntryId = data.timeEntryId
+    const hours = data.hours
+    const description = data.description
+    const ownerId = socket.request.user._id
+
+    try {
+      let ticket = await ticketSchema.getTicketById(ticketId)
+      ticket = await ticket.updateTimeEntry(ownerId, timeEntryId, hours, description)
+      ticket = await ticket.save()
+
+      utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_TIMETRACKING_UPDATE, {
+        tid: ticket._id,
+        estimatedHours: ticket.estimatedHours,
+        timeEntries: ticket.timeEntries,
+        history: ticket.history
+      })
+    } catch (e) {
+      winston.debug(e)
+    }
+  })
+}
+
+events.onDeleteTimeEntry = socket => {
+  socket.on(socketEvents.TICKETS_TIMEENTRY_DELETE, async data => {
+    const ticketId = data._id
+    const timeEntryId = data.timeEntryId
+    const ownerId = socket.request.user._id
+
+    try {
+      let ticket = await ticketSchema.getTicketById(ticketId)
+      ticket = await ticket.removeTimeEntry(ownerId, timeEntryId)
+      ticket = await ticket.save()
+
+      utils.sendToAllConnectedClients(io, socketEvents.TICKETS_UI_TIMETRACKING_UPDATE, {
+        tid: ticket._id,
+        estimatedHours: ticket.estimatedHours,
+        timeEntries: ticket.timeEntries,
+        history: ticket.history
+      })
+    } catch (e) {
+      winston.debug(e)
     }
   })
 }

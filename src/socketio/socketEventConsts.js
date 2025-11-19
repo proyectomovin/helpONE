@@ -56,6 +56,13 @@ exported.TICKETS_COMMENT_NOTE_SET = '$trudesk:tickets:comment_note:set'
 
 exported.TICKETS_UI_ATTACHMENTS_UPDATE = '$trudesk:tickets:ui:attachments:update'
 
+// TIME TRACKING
+exported.TICKETS_UI_TIMETRACKING_UPDATE = '$trudesk:tickets:ui:timetracking:update'
+exported.TICKETS_ESTIMATEDHOURS_SET = '$trudesk:tickets:estimatedhours:set'
+exported.TICKETS_TIMEENTRY_ADD = '$trudesk:tickets:timeentry:add'
+exported.TICKETS_TIMEENTRY_UPDATE = '$trudesk:tickets:timeentry:update'
+exported.TICKETS_TIMEENTRY_DELETE = '$trudesk:tickets:timeentry:delete'
+
 // ACCOUNTS
 exported.ACCOUNTS_UI_PROFILE_IMAGE_UPDATE = '$trudesk:accounts:ui:profile_image:update'
 
