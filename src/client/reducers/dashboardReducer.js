@@ -242,6 +242,9 @@ const reducer = handleActions(
         ...state,
         loadingTopOwners: false,
         topOwners: fromJS(topOwners)
+      }
+    },
+
     [FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING]: state => {
       return {
         ...state,

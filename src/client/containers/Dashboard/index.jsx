@@ -483,6 +483,10 @@ class DashboardContainer extends React.Component {
                 content={
                   <div>
                     <D3Pie type={'donut'} data={this.props.dashboardState.topOwners.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
             <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
               <TruCard
                 loaderActive={this.props.dashboardState.loadingTimeTrackingByGroup}
