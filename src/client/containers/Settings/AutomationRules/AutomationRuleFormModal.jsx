@@ -7,7 +7,7 @@ import Button from 'components/Button'
 
 import { createAutomationRule, updateAutomationRule } from 'actions/automationRules'
 import { fetchRoles } from 'actions/common'
-import { fetchStatus } from 'actions/tickets'
+import { fetchTicketStatus } from 'actions/tickets'
 import { t } from 'helpers/i18n'
 import helpers from 'lib/helpers'
 
@@ -33,7 +33,7 @@ class AutomationRuleFormModal extends React.Component {
       this.props.fetchRoles()
     }
     if (!this.props.statuses || this.props.statuses.size === 0) {
-      this.props.fetchStatus()
+      this.props.fetchTicketStatus()
     }
 
     this.hydrateFromRule(this.props.rule)
@@ -242,7 +242,7 @@ AutomationRuleFormModal.propTypes = {
   createAutomationRule: PropTypes.func.isRequired,
   updateAutomationRule: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
-  fetchStatus: PropTypes.func.isRequired,
+  fetchTicketStatus: PropTypes.func.isRequired,
   roles: PropTypes.object,
   statuses: PropTypes.object
 }
@@ -260,5 +260,5 @@ export default connect(mapStateToProps, {
   createAutomationRule,
   updateAutomationRule,
   fetchRoles,
-  fetchStatus
+  fetchTicketStatus
 })(AutomationRuleFormModal)
