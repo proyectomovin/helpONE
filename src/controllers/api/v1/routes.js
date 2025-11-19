@@ -73,6 +73,18 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v1/tickets/count/topgroups', apiv1, apiCtrl.tickets.getTopTicketGroups)
   router.get('/api/v1/tickets/count/topgroups/:top', apiv1, apiCtrl.tickets.getTopTicketGroups)
   router.get('/api/v1/tickets/count/topgroups/:timespan/:top', apiv1, apiCtrl.tickets.getTopTicketGroups)
+  router.get('/api/v1/tickets/count/toptypes', apiv1, apiCtrl.tickets.getTopTicketTypes)
+  router.get('/api/v1/tickets/count/toptypes/:top', apiv1, apiCtrl.tickets.getTopTicketTypes)
+  router.get('/api/v1/tickets/count/toptypes/:timespan/:top', apiv1, apiCtrl.tickets.getTopTicketTypes)
+  router.get('/api/v1/tickets/count/topassignees', apiv1, apiCtrl.tickets.getTopAssignees)
+  router.get('/api/v1/tickets/count/topassignees/:top', apiv1, apiCtrl.tickets.getTopAssignees)
+  router.get('/api/v1/tickets/count/topassignees/:timespan/:top', apiv1, apiCtrl.tickets.getTopAssignees)
+  router.get('/api/v1/tickets/count/toppriorities', apiv1, apiCtrl.tickets.getTopPriorities)
+  router.get('/api/v1/tickets/count/toppriorities/:top', apiv1, apiCtrl.tickets.getTopPriorities)
+  router.get('/api/v1/tickets/count/toppriorities/:timespan/:top', apiv1, apiCtrl.tickets.getTopPriorities)
+  router.get('/api/v1/tickets/count/topowners', apiv1, apiCtrl.tickets.getTopOwners)
+  router.get('/api/v1/tickets/count/topowners/:top', apiv1, apiCtrl.tickets.getTopOwners)
+  router.get('/api/v1/tickets/count/topowners/:timespan/:top', apiv1, apiCtrl.tickets.getTopOwners)
   router.get(
     '/api/v1/tickets/count/group/:id',
     apiv1,
