@@ -7,6 +7,7 @@ import Button from 'components/Button'
 
 import { fetchWebhooks } from 'actions/webhooks'
 import { showModal } from 'actions/common'
+import { t } from 'helpers/i18n'
 
 import { DEFAULT_WEBHOOK_EVENTS } from './constants'
 import {
@@ -49,7 +50,7 @@ class WebhooksSettingsContainer extends React.Component {
     const { webhooks } = this.props
 
     if (webhooks.loading && webhooks.allIds.size === 0) {
-      return <p className='uk-text-muted'>Loading webhooks…</p>
+      return <p className='uk-text-muted'>{t('settingsWebhooks.loading')}</p>
     }
 
     const entries = webhooks.allIds
@@ -61,7 +62,7 @@ class WebhooksSettingsContainer extends React.Component {
       .filter(Boolean)
 
     if (!entries.length) {
-      return <p className='uk-text-muted'>No webhooks have been configured yet.</p>
+      return <p className='uk-text-muted'>{t('settingsWebhooks.noWebhooks')}</p>
     }
 
     return (
@@ -77,25 +78,25 @@ class WebhooksSettingsContainer extends React.Component {
                   {targetUrl}
                 </p>
                 <p style={{ margin: '4px 0 0 0' }} className='uk-text-small'>
-                  Events: {Array.isArray(data.events) && data.events.length ? data.events.join(', ') : '—'}
+                  {t('settingsWebhooks.events')} {Array.isArray(data.events) && data.events.length ? data.events.join(', ') : '—'}
                 </p>
                 {data.secret && (
                   <p style={{ margin: '4px 0 0 0' }} className='uk-text-small uk-text-muted'>
-                    Secret configured
+                    {t('settingsWebhooks.secretConfigured')}
                   </p>
                 )}
               </div>
               <div className='uk-float-right'>
                 <Button
-                  text='Test'
+                  text={t('actions.test')}
                   small
                   waves
                   style='primary'
                   onClick={() => this.handleTest(id)}
                   extraClass='uk-margin-small-right'
                 />
-                <Button text='Edit' small waves onClick={() => this.handleEdit(id)} extraClass='uk-margin-small-right' />
-                <Button text='Delete' small waves style='danger' onClick={() => this.handleDelete(id)} />
+                <Button text={t('actions.edit')} small waves onClick={() => this.handleEdit(id)} extraClass='uk-margin-small-right' />
+                <Button text={t('actions.delete')} small waves style='danger' onClick={() => this.handleDelete(id)} />
               </div>
             </li>
           )
@@ -109,9 +110,9 @@ class WebhooksSettingsContainer extends React.Component {
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
-          title='Webhooks'
-          subtitle='Manage outgoing webhooks that notify external services about events.'
-          component={<Button text='Add Webhook' style='primary' waves onClick={this.handleCreate} />}
+          title={t('settingsWebhooks.title')}
+          subtitle={t('settingsWebhooks.description')}
+          component={<Button text={t('settingsWebhooks.addWebhook')} style='primary' waves onClick={this.handleCreate} />}
         >
           {this.renderWebhookList()}
         </SettingItem>

@@ -1907,6 +1907,134 @@ apiTickets.getTopTicketGroups = function (req, res) {
 }
 
 /**
+ * @api {get} /api/v1/tickets/count/toptypes/:timespan/:topNum Top Types Count
+ * @apiName getTopTicketTypes
+ * @apiDescription Gets the types with the top ticket count and timespan
+ * @apiVersion 0.1.7
+ * @apiGroup Ticket
+ * @apiHeader {string} accesstoken The access token for the logged in user
+ *
+ * @apiExample Example usage:
+ * curl -H "accesstoken: {accesstoken}" -l http://localhost/api/v1/tickets/count/toptypes/30/10
+ *
+ * @apiSuccess {array} items Array with Type name and Count
+ *
+ * @apiError InvalidPostData The data was invalid
+ * @apiErrorExample
+ *      HTTP/1.1 400 Bad Request
+ {
+     "error": "Invalid Request"
+ }
+ */
+apiTickets.getTopTicketTypes = function (req, res) {
+  var ticketModel = require('../../../models/ticket')
+  var top = req.params.top
+  var timespan = req.params.timespan
+
+  ticketModel.getTopTicketTypes(timespan, top, function (err, items) {
+    if (err) return res.status(400).json({ error: 'Invalid Request' })
+
+    return res.json({ items: items })
+  })
+}
+
+/**
+ * @api {get} /api/v1/tickets/count/topassignees/:timespan/:topNum Top Assignees Count
+ * @apiName getTopAssignees
+ * @apiDescription Gets the assignees with the top ticket count and timespan
+ * @apiVersion 0.1.7
+ * @apiGroup Ticket
+ * @apiHeader {string} accesstoken The access token for the logged in user
+ *
+ * @apiExample Example usage:
+ * curl -H "accesstoken: {accesstoken}" -l http://localhost/api/v1/tickets/count/topassignees/30/10
+ *
+ * @apiSuccess {array} items Array with Assignee name and Count
+ *
+ * @apiError InvalidPostData The data was invalid
+ * @apiErrorExample
+ *      HTTP/1.1 400 Bad Request
+ {
+     "error": "Invalid Request"
+ }
+ */
+apiTickets.getTopAssignees = function (req, res) {
+  var ticketModel = require('../../../models/ticket')
+  var top = req.params.top
+  var timespan = req.params.timespan
+
+  ticketModel.getTopAssignees(timespan, top, function (err, items) {
+    if (err) return res.status(400).json({ error: 'Invalid Request' })
+
+    return res.json({ items: items })
+  })
+}
+
+/**
+ * @api {get} /api/v1/tickets/count/toppriorities/:timespan/:topNum Top Priorities Count
+ * @apiName getTopPriorities
+ * @apiDescription Gets the priorities with the top ticket count and timespan
+ * @apiVersion 0.1.7
+ * @apiGroup Ticket
+ * @apiHeader {string} accesstoken The access token for the logged in user
+ *
+ * @apiExample Example usage:
+ * curl -H "accesstoken: {accesstoken}" -l http://localhost/api/v1/tickets/count/toppriorities/30/10
+ *
+ * @apiSuccess {array} items Array with Priority name and Count
+ *
+ * @apiError InvalidPostData The data was invalid
+ * @apiErrorExample
+ *      HTTP/1.1 400 Bad Request
+ {
+     "error": "Invalid Request"
+ }
+ */
+apiTickets.getTopPriorities = function (req, res) {
+  var ticketModel = require('../../../models/ticket')
+  var top = req.params.top
+  var timespan = req.params.timespan
+
+  ticketModel.getTopPriorities(timespan, top, function (err, items) {
+    if (err) return res.status(400).json({ error: 'Invalid Request' })
+
+    return res.json({ items: items })
+  })
+}
+
+/**
+ * @api {get} /api/v1/tickets/count/topowners/:timespan/:topNum Top Owners Count
+ * @apiName getTopOwners
+ * @apiDescription Gets the owners (clients) with the top ticket count and timespan
+ * @apiVersion 0.1.7
+ * @apiGroup Ticket
+ * @apiHeader {string} accesstoken The access token for the logged in user
+ *
+ * @apiExample Example usage:
+ * curl -H "accesstoken: {accesstoken}" -l http://localhost/api/v1/tickets/count/topowners/30/10
+ *
+ * @apiSuccess {array} items Array with Owner name and Count
+ *
+ * @apiError InvalidPostData The data was invalid
+ * @apiErrorExample
+ *      HTTP/1.1 400 Bad Request
+ {
+     "error": "Invalid Request"
+ }
+ */
+apiTickets.getTopOwners = function (req, res) {
+  var ticketModel = require('../../../models/ticket')
+  var top = req.params.top
+  var timespan = req.params.timespan
+
+  ticketModel.getTopOwners(timespan, top, function (err, items) {
+    if (err) return res.status(400).json({ error: 'Invalid Request' })
+
+    return res.json({ items: items })
+  })
+}
+
+/**
  * @api {delete} /api/v1/tickets/:tid/attachments/remove/:aid Remove Attachment
  * @apiName removeAttachment
  * @apiDescription Remove Attachemtn with given Attachment ID from given Ticket ID

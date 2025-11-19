@@ -23,6 +23,7 @@ import Avatar from 'components/Avatar/Avatar'
 import PDropDown from 'components/PDropdown'
 
 import helpers from 'lib/helpers'
+import { t } from 'helpers/i18n'
 
 @observer
 class AssigneeDropdownPartial extends React.Component {
@@ -51,7 +52,7 @@ class AssigneeDropdownPartial extends React.Component {
     return (
       <PDropDown
         ref={this.props.forwardedRef}
-        title={'Select Assignee'}
+        title={t('tickets.selectAssignee')}
         id={'assigneeDropdown'}
         className={'opt-ignore-notice'}
         override={true}
@@ -68,7 +69,7 @@ class AssigneeDropdownPartial extends React.Component {
               this.props.socket.emit(TICKETS_ASSIGNEE_CLEAR, this.props.ticketId)
             }}
           >
-            Clear Assignee
+            {t('tickets.clearAssignee')}
           </a>
         }
       >

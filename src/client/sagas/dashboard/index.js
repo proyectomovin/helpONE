@@ -20,6 +20,10 @@ import {
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
   FETCH_DASHBOARD_TOP_TAGS,
+  FETCH_DASHBOARD_TOP_TYPES,
+  FETCH_DASHBOARD_TOP_ASSIGNEES,
+  FETCH_DASHBOARD_TOP_PRIORITIES,
+  FETCH_DASHBOARD_TOP_OWNERS
   FETCH_DASHBOARD_TIMETRACKING_STATS,
   FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
@@ -91,6 +95,11 @@ function * fetchDashboardOverdueTickets ({ payload }) {
   }
 }
 
+function * fetchDashboardTopTypes ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TOP_TYPES.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTopTypes, payload)
+    yield put({ type: FETCH_DASHBOARD_TOP_TYPES.SUCCESS, response })
 function * fetchDashboardTimeTrackingStats ({ payload }) {
   yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING })
   try {
@@ -103,6 +112,15 @@ function * fetchDashboardTimeTrackingStats ({ payload }) {
       helpers.UI.showSnackbar(`Error: ${errorText}`, true)
     }
 
+    yield put({ type: FETCH_DASHBOARD_TOP_TYPES.ERROR, error })
+  }
+}
+
+function * fetchDashboardTopAssignees ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTopAssignees, payload)
+    yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.SUCCESS, response })
     yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.ERROR, error })
   }
 }
@@ -119,6 +137,39 @@ function * fetchDashboardTimeTrackingByGroup ({ payload }) {
       helpers.UI.showSnackbar(`Error: ${errorText}`, true)
     }
 
+    yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.ERROR, error })
+  }
+}
+
+function * fetchDashboardTopPriorities ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TOP_PRIORITIES.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTopPriorities, payload)
+    yield put({ type: FETCH_DASHBOARD_TOP_PRIORITIES.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TOP_PRIORITIES.ERROR, error })
+  }
+}
+
+function * fetchDashboardTopOwners ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TOP_OWNERS.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTopOwners, payload)
+    yield put({ type: FETCH_DASHBOARD_TOP_OWNERS.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TOP_OWNERS.ERROR, error })
     yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ERROR, error })
   }
 }
@@ -128,6 +179,10 @@ export default function * watcher () {
   yield takeLatest(FETCH_DASHBOARD_TOP_GROUPS.ACTION, fetchDashboardTopGroups)
   yield takeLatest(FETCH_DASHBOARD_TOP_TAGS.ACTION, fetchDashboardTopTags)
   yield takeLatest(FETCH_DASHBOARD_OVERDUE_TICKETS.ACTION, fetchDashboardOverdueTickets)
+  yield takeLatest(FETCH_DASHBOARD_TOP_TYPES.ACTION, fetchDashboardTopTypes)
+  yield takeLatest(FETCH_DASHBOARD_TOP_ASSIGNEES.ACTION, fetchDashboardTopAssignees)
+  yield takeLatest(FETCH_DASHBOARD_TOP_PRIORITIES.ACTION, fetchDashboardTopPriorities)
+  yield takeLatest(FETCH_DASHBOARD_TOP_OWNERS.ACTION, fetchDashboardTopOwners)
   yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_STATS.ACTION, fetchDashboardTimeTrackingStats)
   yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ACTION, fetchDashboardTimeTrackingByGroup)
 }

@@ -23,6 +23,7 @@ import { showModal, hideModal } from 'actions/common'
 import ColorSelector from 'components/ColorSelector'
 import Button from 'components/Button'
 import EnableSwitch from 'components/Settings/EnableSwitch'
+import { t } from 'helpers/i18n'
 
 import api from 'api'
 import helpers from 'lib/helpers'
@@ -62,7 +63,7 @@ class TicketStatusBody extends React.Component {
     api.tickets
       .updateStatus({ id, name, htmlColor, isResolved, slatimer })
       .then(res => {
-        helpers.UI.showSnackbar('Status updated')
+        helpers.UI.showSnackbar(t('settingsTickets.statusUpdated'))
         this.props.fetchSettings()
       })
       .catch(e => {
@@ -80,14 +81,14 @@ class TicketStatusBody extends React.Component {
       <div>
         <form>
           <div className={'ticket-status-general-wrapper'}>
-            <h2 className='text-light'>General</h2>
+            <h2 className='text-light'>{t('settingsTickets.general')}</h2>
             <hr style={{ margin: '5px 0 25px 0' }} />
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Status Name</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>{t('settingsTickets.statusName')}</label>
               <Input defaultValue={this.statusName} onChange={v => (this.statusName = v)} />
             </div>
             <div style={{ marginBottom: 15 }}>
-              <label style={{ display: 'inline-block', cursor: 'pointer' }}>Status Color</label>
+              <label style={{ display: 'inline-block', cursor: 'pointer' }}>{t('settingsTickets.statusColor')}</label>
               <ColorSelector
                 showLabel={false}
                 hideRevert={true}
@@ -96,48 +97,48 @@ class TicketStatusBody extends React.Component {
               />
             </div>
           </div>
-          <h2 className='text-light mt-25'>Properties</h2>
+          <h2 className='text-light mt-25'>{t('settingsTickets.properties')}</h2>
           <hr style={{ margin: '5px 0 25px 0' }} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <h4 className={'uk-width-1-2'} style={{ flexGrow: 1 }}>
-              SLA Timer
+              {t('settingsTickets.slaTimer')}
             </h4>
             <EnableSwitch
               stateName={`slatimer_${this.props.status.get('_id')}`}
-              label={'Yes'}
+              label={t('actions.yes')}
               checked={this.slatimer}
               onChange={e => (this.slatimer = e.target.checked)}
             />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <h4 className={'uk-width-1-2'} style={{ flexGrow: 1 }}>
-              Is Resolved
+              {t('settingsTickets.isResolved')}
             </h4>
             <EnableSwitch
               stateName={`isResolved_${this.props.status.get('_id')}`}
-              label={'Yes'}
+              label={t('actions.yes')}
               checked={this.isResolved}
               onChange={e => (this.isResolved = e.target.checked)}
             />
           </div>
           <div className={'uk-margin-large-top'} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button text={'Save Status'} style={'success'} onClick={e => this.onSaveClicked(e)} />
+            <Button text={t('settingsTickets.saveStatus')} style={'success'} onClick={e => this.onSaveClicked(e)} />
           </div>
         </form>
         {!this.props.status.get('isLocked') && (
           <>
             <div className={'uk-margin-large-top'} style={{ display: 'block', height: 15 }} />
             <div className={'uk-margin-large-top'}>
-              <h2 className='text-light'>Danger Zone</h2>
+              <h2 className='text-light'>{t('settingsTickets.dangerZone')}</h2>
               <div className='danger-zone'>
                 <div className='dz-box uk-clearfix'>
                   <div className='uk-float-left'>
-                    <h5>Delete this status</h5>
-                    <p>Once you delete a ticket status, there is no going back. Please be certain.</p>
+                    <h5>{t('settingsTickets.deleteStatus')}</h5>
+                    <p>{t('settingsTickets.deleteStatusWarning')}</p>
                   </div>
                   <div className='uk-float-right' style={{ paddingTop: '10px' }}>
                     <Button
-                      text={'Delete'}
+                      text={t('actions.delete')}
                       small={true}
                       style={'danger'}
                       onClick={e => this.showDeleteTicketStatusModal(e, this.props.status)}

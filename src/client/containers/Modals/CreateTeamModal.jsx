@@ -27,6 +27,7 @@ import helpers from 'lib/helpers'
 import $ from 'jquery'
 import Button from 'components/Button'
 import MultiSelect from 'components/MultiSelect'
+import { t } from 'helpers/i18n'
 
 @observer
 class CreateTeamModal extends React.Component {
@@ -83,11 +84,11 @@ class CreateTeamModal extends React.Component {
     return (
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <div className={'mb-25'}>
-          <h2>Create Team</h2>
+          <h2>{t('teams.createTeam')}</h2>
         </div>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className={'uk-margin-medium-bottom'}>
-            <label>Team Name</label>
+            <label>{t('teams.teamName')}</label>
             <input
               type='text'
               className={'md-input'}
@@ -95,16 +96,16 @@ class CreateTeamModal extends React.Component {
               onChange={e => this.onInputChange(e)}
               data-validation='length'
               data-validation-length={'min2'}
-              data-validation-error-msg={'Please enter a valid Team name. (Must contain 2 characters)'}
+              data-validation-error-msg={t('teams.teamNameValidation')}
             />
           </div>
           <div className={'uk-margin-medium-bottom'}>
-            <label style={{ marginBottom: 5 }}>Team Members</label>
+            <label style={{ marginBottom: 5 }}>{t('teams.teamMembers')}</label>
             <MultiSelect items={mappedAccounts} onChange={() => {}} ref={r => (this.membersSelect = r)} />
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Create Team'} flat={true} waves={true} style={'primary'} type={'submit'} />
+            <Button text={t('actions.close')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('teams.createTeam')} flat={true} waves={true} style={'primary'} type={'submit'} />
           </div>
         </form>
       </BaseModal>

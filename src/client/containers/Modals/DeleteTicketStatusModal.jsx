@@ -19,6 +19,7 @@ import { fetchTicketStatus, deleteStatus } from 'actions/tickets'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
 import SingleSelect from 'components/SingleSelect'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 
@@ -45,7 +46,7 @@ class DeleteTicketStatusModal extends React.Component {
   onFormSubmit (e) {
     e.preventDefault()
     if (!this.state.selectedStatus) {
-      helpers.UI.showSnackbar('Unable to get new ticket status. Aborting...', true)
+      helpers.UI.showSnackbar(t('modals.unableToGetStatus'), true)
       return true
     }
 
@@ -65,14 +66,14 @@ class DeleteTicketStatusModal extends React.Component {
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
           <div className='uk-margin-medium-bottom uk-clearfix'>
-            <h2>Remove Ticket Status</h2>
+            <h2>{t('modals.removeTicketStatus')}</h2>
             <span>
-              Please select the ticket status you wish to reassign tickets to in order to delete this ticket status.
+              {t('modals.selectStatusReassign')}
             </span>
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <div className='uk-float-left' style={{ width: '100%' }}>
-              <label className={'uk-form-label nopadding nomargin'}>Status</label>
+              <label className={'uk-form-label nopadding nomargin'}>{t('table.status')}</label>
               <SingleSelect
                 showTextbox={false}
                 items={mappedStatuses}
@@ -83,15 +84,14 @@ class DeleteTicketStatusModal extends React.Component {
           </div>
           <div className='uk-margin-medium-bottom uk-clearfix'>
             <span className='uk-text-danger'>
-              WARNING: This will change all tickets with status <strong>{status.get('name')}</strong> to the selected
-              ticket status.
+              {t('modals.warningChangeStatus')} <strong>{status.get('name')}</strong> {t('modals.toSelectedStatus')}
               <br />
-              <strong>This is permanent!</strong>
+              <strong>{t('modals.thisIsPermanent')}</strong>
             </span>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text={'Cancel'} flat={true} waves={true} extraClass={'uk-modal-close'} />
-            <Button text={'Delete'} style={'danger'} flat={true} type={'submit'} />
+            <Button text={t('actions.cancel')} flat={true} waves={true} extraClass={'uk-modal-close'} />
+            <Button text={t('actions.delete')} style={'danger'} flat={true} type={'submit'} />
           </div>
         </form>
       </BaseModal>

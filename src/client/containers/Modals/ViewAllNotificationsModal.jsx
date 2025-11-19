@@ -19,6 +19,7 @@ import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import axios from 'axios'
 import Log from '../../logger'
+import { t } from 'helpers/i18n'
 
 import { NOTIFICATIONS_MARK_READ } from 'serverSocket/socketEventConsts'
 
@@ -64,15 +65,15 @@ class ViewAllNotificationsModal extends React.Component {
     return (
       <BaseModal large={true}>
         <div className='uk-modal-header'>
-          <h2>Notifications</h2>
+          <h2>{t('modals.notifications')}</h2>
         </div>
         <div className='uk-modal-content' style={{ height: '400px', overflow: 'auto' }}>
           <table className='notificationsTable'>
             <thead>
               <tr>
-                <th className={'type'}>Type</th>
-                <th className={'title'}>Title</th>
-                <th className={'date'}>Date</th>
+                <th className={'type'}>{t('modals.type')}</th>
+                <th className={'title'}>{t('modals.title')}</th>
+                <th className={'date'}>{t('modals.date')}</th>
               </tr>
             </thead>
             <tbody>
@@ -106,7 +107,7 @@ class ViewAllNotificationsModal extends React.Component {
           </table>
         </div>
         <div className='uk-modal-footer uk-text-right'>
-          <Button text={'Close'} flat={true} waves={true} onClick={() => this.props.hideModal()} />
+          <Button text={t('actions.close')} flat={true} waves={true} onClick={() => this.props.hideModal()} />
         </div>
       </BaseModal>
     )

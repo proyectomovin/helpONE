@@ -6,6 +6,7 @@ import BaseModal from 'containers/Modals/BaseModal'
 import Button from 'components/Button'
 
 import { deleteWebhook } from 'actions/webhooks'
+import { t } from 'helpers/i18n'
 
 class DeleteWebhookModal extends React.Component {
   handleSubmit = e => {
@@ -15,19 +16,19 @@ class DeleteWebhookModal extends React.Component {
 
   render () {
     const { webhook } = this.props
-    const name = webhook ? webhook.get('name') || webhook.get('url') : 'this webhook'
+    const name = webhook ? webhook.get('name') || webhook.get('url') : t('settingsWebhooks.thisWebhook')
     return (
       <BaseModal>
         <form onSubmit={this.handleSubmit}>
           <div className='uk-margin-medium-bottom'>
-            <h2>Delete Webhook</h2>
+            <h2>{t('settingsWebhooks.deleteWebhook')}</h2>
             <p className='uk-margin-small-top'>
-              Are you sure you want to delete <strong>{name}</strong>? This action cannot be undone.
+              {t('settingsWebhooks.deleteConfirm')} <strong>{name}</strong>? {t('settingsWebhooks.deleteWarning')}
             </p>
           </div>
           <div className='uk-modal-footer uk-text-right'>
-            <Button text='Cancel' flat waves extraClass='uk-modal-close' />
-            <Button text='Delete' flat waves style='danger' type='submit' />
+            <Button text={t('actions.cancel')} flat waves extraClass='uk-modal-close' />
+            <Button text={t('actions.delete')} flat waves style='danger' type='submit' />
           </div>
         </form>
       </BaseModal>

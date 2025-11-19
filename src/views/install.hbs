@@ -267,115 +267,115 @@
 <div class="wrapper">
     <div class="slides">
         <div class="slide">
-            <h2 style="margin-bottom: 18px;">Welcome</h2>
+            <h2 style="margin-bottom: 18px;">Bienvenido</h2>
             <p style="text-align: left;">
-                Lets get you up and running. Lets guide you through the process of installing Trudesk.
-                Don't worry, its pretty painless.
+                Empecemos. Le guiaremos a través del proceso de instalación de Trudesk.
+                No se preocupe, es bastante sencillo.
             </p>
 
-            <button class="btn md-btn md-btn-wave md-btn-success" data-next>Lets Start</button>
+            <button class="btn md-btn md-btn-wave md-btn-success" data-next>Comencemos</button>
         </div>
 
         {{#isNotTrue isDocker}}
             <div class="slide hide">
-                <h2 style="margin-bottom: 25px;">ElasticSearch Connection</h2>
+                <h2 style="margin-bottom: 25px;">Conexión ElasticSearch</h2>
                 <p style="text-align: left;">
-                    It allows us to search. Its optional, but you should probably set up the connection.
+                    Nos permite buscar. Es opcional, pero probablemente debería configurar la conexión.
                 </p>
                 <form id="elasticConnection" class="uk-form-stacked uk-clearfix">
                     <div class="uk-margin-medium-bottom">
-                        <label for="elastic-host">Server</label>
+                        <label for="elastic-host">Servidor</label>
                         <input id="elastic-host" name="elastic-host" class="md-input" type="text" value="http://localhost" />
                     </div>
                     <div class="uk-margin-medium-bottom">
-                        <label for="elastic-port">Port</label>
+                        <label for="elastic-port">Puerto</label>
                         <input id="elastic-port" name="elastic-port" class="md-input" type="text" value="9200"/>
                     </div>
-                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="test-elastic-connection">Test Connection!</button>
+                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="test-elastic-connection">¡Probar Conexión!</button>
                 </form>
 
                 <div class="uk-clearfix">
-                    <a href="#" id="btn-skip-elastic" class="no-ajaxy uk-float-left">Skip ElasticSearch</a>
-                    <a href="https://www.elastic.co/products/elasticsearch" class="no-ajaxy" target="_blank">What is ElasticSearch?</a>
+                    <a href="#" id="btn-skip-elastic" class="no-ajaxy uk-float-left">Omitir ElasticSearch</a>
+                    <a href="https://www.elastic.co/products/elasticsearch" class="no-ajaxy" target="_blank">¿Qué es ElasticSearch?</a>
                 </div>
             </div>
             <div class="slide hide">
-                <h2 style="margin-bottom: 25px;">MongoDB Connection</h2>
+                <h2 style="margin-bottom: 25px;">Conexión MongoDB</h2>
                 <p style="text-align: left;">
-                    We've got to store the data somewhere. We've chosen MongoDB as our backend storage.
-                    Just enter your connection information below and lets get connected.
+                    Tenemos que almacenar los datos en algún lugar. Hemos elegido MongoDB como nuestro almacenamiento backend.
+                    Simplemente ingrese su información de conexión a continuación y conéctese.
                 </p>
                 <form id="mongoConnection" class="uk-form-stacked uk-clearfix">
                     <div class="uk-margin-medium-bottom">
-                        <label for="mongo-server">Server</label>
+                        <label for="mongo-server">Servidor</label>
                         <input id="mongo-server" name="mongo-server" class="md-input" type="text" value="localhost" />
                     </div>
                     <div class="uk-margin-medium-bottom">
-                        <label for="mongo-port">Port</label>
+                        <label for="mongo-port">Puerto</label>
                         <input id="mongo-port" name="mongo-port" class="md-input" type="text" value="27017"/>
                     </div>
                     <div class="uk-margin-medium-bottom">
-                        <label for="mongo-username">Username</label>
+                        <label for="mongo-username">Usuario</label>
                         <input id="mongo-username" name="mongo-username" class="md-input" type="text" value="trudesk"/>
                     </div>
                     <div class="uk-margin-medium-bottom">
-                        <label for="mongo-password">Password</label>
+                        <label for="mongo-password">Contraseña</label>
                         <input id="mongo-password" name="mongo-password" class="md-input" type="password" value="#TruDesk1$" />
                     </div>
                     <div class="uk-margin-medium-bottom">
-                        <label for="mongo-database">Database</label>
+                        <label for="mongo-database">Base de Datos</label>
                         <input id="mongo-database" name="mongo-database" class="md-input" type="text"  value="trudesk"/>
                     </div>
-                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="test-mongo-connection">Test Connection!</button>
+                    <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="test-mongo-connection">¡Probar Conexión!</button>
                 </form>
-                <a href="https://www.mongodb.com/" class="no-ajaxy" target="_blank">What is MongoDB?</a>
+                <a href="https://www.mongodb.com/" class="no-ajaxy" target="_blank">¿Qué es MongoDB?</a>
             </div>
         {{/isNotTrue}}
         {{#isNotTrue isDocker}}
             <div class="slide hide">
-                <h2 style="margin-bottom: 25px;">Existing Database?</h2>
+                <h2 style="margin-bottom: 25px;">¿Base de Datos Existente?</h2>
                 <p style="text-align: left; margin-bottom: 20px;">
-                    Is this mongodb connection an existing database or a new database?
+                    ¿Esta conexión mongodb es una base de datos existente o una nueva base de datos?
                 </p>
-                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="margin: 0 0 10px 0 !important;" data-next>New Database</button>
-                <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="existing-database-btn" style="margin: 0;">Existing Database</button>
+                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="margin: 0 0 10px 0 !important;" data-next>Nueva Base de Datos</button>
+                <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="existing-database-btn" style="margin: 0;">Base de Datos Existente</button>
             </div>
         {{/isNotTrue}}
 
         <div class="slide hide">
-            <h2 style="margin-bottom: 25px;">Setup Account</h2>
+            <h2 style="margin-bottom: 25px;">Configurar Cuenta</h2>
             <p style="text-align: left;">
-                Now that we got you connected, its time to create an Administrator.
+                Ahora que lo conectamos, es hora de crear un Administrador.
             </p>
 
             <form id="adminAccount" class="uk-form-stacked uk-clearfix">
                 <div class="uk-margin-medium-bottom">
-                    <label for="admin-username">Username</label>
+                    <label for="admin-username">Usuario</label>
                     <input type="text" id="admin-username" name="admin-username" class="md-input" />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="admin-fullname">Full Name</label>
+                    <label for="admin-fullname">Nombre Completo</label>
                     <input type="text" id="admin-fullname" name="admin-fullname" class="md-input" />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="admin-password">Password</label>
+                    <label for="admin-password">Contraseña</label>
                     <input type="password" id="admin-password" name="admin-password" class="md-input" />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="admin-cpassword">Confirm Password</label>
+                    <label for="admin-cpassword">Confirmar Contraseña</label>
                     <input type="password" id="admin-cpassword" name="admin-cpassword" class="md-input" />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="admin-email">Email</label>
+                    <label for="admin-email">Correo Electrónico</label>
                     <input type="email" id="admin-email" name="admin-email" class="md-input" />
                 </div>
 
-                <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="set-admin-account">Create Admin</button>
+                <button class="btn md-btn md-btn-wave md-btn-primary" type="button" id="set-admin-account">Crear Administrador</button>
             </form>
         </div>
         <div id="installingSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Installing...</h2>
-            <p style="text-align: left;">Putting it all together. Trudesk is currently building itself and powering up its engine. Please wait, this may take a minute.</p>
+            <h2 style="margin-bottom: 25px;">Instalando...</h2>
+            <p style="text-align: left;">Juntando todo. Trudesk actualmente se está construyendo y encendiendo su motor. Por favor espere, esto puede tomar un minuto.</p>
             <div class="loader">
                 <svg style="width: 140px; " viewBox="0 0 288.9 70.1">
                     <line class="l1" x1="0" y1="0" x2="288" y2="0"></line>
@@ -383,8 +383,8 @@
             </div>
         </div>
         <div id="savingConfig" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Saving Configuration...</h2>
-            <p style="text-align: left;">Currently writing trudesk configuration file to an existing MongoDB connection. Please wait, this should only take a second.</p>
+            <h2 style="margin-bottom: 25px;">Guardando Configuración...</h2>
+            <p style="text-align: left;">Actualmente escribiendo el archivo de configuración de trudesk en una conexión MongoDB existente. Por favor espere, esto solo debería tomar un segundo.</p>
             <div class="loader">
                 <svg style="width: 140px; " viewBox="0 0 288.9 70.1">
                     <line class="l1" x1="0" y1="0" x2="288" y2="0"></line>
@@ -392,24 +392,24 @@
             </div>
         </div>
         <div id="restartSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Time to Restart</h2>
-            <p style="text-align: left;"><i>So here we are, together sharpening a knife.</i> Trudesk needs to restart to come out of install mode. Just restart it and you should get a login screen. (hopefully)!</p>
-            <button class="btn md-btn md-btn-wave" type="button" id="restartTrudesk">restart me!</button>
+            <h2 style="margin-bottom: 25px;">Hora de Reiniciar</h2>
+            <p style="text-align: left;"><i>Aquí estamos, juntos afilando un cuchillo.</i> Trudesk necesita reiniciarse para salir del modo de instalación. Simplemente reinícielo y debería obtener una pantalla de inicio de sesión. (¡esperemos!)</p>
+            <button class="btn md-btn md-btn-wave" type="button" id="restartTrudesk">¡reiniciarme!</button>
         </div>
         <div id="errorSlide" class="slide hide">
-            <h2 style="margin-bottom: 25px;">Crap! Something funky happened.</h2>
+            <h2 style="margin-bottom: 25px;">¡Vaya! Algo extraño sucedió.</h2>
             <p style="text-align: justify;">
-                Alright. This entire install script is in <i>beta</i>. Didn't I mention that? Anyway, there are a couple of options below to try and resolve the issue. There are some common pit falls and workarounds
-                in the docs that may help. Submitting the issue will help identify any bugs in the script and will help others as well.
+                De acuerdo. Todo este script de instalación está en <i>beta</i>. ¿No mencioné eso? De todos modos, hay un par de opciones a continuación para intentar resolver el problema. Hay algunos errores comunes y soluciones alternativas
+                en la documentación que pueden ayudar. Enviar el problema ayudará a identificar cualquier error en el script y también ayudará a otros.
             </p>
             <pre style="text-align: left; font-size: 11px; font-weight: normal; margin-bottom: 15px;"></pre>
             <div style="width: 100%;">
                 <a href="https://www.github.com/polonel/trudesk/issues/new" target="_blank" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">I think I should submit this issue.</button>
+                    <button class="btn md-btn md-btn-wave md-btn-danger" type="button" style="width: 100%; margin-bottom: 10px !important;">Creo que debería enviar este problema.</button>
                 </a>
-                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="width: 100%; margin-bottom: 10px !important;" onclick="location.reload();">I think i will start over.</button>
+                <button class="btn md-btn md-btn-wave md-btn-success" type="button" style="width: 100%; margin-bottom: 10px !important;" onclick="location.reload();">Creo que empezaré de nuevo.</button>
                 <a href="https://github.com/polonel/trudesk/blob/master/README.md" target="_blank" style="width: 100%; padding: 0; margin: 0;">
-                    <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;">or maybe i should read the docs!</button>
+                    <button class="btn md-btn md-btn-wave" type="button" style="width: 100%; margin-bottom: 10px !important;">¡o tal vez debería leer la documentación!</button>
                 </a>
             </div>
         </div>
@@ -501,7 +501,7 @@
                         },
                         error: function(e) {
                             window.Snackbar.show({
-                                text: 'Unable to save configuration!',
+                                text: '¡No se puede guardar la configuración!',
                                 actionTextColor: 'red'
                             });
 
@@ -510,14 +510,14 @@
                         success: function(data) {
                             if (!data.success) {
                                 window.Snackbar.show({
-                                    text: 'Unable to save configuration!',
+                                    text: '¡No se puede guardar la configuración!',
                                     actionTextColor: 'red'
                                 });
 
                                 console.log(data);
                             } else {
                                 window.Snackbar.show({
-                                    text: 'Configuration File Saved!'
+                                    text: '¡Archivo de Configuración Guardado!'
                                 });
                                 var $savingConfig = $('#savingConfig');
                                 var $restartSlide = $('#restartSlide');
@@ -548,9 +548,9 @@
                         port: elasticFormData['elastic-port']
                     },
                     error: function(e) {
-                        $connectBtn.prop('disabled', false).text('Test Connection');
+                        $connectBtn.prop('disabled', false).text('Probar Conexión');
                         window.Snackbar.show({
-                            text: 'Couldn\t connect; make sure connection is correct.',
+                            text: 'No se pudo conectar; asegúrese de que la conexión sea correcta.',
                             actionTextColor: 'red'
                         });
                         console.error(e);
@@ -558,10 +558,10 @@
                     success: function(data) {
                         if (!data.success) {
                             window.Snackbar.show({
-                                text: 'Couldn\t connect; make sure connection is correct.',
+                                text: 'No se pudo conectar; asegúrese de que la conexión sea correcta.',
                                 actionTextColor: 'red'
                             });
-                            $connectBtn.prop('disabled', false).text('Test Connection!');
+                            $connectBtn.prop('disabled', false).text('¡Probar Conexión!');
                         } else {
                             elasticConnection = {
                                 enable: true,
@@ -570,7 +570,7 @@
                             };
 
                             window.Snackbar.show({
-                                text: 'ElasticSearch Connection Successful!'
+                                text: '¡Conexión ElasticSearch Exitosa!'
                             });
 
                             advanceSlide();
@@ -595,9 +595,9 @@
                         database: mongoFormData['mongo-database']
                     },
                     error: function(e) {
-                        $connectBtn.prop('disabled', false).text('Test Connection!');
+                        $connectBtn.prop('disabled', false).text('¡Probar Conexión!');
                         window.Snackbar.show({
-                            text: 'Couldn\'t connect; make sure connection is correct.',
+                            text: 'No se pudo conectar; asegúrese de que la conexión sea correcta.',
                             actionTextColor: 'red'
                         });
                         console.error(e);
@@ -605,10 +605,10 @@
                     success: function(data) {
                         if (!data.success) {
                             window.Snackbar.show({
-                                text: 'Couldn\'t connect; make sure connection is correct.',
+                                text: 'No se pudo conectar; asegúrese de que la conexión sea correcta.',
                                 actionTextColor: 'red'
                             });
-                            $connectBtn.prop('disabled', false).text('Test Connection!');
+                            $connectBtn.prop('disabled', false).text('¡Probar Conexión!');
                         } else {
                             mongoConnection = {
                                 host: mongoFormData['mongo-server'],
@@ -619,7 +619,7 @@
                             };
 
                             window.Snackbar.show({
-                                text: 'MongoDB Connection Successful!'
+                                text: '¡Conexión MongoDB Exitosa!'
                             });
 
                             //Advance to next slide
@@ -758,8 +758,8 @@
 
             $('button#restartTrudesk').click(function() {
                 var $restartSlide = $('#restartSlide');
-                $restartSlide.find('h2').html('Restarting...');
-                $restartSlide.find('p').css('text-align', 'center').html('I\'m restarting now... Give me about 10seconds!');
+                $restartSlide.find('h2').html('Reiniciando...');
+                $restartSlide.find('p').css('text-align', 'center').html('Me estoy reiniciando ahora... ¡Dame unos 10 segundos!');
                 $restartSlide.find('button').hide();
 
                 setTimeout(function() {
@@ -786,7 +786,7 @@
                     },
                     success: function(response) {
                         window.Snackbar.show({
-                            text: 'We did it! Everything is all set up!'
+                            text: '¡Lo logramos! ¡Todo está configurado!'
                         });
 
                         var $installingSlide = $('#installingSlide');

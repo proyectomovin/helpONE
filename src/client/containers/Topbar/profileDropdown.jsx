@@ -13,6 +13,7 @@ import PDropdown from 'components/PDropdown'
 import Spacer from 'components/Spacer'
 
 import helpers from 'lib/helpers'
+import { t } from 'helpers/i18n'
 
 @observer
 class ProfileDropdownPartial extends React.Component {
@@ -79,7 +80,7 @@ class ProfileDropdownPartial extends React.Component {
                   {this.props.sessionUser.fullname}
                 </span>
                 <span>{this.props.sessionUser.email}</span>
-                <a href='/profile'>Profile Settings</a>
+                <a href='/profile'>{t('topbar.profileSettings')}</a>
               </div>
             </div>
           </div>
@@ -110,14 +111,14 @@ class ProfileDropdownPartial extends React.Component {
           <div className={'profile-drop-actions'}>
             <div className={'action-logout'}>
               <i className='material-icons'>logout</i>
-              <a href='/logout'>Logout</a>
+              <a href='/logout'>{t('topbar.logout')}</a>
             </div>
           </div>
         </div>
         <div className={'pdrop-footer'}>
           <div className='links'>
             <a href='https://forum.trudesk.io' target={'_blank'} rel={'noreferrer'}>
-              Community
+              {t('topbar.community')}
             </a>
             <span>&middot;</span>
             <a
@@ -129,7 +130,7 @@ class ProfileDropdownPartial extends React.Component {
                 this.props.showModal('PRIVACY_POLICY')
               }}
             >
-              Privacy Policy
+              {t('topbar.privacyPolicy')}
             </a>
           </div>
         </div>

@@ -18,6 +18,7 @@ import { connect } from 'react-redux'
 import BaseModal from './BaseModal'
 import SingleSelect from 'components/SingleSelect'
 import Button from 'components/Button'
+import { t } from 'helpers/i18n'
 
 import { deletePriority } from 'actions/tickets'
 
@@ -34,7 +35,7 @@ class DeletePriorityModal extends React.Component {
   onSubmit (e) {
     e.preventDefault()
     if (!this.state.selectedPriority) {
-      helpers.UI.showSnackbar('Unable to get new priority. Aborting...', true)
+      helpers.UI.showSnackbar(t('modals.unableToGetPriority'), true)
       return true
     }
 
@@ -67,13 +68,13 @@ class DeletePriorityModal extends React.Component {
         <div>
           <form onSubmit={e => this.onSubmit(e)}>
             <div className='uk-margin-medium-bottom uk-clearfix'>
-              <h2>Remove Priority</h2>
-              <span>Please select the priority you wish to reassign tickets to in order to delete this priority</span>
+              <h2>{t('modals.removePriority')}</h2>
+              <span>{t('modals.selectPriorityReassign')}</span>
               <hr style={{ margin: '10px 0' }} />
             </div>
             <div className='uk-margin-medium-bottom uk-clearfix'>
               <div className='uk-float-left' style={{ width: '100%' }}>
-                <label className={'uk-form-label'}>Priority</label>
+                <label className={'uk-form-label'}>{t('table.priority')}</label>
                 <SingleSelect
                   items={mappedPriorities}
                   showTextbox={false}
@@ -85,13 +86,12 @@ class DeletePriorityModal extends React.Component {
             </div>
             <div className='uk-margin-medium-bottom uk-clearfix'>
               <span className='uk-text-danger'>
-                WARNING: This will change all tickets with a priority of: <strong>{priority.get('name')}</strong> to the
-                selected priority above.
+                {t('modals.warningChangePriority')} <strong>{priority.get('name')}</strong> {t('modals.toSelectedPriority')}
               </span>
             </div>
             <div className='uk-modal-footer uk-text-right'>
-              <Button type={'button'} flat={true} waves={true} text={'Cancel'} extraClass={'uk-modal-close'} />
-              <Button type={'submit'} flat={true} waves={true} text={'Delete'} style={'danger'} />
+              <Button type={'button'} flat={true} waves={true} text={t('actions.cancel')} extraClass={'uk-modal-close'} />
+              <Button type={'submit'} flat={true} waves={true} text={t('actions.delete')} style={'danger'} />
             </div>
           </form>
         </div>

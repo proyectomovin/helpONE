@@ -14,6 +14,7 @@
 
 import React, { createRef } from 'react'
 import PropTypes from 'prop-types'
+import { t } from 'helpers/i18n'
 import PageTitle from 'components/PageTitle'
 import PageContent from 'components/PageContent'
 import StepWizard from 'components/StepWizard'
@@ -72,11 +73,11 @@ class AccountsImportContainer extends React.Component {
   render () {
     return (
       <>
-        <PageTitle title={'Accounts Import'} />
+        <PageTitle title={t('accountsImport.title')} />
         <PageContent>
           <div className='uk-grid uk-grid-medium uk-margin-medium-bottom js-wizard-select-wrapper'>
             <div className='uk-width-1-1 uk-margin-small-bottom'>
-              <h3>Select Import Type</h3>
+              <h3>{t('accountsImport.selectImportType')}</h3>
             </div>
             <div className='uk-width-1-3'>
               <div
@@ -91,9 +92,9 @@ class AccountsImportContainer extends React.Component {
                     <i className='material-icons font-size-40'>description</i>
                   </div>
                   <h2 className='uk-margin-remove'>
-                    <span className='md-color-white uk-margin-small-bottom'>CSV</span>
+                    <span className='md-color-white uk-margin-small-bottom'>{t('accountsImport.csv')}</span>
                     <span className='md-color-white uk-text-small uk-display-block'>
-                      Import accounts from an uploaded csv
+                      {t('accountsImport.csvDescription')}
                     </span>
                   </h2>
                 </div>
@@ -117,9 +118,9 @@ class AccountsImportContainer extends React.Component {
                     </svg>
                   </div>
                   <h2 className='uk-margin-remove'>
-                    <span className='md-color-white uk-margin-small-bottom'>JSON</span>
+                    <span className='md-color-white uk-margin-small-bottom'>{t('accountsImport.json')}</span>
                     <span className='md-color-white uk-text-small uk-display-block'>
-                      Import accounts from an uploaded json file
+                      {t('accountsImport.jsonDescription')}
                     </span>
                   </h2>
                 </div>
@@ -138,9 +139,9 @@ class AccountsImportContainer extends React.Component {
                     <i className='material-icons font-size-40'>&#xE875;</i>
                   </div>
                   <h2 className='uk-margin-remove'>
-                    <span className='md-color-white uk-margin-small-bottom'>LDAP</span>
+                    <span className='md-color-white uk-margin-small-bottom'>{t('accountsImport.ldap')}</span>
                     <span className='md-color-white uk-text-small uk-display-block'>
-                      Import accounts from an enterprise ldap server.
+                      {t('accountsImport.ldapDescription')}
                     </span>
                   </h2>
                 </div>
@@ -149,8 +150,8 @@ class AccountsImportContainer extends React.Component {
           </div>
 
           <StepWizard
-            title={'CSV Account Import Wizard'}
-            subtitle={'This wizard will walk you through importing accounts from a json file.'}
+            title={t('accountsImport.csvWizardTitle')}
+            subtitle={t('accountsImport.csvWizardSubtitle')}
             ref={this.csvWizardRef}
             onCancelClicked={this.resetWizards}
           />
@@ -161,34 +162,34 @@ class AccountsImportContainer extends React.Component {
                 style={{ position: 'relative', minHeight: 265 }}
               >
                 <div className='left'>
-                  <h6 style={{ padding: '10px 0 0 15px', margin: 0, fontSize: 16 }}>JSON Account Import Wizard</h6>
+                  <h6 style={{ padding: '10px 0 0 15px', margin: 0, fontSize: 16 }}>{t('accountsImport.jsonWizardTitle')}</h6>
                   <h5
                     style={{ padding: '0 0 10px 15px', margin: '-2px 0 0 0', fontSize: 12 }}
                     className='uk-text-muted'
                   >
-                    This wizard will walk you through importing accounts from a json file.
+                    {t('accountsImport.jsonWizardSubtitle')}
                   </h5>
                 </div>
                 <div className='right' style={{ margin: 15 }}>
                   <button className='btn md-btn md-btn-warning js-wizard-cancel' onClick={this.resetWizards}>
-                    Cancel
+                    {t('actions.cancel')}
                   </button>
                 </div>
                 <hr className='nomargin' />
                 <form className='uk-form-stacked' id='wizard_json_form'>
                   <div id='wizard_json'>
-                    <h3>File Upload</h3>
+                    <h3>{t('accountsImport.fileUpload')}</h3>
                     <section>
                       <h2 className='heading-wiz'>
-                        File Upload
-                        <span className='sub-heading'>Upload json file containing user data to import.</span>
+                        {t('accountsImport.fileUpload')}
+                        <span className='sub-heading'>{t('accountsImport.fileUploadDescription')}</span>
                       </h2>
                       <hr className='md-hr' />
                       <div id='json-upload-drop' className='uk-file-upload'>
-                        <p className='uk-text'>Drop file to upload</p>
-                        <p className='uk-text-muted uk-text-small uk-margin-small-bottom'>or</p>
+                        <p className='uk-text'>{t('accountsImport.dropFileToUpload')}</p>
+                        <p className='uk-text-muted uk-text-small uk-margin-small-bottom'>{t('accountsImport.or')}</p>
                         <a className='uk-form-file md-btn'>
-                          choose file
+                          {t('accountsImport.chooseFile')}
                           <input type='file' id='json-upload-select' />
                         </a>
                       </div>
@@ -197,23 +198,23 @@ class AccountsImportContainer extends React.Component {
                         <div className='uk-progress-bar' style={{ width: 0 }} />
                       </div>
                     </section>
-                    <h3>Review Uploaded Data</h3>
+                    <h3>{t('accountsImport.reviewUploadedData')}</h3>
                     <section>
                       <h2 className='heading-wiz'>
-                        Review Uploaded Data
-                        <span className='sub-heading'>Below is the parsed contents of the uploaded csv file.</span>
+                        {t('accountsImport.reviewUploadedData')}
+                        <span className='sub-heading'>{t('accountsImport.reviewUploadedDataDescription')}</span>
                       </h2>
 
                       <textarea className='review-list' id='json-review-list' disabled />
                     </section>
-                    <h3>Import Accounts</h3>
+                    <h3>{t('accountsImport.importAccounts')}</h3>
                     <section>
                       <h2 className='heading-wiz uk-margin-medium-bottom'>
-                        Importing Accounts..
+                        {t('accountsImport.importingAccounts')}
                         <span className='sub-heading'>
-                          Please wait while your accounts are imported.
+                          {t('accountsImport.importingAccountsDescription')}
                           <br />
-                          <em>Please do not navigate away from this page. Some UI Elements have been disabled.</em>
+                          <em>{t('accountsImport.doNotNavigateAway')}</em>
                         </span>
                       </h2>
                       <div
@@ -246,17 +247,17 @@ class AccountsImportContainer extends React.Component {
                 style={{ position: 'relative', minHeight: 265 }}
               >
                 <div className='left'>
-                  <h6 style={{ padding: '10px 0 0 15px', margin: 0, fontSize: 16 }}>LDAP Account Import Wizard</h6>
+                  <h6 style={{ padding: '10px 0 0 15px', margin: 0, fontSize: 16 }}>{t('accountsImport.ldapWizardTitle')}</h6>
                   <h5
                     style={{ padding: '0 0 10px 15px', margin: '-2px 0 0 0', fontSize: 12 }}
                     className='uk-text-muted'
                   >
-                    This wizard will walk you through connecting and import users from a LDAP server.
+                    {t('accountsImport.ldapWizardSubtitle')}
                   </h5>
                 </div>
                 <div className='right' style={{ margin: 15 }}>
                   <button className='btn md-btn md-btn-warning js-wizard-cancel' onClick={this.resetWizards}>
-                    Cancel
+                    {t('actions.cancel')}
                   </button>
                 </div>
                 <hr className='nomargin' />
@@ -265,19 +266,19 @@ class AccountsImportContainer extends React.Component {
                 </div>
                 <form action='#' className='uk-form-stacked' id='wizard_ldap_connection_form'>
                   <div id='wizard_ldap'>
-                    <h3>Connection Information</h3>
+                    <h3>{t('accountsImport.connectionInformation')}</h3>
                     <section>
                       <h2 className='heading-wiz'>
-                        Connection Information
+                        {t('accountsImport.connectionInformation')}
                         <span className='sub-heading'>
-                          To import users from an LDAP server, we need a little connection information.
+                          {t('accountsImport.connectionInformationDescription')}
                         </span>
                       </h2>
                       <hr className='md-hr' style={{ marginTop: '14px !important' }} />
 
                       <div className='uk-grid'>
                         <div className='uk-margin-large-bottom uk-width-1-3'>
-                          <label htmlFor='ldap-server'>LDAP Server</label>
+                          <label htmlFor='ldap-server'>{t('accountsImport.ldapServer')}</label>
                           <input
                             id='ldap-server'
                             type='text'
@@ -288,19 +289,19 @@ class AccountsImportContainer extends React.Component {
                           />
                         </div>
                         <div className='uk-margin-large-bottom uk-width-1-3'>
-                          <label htmlFor='ldap-bind-dn'>Bind DN (CN=Administrator,DC=domain,DC=com)</label>
+                          <label htmlFor='ldap-bind-dn'>{t('accountsImport.bindDN')}</label>
                           <input type='text' className='md-input' name='ldap-bind-dn' required defaultValue={''} />
                         </div>
                         <div className='uk-margin-large-bottom uk-width-1-3'>
-                          <label htmlFor='ldap-password'>Password</label>
+                          <label htmlFor='ldap-password'>{t('accountModal.password')}</label>
                           <input type='password' className='md-input' name='ldap-password' required defaultValue={''} />
                         </div>
                         <div className='uk-margin-large-bottom uk-width-1-2'>
-                          <label htmlFor='ldap-search-base'>Search Base</label>
+                          <label htmlFor='ldap-search-base'>{t('accountsImport.searchBase')}</label>
                           <input type='text' className='md-input' name='ldap-search-base' required defaultValue={''} />
                         </div>
                         <div className='uk-margin-large-bottom uk-width-1-2'>
-                          <label htmlFor='ldap-filter'>Search Filter (Defaults to Users)</label>
+                          <label htmlFor='ldap-filter'>{t('accountsImport.searchFilter')}</label>
                           <input
                             type='text'
                             className='md-input'
@@ -312,12 +313,12 @@ class AccountsImportContainer extends React.Component {
                       </div>
                     </section>
 
-                    <h3>Verify Connection</h3>
+                    <h3>{t('accountsImport.verifyConnection')}</h3>
                     <section>
                       <h2 className='heading-wiz'>
-                        Verify Connection
+                        {t('accountsImport.verifyConnection')}
                         <span id='wizard_ldap_verify_text' className='sub-heading'>
-                          Please wait while we try to bind to your ldap server...
+                          {t('accountsImport.verifyConnectionDescription')}
                         </span>
                       </h2>
 
@@ -333,26 +334,26 @@ class AccountsImportContainer extends React.Component {
                         <i className='material-icons'>&#xE86C;</i>
                       </div>
                     </section>
-                    <h3>Review Accounts</h3>
+                    <h3>{t('accountsImport.reviewAccounts')}</h3>
                     <section>
                       <h2 className='heading-wiz' style={{ marginBottom: 15 }}>
-                        Review Accounts
+                        {t('accountsImport.reviewAccounts')}
                         <span className='sub-heading'>
-                          Please review the accounts below before proceeding. The next step will import the accounts.
+                          {t('accountsImport.reviewAccountsDescription')}
                         </span>
                       </h2>
 
                       <textarea className='review-list' id='ldap-review-list' disabled />
                     </section>
 
-                    <h3>Import Accounts</h3>
+                    <h3>{t('accountsImport.importAccounts')}</h3>
                     <section>
                       <h2 className='heading-wiz uk-margin-medium-bottom'>
-                        Importing Accounts..
+                        {t('accountsImport.importingAccounts')}
                         <span className='sub-heading'>
-                          Please wait while your accounts are imported.
+                          {t('accountsImport.importingAccountsDescription')}
                           <br />
-                          <em>Please do not navigate away from this page. Some UI Elements have been disabled.</em>
+                          <em>{t('accountsImport.doNotNavigateAway')}</em>
                         </span>
                       </h2>
                       <div

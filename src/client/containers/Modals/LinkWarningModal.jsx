@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import BaseModal from './BaseModal'
 import Button from 'components/Button'
+import { t } from 'helpers/i18n'
 
 import { hideModal } from 'actions/common'
 
@@ -33,16 +34,16 @@ class LinkWarningModal extends React.Component {
     return (
       <BaseModal>
         <div>
-          <h2>Redirect Warning</h2>
-          <p>You are being redirected to a site outside this domain. Proceed with caution.</p>
+          <h2>{t('modals.redirectWarning')}</h2>
+          <p>{t('modals.redirectOutsideDomain')}</p>
           <p>
             <strong>{this.props.href}</strong>
           </p>
         </div>
         <div className='uk-modal-footer uk-text-right'>
-          <Button text={'Cancel'} extraClass={'uk-modal-close'} flat={true} waves={true} />
+          <Button text={t('actions.cancel')} extraClass={'uk-modal-close'} flat={true} waves={true} />
           <Button
-            text={'Proceed'}
+            text={t('modals.proceed')}
             type={'submit'}
             flat={true}
             waves={true}

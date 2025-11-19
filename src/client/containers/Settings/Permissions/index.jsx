@@ -24,6 +24,7 @@ import SettingItem from 'components/Settings/SettingItem'
 import SingleSelect from 'components/SingleSelect'
 import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import PermissionBody from './permissionBody'
+import { t } from 'helpers/i18n'
 
 import $ from 'jquery'
 
@@ -80,8 +81,8 @@ class PermissionsSettingsContainer extends React.Component {
     return (
       <div className={this.props.active ? '' : 'hide'}>
         <SettingItem
-          title={'Default New User Role'}
-          subtitle={'Role assigned to users created during sign-up and public tickets'}
+          title={t('settingsPermissions.defaultUserRole')}
+          subtitle={t('settingsPermissions.defaultUserRoleSubtitle')}
           component={
             <SingleSelect
               items={mappedRoles}
@@ -95,17 +96,17 @@ class PermissionsSettingsContainer extends React.Component {
           }
         />
         <SplitSettingsPanel
-          title={'Permissions'}
-          tooltip={'Permission order is top down. ex: Admins at top; Users at bottom.'}
+          title={t('settingsPermissions.permissions')}
+          tooltip={t('settingsPermissions.permissionsTooltip')}
           subtitle={
             <div>
-              Create/Modify Role Permissions{' '}
-              <span className={'uk-text-danger'}>Note: Changes take affect after page refresh</span>
+              {t('settingsPermissions.permissionsSubtitle')}{' '}
+              <span className={'uk-text-danger'}>{t('settingsPermissions.permissionsNote')}</span>
             </div>
           }
           rightComponent={
             <Button
-              text={'Create'}
+              text={t('actions.create')}
               style={'success'}
               flat={true}
               waves={true}

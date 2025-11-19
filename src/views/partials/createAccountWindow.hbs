@@ -9,8 +9,8 @@
                 </div>
                 <div class="user-heading-content">
                     <h2>
-                        <span class="uk-text-truncate">Create Account</span>
-                        <span class="sub-heading">Please provide account details below</span>
+                        <span class="uk-text-truncate">Crear Cuenta</span>
+                        <span class="sub-heading">Por favor proporcione los detalles de la cuenta a continuación</span>
                     </h2>
                 </div>
             </div>
@@ -19,41 +19,41 @@
             <form class="uk-form-stacked" id="createAccountForm" action="#" method="POST">
                 <input type="hidden" name="socketId" id="ca_socketId" value="{{data.user.socket.id}}" />
                 <div class="uk-margin-medium-bottom">
-                    <label for="aUsername">Username</label>
+                    <label for="aUsername">Nombre de Usuario</label>
                     <input type="text" class="md-input" id="caUsername" name="aUsername"
                            data-validation="length"
                            data-validation-length="min5"
-                           data-validation-error-msg="Please enter a valid username. Username must be at least 5 characters."
+                           data-validation-error-msg="Por favor ingrese un nombre de usuario válido. El nombre de usuario debe tener al menos 5 caracteres."
                     />
                 </div>
                 <div class="uk-margin-medium-bottom uk-clearfix">
                     <div class="left" style="width: 50%; padding-right: 20px">
-                        <label for="aFullname">Name</label>
+                        <label for="aFullname">Nombre</label>
                         <input type="text" class="md-input" id="caFullname" name="aFullname"
                                data-validation="length"
                                data-validation-length="min4"
-                               data-validation-error-msg="Please enter a valid name. Name must be at be 4 characters."
+                               data-validation-error-msg="Por favor ingrese un nombre válido. El nombre debe tener al menos 4 caracteres."
                         />
                     </div>
                     <div class="left" style="width: 50%;">
-                        <label for="aTitle" class="uk-form-label">Title</label>
+                        <label for="aTitle" class="uk-form-label">Título</label>
                         <input type="text" class="md-input" id="caTitle" name="aTitle"/>
                     </div>
                 </div>
                 <div class="uk-margin-medium-bottom uk-clearfix">
                     <div class="left" style="width: 50%; padding-right: 20px;">
-                        <label for="aPass" class="uk-form-label">Password</label>
+                        <label for="aPass" class="uk-form-label">Contraseña</label>
                         <input type="password" class="md-input" id="caPass" name="aPass"
                                data-validation="length"
                                data-validation-length="min6"
                         />
                     </div>
                     <div class="left" style="width: 50%;">
-                        <label for="aPassConfirm" class="uk-form-label">Confirm Password</label>
+                        <label for="aPassConfirm" class="uk-form-label">Confirmar Contraseña</label>
                         <input type="password" class="md-input" id="caPassConfirm" name="aPassConfirm"
                                data-validation="confirmation"
                                data-validation-confirm="aPass"
-                               data-validation-error-msg="Password fields do not match."
+                               data-validation-error-msg="Los campos de contraseña no coinciden."
                         />
                     </div>
                 </div>
@@ -61,11 +61,11 @@
                     <label for="aEmail" class="uk-form-label">Email</label>
                     <input type="email" class="md-input" id="caEmail" name="aEmail"
                            data-validation="email"
-                           data-validation-error-msg="Please enter a valid email address."
+                           data-validation-error-msg="Por favor ingrese una dirección de email válida."
                     />
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="aRole" class="uk-form-label">Role</label>
+                    <label for="aRole" class="uk-form-label">Rol</label>
                     <select class="selectize" name="aRole" id="caRole" data-md-selectize-inline>
                         {{#each data.common.roles}}
                             <option value="{{id}}">{{name}}</option>
@@ -73,17 +73,17 @@
                     </select>
                 </div>
                 <div class="uk-margin-medium-bottom">
-                    <label for="caGrps" class="uk-form-label">Groups</label>
+                    <label for="caGrps" class="uk-form-label">Grupos</label>
                     <select multiple="multiple" class="multiselect" id="caGrps" name="caGrps[]">
                         {{#each data.allGroups}}
                             <option value="{{_id}}">{{name}}</option>
                         {{/each}}
                     </select>
-                    <span class="aGrps-error-message hide help-block uk-form-danger">Please select a group for this user.</span>
+                    <span class="aGrps-error-message hide help-block uk-form-danger">Por favor seleccione un grupo para este usuario.</span>
                 </div>
                 <div class="uk-modal-footer uk-text-right">
-                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Close</button>
-                    <button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" ng-click="createAccount($event)">Create Account</button>
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Cerrar</button>
+                    <button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" ng-click="createAccount($event)">Crear Cuenta</button>
                 </div>
             </form>
         </div>
