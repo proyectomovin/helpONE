@@ -292,7 +292,7 @@ class SingleTicketContainer extends React.Component {
     })
   }
 
-  onUpdateTimeTracking (data) {
+  onUpdateTimeTracking = (data) => {
     if (this.ticket._id === data.tid) {
       this.ticket.estimatedHours = data.estimatedHours
       this.ticket.timeEntries = data.timeEntries
@@ -957,9 +957,5 @@ export default connect(mapStateToProps, {
   fetchTicketStatus,
   unloadGroups,
   showModal,
-  transferToThirdParty,
-  setEstimatedHours,
-  addTimeEntry,
-  updateTimeEntry,
-  deleteTimeEntry
+  transferToThirdParty
 })(SingleTicketContainer)

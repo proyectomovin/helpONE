@@ -408,7 +408,14 @@ events.onSetEstimatedHours = socket => {
   socket.on(socketEvents.TICKETS_ESTIMATEDHOURS_SET, async data => {
     const ticketId = data._id
     const hours = data.hours
-    const ownerId = socket.request.user._id
+    const user = socket.request.user
+    const ownerId = user._id
+
+    // Permission check
+    if (!permissions.canThis(user.role, 'tickets:update')) {
+      winston.warn('User ' + user.username + ' attempted to set estimated hours without permission')
+      return
+    }
 
     try {
       let ticket = await ticketSchema.getTicketById(ticketId)
@@ -432,7 +439,14 @@ events.onAddTimeEntry = socket => {
     const ticketId = data._id
     const hours = data.hours
     const description = data.description
-    const ownerId = socket.request.user._id
+    const user = socket.request.user
+    const ownerId = user._id
+
+    // Permission check
+    if (!permissions.canThis(user.role, 'tickets:update')) {
+      winston.warn('User ' + user.username + ' attempted to add time entry without permission')
+      return
+    }
 
     try {
       let ticket = await ticketSchema.getTicketById(ticketId)
@@ -460,7 +474,14 @@ events.onUpdateTimeEntry = socket => {
     const timeEntryId = data.timeEntryId
     const hours = data.hours
     const description = data.description
-    const ownerId = socket.request.user._id
+    const user = socket.request.user
+    const ownerId = user._id
+
+    // Permission check
+    if (!permissions.canThis(user.role, 'tickets:update')) {
+      winston.warn('User ' + user.username + ' attempted to update time entry without permission')
+      return
+    }
 
     try {
       let ticket = await ticketSchema.getTicketById(ticketId)
@@ -483,7 +504,14 @@ events.onDeleteTimeEntry = socket => {
   socket.on(socketEvents.TICKETS_TIMEENTRY_DELETE, async data => {
     const ticketId = data._id
     const timeEntryId = data.timeEntryId
-    const ownerId = socket.request.user._id
+    const user = socket.request.user
+    const ownerId = user._id
+
+    // Permission check
+    if (!permissions.canThis(user.role, 'tickets:update')) {
+      winston.warn('User ' + user.username + ' attempted to delete time entry without permission')
+      return
+    }
 
     try {
       let ticket = await ticketSchema.getTicketById(ticketId)
