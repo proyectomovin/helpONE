@@ -20,7 +20,8 @@ import {
   FETCH_DASHBOARD_OVERDUE_TICKETS,
   FETCH_DASHBOARD_TOP_GROUPS,
   FETCH_DASHBOARD_TOP_TAGS,
-  FETCH_DASHBOARD_TIMETRACKING_STATS
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 const initialState = {
@@ -51,7 +52,10 @@ const initialState = {
     percentageComplete: 0,
     ticketsWithTracking: 0,
     topConsultants: List([])
-  })
+  }),
+
+  loadingTimeTrackingByGroup: false,
+  timeTrackingByGroup: List([])
 }
 
 const reducer = handleActions(
@@ -149,6 +153,21 @@ const reducer = handleActions(
         ...state,
         loadingTimeTrackingStats: false,
         timeTrackingStats: fromJS(action.response.stats)
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.PENDING]: state => {
+      return {
+        ...state,
+        loadingTimeTrackingByGroup: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        loadingTimeTrackingByGroup: false,
+        timeTrackingByGroup: fromJS(action.response.groups)
       }
     }
   },

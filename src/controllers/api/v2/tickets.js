@@ -446,4 +446,75 @@ ticketsV2.getTimeTrackingStats = async (req, res) => {
   }
 }
 
+// Time Tracking Stats By Group
+ticketsV2.getTimeTrackingStatsByGroup = async (req, res) => {
+  try {
+    const timespan = parseInt(req.params.timespan) || 30
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - timespan)
+
+    // Get all tickets with time tracking data in the timespan
+    const tickets = await Models.Ticket.find({
+      $or: [
+        { estimatedHours: { $exists: true, $gt: 0 } },
+        { 'timeEntries.0': { $exists: true } }
+      ],
+      date: { $gte: startDate },
+      deleted: false
+    }).populate('timeEntries.owner', 'fullname email image')
+      .populate('group', 'name')
+
+    // Calculate statistics grouped by group
+    const groupStats = {}
+
+    tickets.forEach(ticket => {
+      if (ticket.estimatedHours > 0 || (ticket.timeEntries && ticket.timeEntries.length > 0)) {
+        const groupId = ticket.group ? ticket.group._id.toString() : 'unassigned'
+        const groupName = ticket.group ? ticket.group.name : 'Sin Grupo'
+
+        if (!groupStats[groupId]) {
+          groupStats[groupId] = {
+            groupId,
+            groupName,
+            totalEstimated: 0,
+            totalConsumed: 0,
+            ticketCount: 0
+          }
+        }
+
+        groupStats[groupId].ticketCount++
+
+        if (ticket.estimatedHours) {
+          groupStats[groupId].totalEstimated += ticket.estimatedHours
+        }
+
+        if (ticket.timeEntries && ticket.timeEntries.length > 0) {
+          ticket.timeEntries.forEach(entry => {
+            if (!entry.deleted) {
+              groupStats[groupId].totalConsumed += entry.hours
+            }
+          })
+        }
+      }
+    })
+
+    // Format and sort groups by total consumed hours
+    const groupsArray = Object.values(groupStats).map(group => ({
+      groupId: group.groupId,
+      groupName: group.groupName,
+      totalEstimated: Math.round(group.totalEstimated * 10) / 10,
+      totalConsumed: Math.round(group.totalConsumed * 10) / 10,
+      percentageComplete: group.totalEstimated > 0
+        ? Math.round((group.totalConsumed / group.totalEstimated) * 100)
+        : 0,
+      ticketCount: group.ticketCount
+    })).sort((a, b) => b.totalConsumed - a.totalConsumed)
+
+    return res.json({ success: true, groups: groupsArray, timespan })
+  } catch (error) {
+    logger.error('Error getting time tracking stats by group:', error)
+    return apiUtils.sendApiError(res, 500, error.message)
+  }
+}
+
 module.exports = ticketsV2
