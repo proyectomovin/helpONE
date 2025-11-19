@@ -97,6 +97,23 @@ module.exports = function (middleware, router, controllers) {
     apiCtrl.tickets.removeAttachment
   )
 
+  // Products
+  router.get('/api/v1/products', apiv1, apiCtrl.products.get)
+  router.get('/api/v1/products/enabled', apiv1, apiCtrl.products.getEnabled)
+  router.get('/api/v1/products/:id', apiv1, apiCtrl.products.getSingle)
+  router.post('/api/v1/products', apiv1, isAdmin, apiCtrl.products.create)
+  router.put('/api/v1/products/:id', apiv1, isAdmin, apiCtrl.products.update)
+  router.delete('/api/v1/products/:id', apiv1, isAdmin, apiCtrl.products.delete)
+
+  // Modules
+  router.get('/api/v1/modules', apiv1, apiCtrl.modules.get)
+  router.get('/api/v1/modules/enabled', apiv1, apiCtrl.modules.getEnabled)
+  router.get('/api/v1/modules/product/:productId', apiv1, apiCtrl.modules.getByProduct)
+  router.get('/api/v1/modules/:id', apiv1, apiCtrl.modules.getSingle)
+  router.post('/api/v1/modules', apiv1, isAdmin, apiCtrl.modules.create)
+  router.put('/api/v1/modules/:id', apiv1, isAdmin, apiCtrl.modules.update)
+  router.delete('/api/v1/modules/:id', apiv1, isAdmin, apiCtrl.modules.delete)
+
   // Tags
   router.get('/api/v1/count/tags', middleware.api, function (req, res) {
     const tagSchema = require('../../../models/tag')

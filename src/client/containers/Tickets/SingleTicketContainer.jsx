@@ -566,7 +566,12 @@ class SingleTicketContainer extends React.Component {
                                 type='checkbox'
                                 checked={this.ticket.billable}
                                 onChange={(e) => {
-                                  this.ticket.billable = e.target.checked
+                                  const newValue = e.target.checked
+                                  this.ticket.billable = newValue
+                                  this.props.socket.emit('$trudesk:tickets:billable:set', {
+                                    _id: this.ticket._id,
+                                    value: newValue
+                                  })
                                 }}
                                 style={{ marginRight: 5 }}
                               />
