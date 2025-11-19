@@ -247,10 +247,14 @@ AutomationRuleFormModal.propTypes = {
   statuses: PropTypes.object
 }
 
-const mapStateToProps = state => ({
-  roles: state.shared.roles,
-  statuses: state.shared.statuses
-})
+const mapStateToProps = (state, ownProps) => {
+  const { ruleId } = ownProps
+  return {
+    roles: state.shared.roles,
+    statuses: state.shared.statuses,
+    rule: ruleId ? state.automationRulesState.byId.get(ruleId) : null
+  }
+}
 
 export default connect(mapStateToProps, {
   createAutomationRule,
