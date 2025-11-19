@@ -48,6 +48,8 @@ import PrivacyPolicyModal from 'containers/Modals/PrivacyPolicyModal'
 import WebhookFormModal from 'containers/Settings/Webhooks/WebhookFormModal'
 import DeleteWebhookModal from 'containers/Settings/Webhooks/DeleteWebhookModal'
 import TestWebhookModal from 'containers/Settings/Webhooks/TestWebhookModal'
+import AutomationRuleFormModal from 'containers/Settings/AutomationRules/AutomationRuleFormModal'
+import DeleteAutomationRuleModal from 'containers/Settings/AutomationRules/DeleteAutomationRuleModal'
 
 const MODAL_COMPONENTS = {
   NOTICE_ALERT: NoticeAlertModal,
@@ -81,7 +83,10 @@ const MODAL_COMPONENTS = {
   CREATE_WEBHOOK: WebhookFormModal,
   EDIT_WEBHOOK: WebhookFormModal,
   TEST_WEBHOOK: TestWebhookModal,
-  DELETE_WEBHOOK: DeleteWebhookModal
+  DELETE_WEBHOOK: DeleteWebhookModal,
+  CREATE_AUTOMATION_RULE_MODAL: AutomationRuleFormModal,
+  EDIT_AUTOMATION_RULE_MODAL: AutomationRuleFormModal,
+  DELETE_AUTOMATION_RULE_MODAL: DeleteAutomationRuleModal
 }
 
 const ModalRoot = ({ modalType, modalProps }) => {

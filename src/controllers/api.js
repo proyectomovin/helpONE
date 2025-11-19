@@ -42,6 +42,7 @@ apiController.v1.reports = apiReportsV1
 apiController.v1.settings = apiSettingsV1
 apiController.v1.plugins = apiPluginsV1
 apiController.v1.roles = require('./api/v1/roles')
+apiController.v1.automationRules = require('./api/v1/ticketStatusAutomationRules')
 apiController.v1.webhooks = apiWebhooksV1
 
 apiController.v2 = {}

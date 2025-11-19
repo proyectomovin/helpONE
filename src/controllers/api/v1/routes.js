@@ -62,6 +62,22 @@ module.exports = function (middleware, router, controllers) {
   router.put('/api/v1/tickets/status/:id', apiv1, isAdmin, apiCtrl.tickets.updateStatus)
   router.post('/api/v1/tickets/status/:id/delete', apiv1, isAdmin, apiCtrl.tickets.deleteStatus)
 
+  // Ticket Status Automation Rules
+  router.get('/api/v1/automation-rules', apiv1, isAdmin, apiCtrl.automationRules.get)
+  router.get('/api/v1/automation-rules/active', apiv1, isAdmin, apiCtrl.automationRules.getActive)
+  router.get('/api/v1/automation-rules/events', apiv1, isAdmin, apiCtrl.automationRules.getEvents)
+  router.get('/api/v1/automation-rules/:id', apiv1, isAdmin, apiCtrl.automationRules.getById)
+  router.post('/api/v1/automation-rules/create', apiv1, isAdmin, apiCtrl.automationRules.create)
+  router.put('/api/v1/automation-rules/:id', apiv1, isAdmin, apiCtrl.automationRules.update)
+  router.put('/api/v1/automation-rules/:id/toggle', apiv1, isAdmin, apiCtrl.automationRules.toggle)
+  router.delete('/api/v1/automation-rules/:id', apiv1, isAdmin, apiCtrl.automationRules.delete)
+  router.get(
+    '/api/v1/automation-rules/match/:event/:roleId',
+    apiv1,
+    isAdmin,
+    apiCtrl.automationRules.findMatching
+  )
+
   router.get('/api/v1/tickets/overdue', apiv1, canUser('tickets:view'), apiCtrl.tickets.getOverdue)
   router.post('/api/v1/tickets/addcomment', apiv1, canUser('comments:create'), apiCtrl.tickets.postComment)
   router.post('/api/v1/tickets/addnote', apiv1, canUser('tickets:notes'), apiCtrl.tickets.postInternalNote)
