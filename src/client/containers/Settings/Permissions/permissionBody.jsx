@@ -25,6 +25,7 @@ import Button from 'components/Button'
 import SettingItem from 'components/Settings/SettingItem'
 import EnableSwitch from 'components/Settings/EnableSwitch'
 import PermissionGroupPartial from './permissionGroupPartial'
+import { t } from 'helpers/i18n'
 
 import helpers from 'lib/helpers'
 
@@ -109,21 +110,21 @@ class PermissionBody extends React.Component {
 
   static mapTicketSpecials () {
     return [
-      { title: 'Print', perm: 'print' },
-      { title: 'Notes', perm: 'notes' },
-      { title: 'Manage Public Tickets', perm: 'public' },
-      { title: 'Can View All Tickets in Assigned Groups', perm: 'viewall' }
+      { title: t('settingsPermissions.print'), perm: 'print' },
+      { title: t('settingsPermissions.notes'), perm: 'notes' },
+      { title: t('settingsPermissions.managePublicTickets'), perm: 'public' },
+      { title: t('settingsPermissions.viewAllTicketsInGroups'), perm: 'viewall' }
     ]
   }
 
   static mapAccountSpecials () {
-    return [{ title: 'Import', perm: 'import' }]
+    return [{ title: t('settingsPermissions.import'), perm: 'import' }]
   }
 
   static mapNoticeSpecials () {
     return [
-      { title: 'Activate', perm: 'activate' },
-      { title: 'Deactivate', perm: 'deactivate' }
+      { title: t('settingsPermissions.activate'), perm: 'activate' },
+      { title: t('settingsPermissions.deactivate'), perm: 'deactivate' }
     ]
   }
 
@@ -174,38 +175,38 @@ class PermissionBody extends React.Component {
       <div>
         <form onSubmit={e => this.onSubmit(e)}>
           <SettingItem
-            title={'Admin'}
-            tooltip={'Role is considered an admin. Enabling management of the trudesk instance.'}
-            subtitle={'Is this role defined as an admin role?'}
+            title={t('settingsPermissions.admin')}
+            tooltip={t('settingsPermissions.adminTooltip')}
+            subtitle={t('settingsPermissions.adminSubtitle')}
             component={
               <EnableSwitch
                 stateName={'isAdmin_' + this.props.role.get('_id')}
-                label={'Enable'}
+                label={t('actions.enable')}
                 checked={this.isAdmin}
                 onChange={e => this.onEnableSwitchChanged(e, 'isAdmin')}
               />
             }
           />
           <SettingItem
-            title={'Support Agent'}
-            subtitle={'Is this role defined as an agent role?'}
-            tooltip={'Role is considered an agent role. Enabling agent views and displaying in agent lists.'}
+            title={t('settingsPermissions.supportAgent')}
+            subtitle={t('settingsPermissions.supportAgentSubtitle')}
+            tooltip={t('settingsPermissions.supportAgentTooltip')}
             component={
               <EnableSwitch
                 stateName={'isAgent_' + this.props.role.get('_id')}
-                label={'Enable'}
+                label={t('actions.enable')}
                 checked={this.isAgent}
                 onChange={e => this.onEnableSwitchChanged(e, 'isAgent')}
               />
             }
           />
           <SettingItem
-            title={'Enable Hierarchy'}
-            subtitle={'Allow this role to manage resources owned by roles defined under it.'}
+            title={t('settingsPermissions.enableHierarchy')}
+            subtitle={t('settingsPermissions.enableHierarchySubtitle')}
             component={
               <EnableSwitch
                 stateName={'hasHierarchy_' + this.props.role.get('_id')}
-                label={'Enable'}
+                label={t('actions.enable')}
                 checked={this.hasHierarchy}
                 onChange={e => this.onEnableSwitchChanged(e, 'hasHierarchy')}
               />
@@ -213,74 +214,74 @@ class PermissionBody extends React.Component {
           />
           <PermissionGroupPartial
             ref={i => (this.ticketPermGroup = i)}
-            title={'Tickets'}
+            title={t('settingsPermissions.tickets')}
             role={this.props.role}
             grants={this.ticketGrants}
             roleSpecials={PermissionBody.mapTicketSpecials()}
-            subtitle={'Ticket Permissions'}
+            subtitle={t('settingsPermissions.ticketsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.commentPermGroup = i)}
-            title={'Comments'}
+            title={t('settingsPermissions.comments')}
             role={this.props.role}
             grants={this.commentGrants}
-            subtitle={'Ticket Comments Permissions'}
+            subtitle={t('settingsPermissions.commentsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.accountPermGroup = i)}
-            title={'Accounts'}
+            title={t('settingsPermissions.accounts')}
             role={this.props.role}
             roleSpecials={PermissionBody.mapAccountSpecials()}
             grants={this.accountGrants}
-            subtitle={'Account Permissions'}
+            subtitle={t('settingsPermissions.accountsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.groupPermGroup = i)}
-            title={'Groups'}
+            title={t('settingsPermissions.groups')}
             role={this.props.role}
             grants={this.groupGrants}
-            subtitle={'Group Permissions'}
+            subtitle={t('settingsPermissions.groupsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.teamPermGroup = i)}
-            title={'Teams'}
+            title={t('settingsPermissions.teams')}
             role={this.props.role}
             grants={this.teamGrants}
-            subtitle={'Team Permissions'}
+            subtitle={t('settingsPermissions.teamsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.departmentPermGroup = i)}
-            title={'Departments'}
+            title={t('settingsPermissions.departments')}
             role={this.props.role}
             grants={this.departmentGrants}
-            subtitle={'Department Permissions'}
+            subtitle={t('settingsPermissions.departmentsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.reportPermGroup = i)}
-            title={'Reports'}
+            title={t('settingsPermissions.reports')}
             role={this.props.role}
             grants={this.reportGrants}
-            subtitle={'Report Permissions'}
+            subtitle={t('settingsPermissions.reportsSubtitle')}
           />
           <PermissionGroupPartial
             ref={i => (this.noticePermGroup = i)}
-            title={'Notices'}
+            title={t('settingsPermissions.notices')}
             role={this.props.role}
             grants={this.noticeGrants}
             roleSpecials={PermissionBody.mapNoticeSpecials()}
-            subtitle={'Notice Permissions'}
+            subtitle={t('settingsPermissions.noticesSubtitle')}
           />
           <div className={'uk-margin-large-bottom'}>
-            <h2 className='text-light'>Danger Zone</h2>
+            <h2 className='text-light'>{t('settingsPermissions.dangerZone')}</h2>
             <div className='danger-zone'>
               <div className='dz-box uk-clearfix'>
                 <div className='uk-float-left'>
-                  <h5>Delete this permission role?</h5>
-                  <p>Once you delete a permission role, there is no going back. Please be certain.</p>
+                  <h5>{t('settingsPermissions.deleteRole')}</h5>
+                  <p>{t('settingsPermissions.deleteRoleWarning')}</p>
                 </div>
                 <div className='uk-float-right' style={{ paddingTop: '10px' }}>
                   <Button
-                    text={'Delete'}
+                    text={t('actions.delete')}
                     small={true}
                     style={'danger'}
                     onClick={e => this.showDeletePermissionRole(e)}
@@ -293,7 +294,7 @@ class PermissionBody extends React.Component {
           <div>
             <div className='box uk-clearfix'>
               <div className='uk-float-right' style={{ paddingTop: '10px' }}>
-                <Button type={'submit'} style={'success'} waves={true} text={'Save Permissions'} />
+                <Button type={'submit'} style={'success'} waves={true} text={t('settingsPermissions.savePermissions')} />
               </div>
             </div>
           </div>
