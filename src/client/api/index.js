@@ -44,6 +44,30 @@ api.dashboard.getOverdueTickets = () => {
     return res.data
   })
 }
+api.dashboard.getTopTypes = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v1/tickets/count/toptypes/${timespan}/10`).then(res => {
+    return res.data
+  })
+}
+api.dashboard.getTopAssignees = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v1/tickets/count/topassignees/${timespan}/10`).then(res => {
+    return res.data
+  })
+}
+api.dashboard.getTopPriorities = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v1/tickets/count/toppriorities/${timespan}/10`).then(res => {
+    return res.data
+  })
+}
+api.dashboard.getTopOwners = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v1/tickets/count/topowners/${timespan}/10`).then(res => {
+    return res.data
+  })
+}
 
 api.tickets = {}
 api.tickets.getWithPage = payload => {

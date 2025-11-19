@@ -10,7 +10,11 @@ import {
   fetchDashboardData,
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
-  fetchDashboardOverdueTickets
+  fetchDashboardOverdueTickets,
+  fetchDashboardTopTypes,
+  fetchDashboardTopAssignees,
+  fetchDashboardTopPriorities,
+  fetchDashboardTopOwners
 } from 'actions/dashboard'
 
 import Grid from 'components/Grid'
@@ -44,6 +48,10 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardTopGroups({ timespan: this.timespan })
     this.props.fetchDashboardTopTags({ timespan: this.timespan })
     this.props.fetchDashboardOverdueTickets()
+    this.props.fetchDashboardTopTypes({ timespan: this.timespan })
+    this.props.fetchDashboardTopAssignees({ timespan: this.timespan })
+    this.props.fetchDashboardTopPriorities({ timespan: this.timespan })
+    this.props.fetchDashboardTopOwners({ timespan: this.timespan })
   }
 
   onTimespanChange = e => {
@@ -52,6 +60,10 @@ class DashboardContainer extends React.Component {
     this.props.fetchDashboardData({ timespan: e.target.value })
     this.props.fetchDashboardTopGroups({ timespan: e.target.value })
     this.props.fetchDashboardTopTags({ timespan: e.target.value })
+    this.props.fetchDashboardTopTypes({ timespan: e.target.value })
+    this.props.fetchDashboardTopAssignees({ timespan: e.target.value })
+    this.props.fetchDashboardTopPriorities({ timespan: e.target.value })
+    this.props.fetchDashboardTopOwners({ timespan: e.target.value })
   }
 
   render () {
@@ -323,6 +335,77 @@ class DashboardContainer extends React.Component {
                 }
               />
             </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTopTypes}
+                animateLoader={true}
+                style={{ minHeight: 256 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Tickets por Tipo</h6>
+                  </div>
+                }
+                content={
+                  <div>
+                    <D3Pie data={this.props.dashboardState.topTypes.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTopAssignees}
+                animateLoader={true}
+                animateDelay={200}
+                style={{ minHeight: 256 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Tickets por Consultor</h6>
+                  </div>
+                }
+                content={
+                  <div>
+                    <D3Pie type={'donut'} data={this.props.dashboardState.topAssignees.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTopPriorities}
+                animateLoader={true}
+                animateDelay={400}
+                style={{ minHeight: 256 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Tickets por Prioridad</h6>
+                  </div>
+                }
+                content={
+                  <div>
+                    <D3Pie data={this.props.dashboardState.topPriorities.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
+            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+              <TruCard
+                loaderActive={this.props.dashboardState.loadingTopOwners}
+                animateLoader={true}
+                animateDelay={600}
+                style={{ minHeight: 256 }}
+                header={
+                  <div className='uk-text-left'>
+                    <h6 style={{ padding: 15, margin: 0, fontSize: '14px' }}>Tickets por Cliente</h6>
+                  </div>
+                }
+                content={
+                  <div>
+                    <D3Pie type={'donut'} data={this.props.dashboardState.topOwners.toJS()} />
+                  </div>
+                }
+              />
+            </GridItem>
           </Grid>
         </PageContent>
       </div>
@@ -335,6 +418,10 @@ DashboardContainer.propTypes = {
   fetchDashboardTopGroups: PropTypes.func.isRequired,
   fetchDashboardTopTags: PropTypes.func.isRequired,
   fetchDashboardOverdueTickets: PropTypes.func.isRequired,
+  fetchDashboardTopTypes: PropTypes.func.isRequired,
+  fetchDashboardTopAssignees: PropTypes.func.isRequired,
+  fetchDashboardTopPriorities: PropTypes.func.isRequired,
+  fetchDashboardTopOwners: PropTypes.func.isRequired,
   dashboardState: PropTypes.object.isRequired
 }
 
@@ -346,5 +433,9 @@ export default connect(mapStateToProps, {
   fetchDashboardData,
   fetchDashboardTopGroups,
   fetchDashboardTopTags,
-  fetchDashboardOverdueTickets
+  fetchDashboardOverdueTickets,
+  fetchDashboardTopTypes,
+  fetchDashboardTopAssignees,
+  fetchDashboardTopPriorities,
+  fetchDashboardTopOwners
 })(DashboardContainer)
