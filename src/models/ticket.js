@@ -1641,6 +1641,403 @@ ticketSchema.statics.getTopTicketGroups = function (timespan, top, callback) {
   )
 }
 
+/**
+ * Gets count of X Top Ticket Types
+ *
+ * @memberof Ticket
+ * @static
+ * @method getTopTicketTypes
+ *
+ * @param {Number} timespan Timespan to get the top types (default: 9999)
+ * @param {Number} top Top number of Types to return (default: 10)
+ * @param {function} callback MongoDB Query Callback
+ */
+ticketSchema.statics.getTopTicketTypes = function (timespan, top, callback) {
+  if (_.isUndefined(timespan) || _.isNaN(timespan) || timespan === 0) timespan = -1
+  if (_.isUndefined(top) || _.isNaN(top)) top = 10
+
+  const self = this
+
+  const today = moment
+    .utc()
+    .hour(23)
+    .minute(59)
+    .second(59)
+  const tsDate = today.clone().subtract(timespan, 'd')
+  let query = {
+    date: { $gte: tsDate.toDate(), $lte: today.toDate() },
+    deleted: false
+  }
+  if (timespan === -1) {
+    query = { deleted: false }
+  }
+
+  const q = self
+    .model(COLLECTION)
+    .find(query)
+    .select('type')
+    .populate('type', 'name')
+    .lean()
+
+  let topCount = []
+  const ticketsDb = []
+
+  async.waterfall(
+    [
+      function (next) {
+        q.exec(function (err, t) {
+          if (err) return next(err)
+
+          const arr = []
+
+          for (let i = 0; i < t.length; i++) {
+            const ticket = t[i]
+            if (ticket.type) {
+              ticketsDb.push({
+                ticketId: ticket._id,
+                typeId: ticket.type._id
+              })
+              const o = {}
+              o._id = ticket.type._id
+              o.name = ticket.type.name
+
+              if (!_.filter(arr, { name: o.name }).length) {
+                arr.push(o)
+              }
+            }
+          }
+
+          return next(null, _.uniq(arr))
+        })
+      },
+      function (types, next) {
+        for (let g = 0; g < types.length; g++) {
+          const tickets = []
+          const type = types[g]
+          for (let i = 0; i < ticketsDb.length; i++) {
+            if (ticketsDb[i].typeId.toString() === type._id.toString()) {
+              tickets.push(ticketsDb[i])
+            }
+          }
+
+          topCount.push({ name: type.name, count: tickets.length })
+        }
+
+        topCount = _.sortBy(topCount, function (o) {
+          return -o.count
+        })
+
+        topCount = topCount.slice(0, top)
+
+        return next(null, topCount)
+      }
+    ],
+    function (err, result) {
+      if (err) return callback(err, null)
+
+      return callback(null, result)
+    }
+  )
+}
+
+/**
+ * Gets count of X Top Assignees
+ *
+ * @memberof Ticket
+ * @static
+ * @method getTopAssignees
+ *
+ * @param {Number} timespan Timespan to get the top assignees (default: 9999)
+ * @param {Number} top Top number of Assignees to return (default: 10)
+ * @param {function} callback MongoDB Query Callback
+ */
+ticketSchema.statics.getTopAssignees = function (timespan, top, callback) {
+  if (_.isUndefined(timespan) || _.isNaN(timespan) || timespan === 0) timespan = -1
+  if (_.isUndefined(top) || _.isNaN(top)) top = 10
+
+  const self = this
+
+  const today = moment
+    .utc()
+    .hour(23)
+    .minute(59)
+    .second(59)
+  const tsDate = today.clone().subtract(timespan, 'd')
+  let query = {
+    date: { $gte: tsDate.toDate(), $lte: today.toDate() },
+    deleted: false,
+    assignee: { $ne: null }
+  }
+  if (timespan === -1) {
+    query = { deleted: false, assignee: { $ne: null } }
+  }
+
+  const q = self
+    .model(COLLECTION)
+    .find(query)
+    .select('assignee')
+    .populate('assignee', 'fullname')
+    .lean()
+
+  let topCount = []
+  const ticketsDb = []
+
+  async.waterfall(
+    [
+      function (next) {
+        q.exec(function (err, t) {
+          if (err) return next(err)
+
+          const arr = []
+
+          for (let i = 0; i < t.length; i++) {
+            const ticket = t[i]
+            if (ticket.assignee) {
+              ticketsDb.push({
+                ticketId: ticket._id,
+                assigneeId: ticket.assignee._id
+              })
+              const o = {}
+              o._id = ticket.assignee._id
+              o.name = ticket.assignee.fullname
+
+              if (!_.filter(arr, { name: o.name }).length) {
+                arr.push(o)
+              }
+            }
+          }
+
+          return next(null, _.uniq(arr))
+        })
+      },
+      function (assignees, next) {
+        for (let g = 0; g < assignees.length; g++) {
+          const tickets = []
+          const assignee = assignees[g]
+          for (let i = 0; i < ticketsDb.length; i++) {
+            if (ticketsDb[i].assigneeId.toString() === assignee._id.toString()) {
+              tickets.push(ticketsDb[i])
+            }
+          }
+
+          topCount.push({ name: assignee.name, count: tickets.length })
+        }
+
+        topCount = _.sortBy(topCount, function (o) {
+          return -o.count
+        })
+
+        topCount = topCount.slice(0, top)
+
+        return next(null, topCount)
+      }
+    ],
+    function (err, result) {
+      if (err) return callback(err, null)
+
+      return callback(null, result)
+    }
+  )
+}
+
+/**
+ * Gets count of X Top Priorities
+ *
+ * @memberof Ticket
+ * @static
+ * @method getTopPriorities
+ *
+ * @param {Number} timespan Timespan to get the top priorities (default: 9999)
+ * @param {Number} top Top number of Priorities to return (default: 10)
+ * @param {function} callback MongoDB Query Callback
+ */
+ticketSchema.statics.getTopPriorities = function (timespan, top, callback) {
+  if (_.isUndefined(timespan) || _.isNaN(timespan) || timespan === 0) timespan = -1
+  if (_.isUndefined(top) || _.isNaN(top)) top = 10
+
+  const self = this
+
+  const today = moment
+    .utc()
+    .hour(23)
+    .minute(59)
+    .second(59)
+  const tsDate = today.clone().subtract(timespan, 'd')
+  let query = {
+    date: { $gte: tsDate.toDate(), $lte: today.toDate() },
+    deleted: false
+  }
+  if (timespan === -1) {
+    query = { deleted: false }
+  }
+
+  const q = self
+    .model(COLLECTION)
+    .find(query)
+    .select('priority')
+    .populate('priority', 'name')
+    .lean()
+
+  let topCount = []
+  const ticketsDb = []
+
+  async.waterfall(
+    [
+      function (next) {
+        q.exec(function (err, t) {
+          if (err) return next(err)
+
+          const arr = []
+
+          for (let i = 0; i < t.length; i++) {
+            const ticket = t[i]
+            if (ticket.priority) {
+              ticketsDb.push({
+                ticketId: ticket._id,
+                priorityId: ticket.priority._id
+              })
+              const o = {}
+              o._id = ticket.priority._id
+              o.name = ticket.priority.name
+
+              if (!_.filter(arr, { name: o.name }).length) {
+                arr.push(o)
+              }
+            }
+          }
+
+          return next(null, _.uniq(arr))
+        })
+      },
+      function (priorities, next) {
+        for (let g = 0; g < priorities.length; g++) {
+          const tickets = []
+          const priority = priorities[g]
+          for (let i = 0; i < ticketsDb.length; i++) {
+            if (ticketsDb[i].priorityId.toString() === priority._id.toString()) {
+              tickets.push(ticketsDb[i])
+            }
+          }
+
+          topCount.push({ name: priority.name, count: tickets.length })
+        }
+
+        topCount = _.sortBy(topCount, function (o) {
+          return -o.count
+        })
+
+        topCount = topCount.slice(0, top)
+
+        return next(null, topCount)
+      }
+    ],
+    function (err, result) {
+      if (err) return callback(err, null)
+
+      return callback(null, result)
+    }
+  )
+}
+
+/**
+ * Gets count of X Top Owners (Clients)
+ *
+ * @memberof Ticket
+ * @static
+ * @method getTopOwners
+ *
+ * @param {Number} timespan Timespan to get the top owners (default: 9999)
+ * @param {Number} top Top number of Owners to return (default: 10)
+ * @param {function} callback MongoDB Query Callback
+ */
+ticketSchema.statics.getTopOwners = function (timespan, top, callback) {
+  if (_.isUndefined(timespan) || _.isNaN(timespan) || timespan === 0) timespan = -1
+  if (_.isUndefined(top) || _.isNaN(top)) top = 10
+
+  const self = this
+
+  const today = moment
+    .utc()
+    .hour(23)
+    .minute(59)
+    .second(59)
+  const tsDate = today.clone().subtract(timespan, 'd')
+  let query = {
+    date: { $gte: tsDate.toDate(), $lte: today.toDate() },
+    deleted: false
+  }
+  if (timespan === -1) {
+    query = { deleted: false }
+  }
+
+  const q = self
+    .model(COLLECTION)
+    .find(query)
+    .select('owner')
+    .populate('owner', 'fullname')
+    .lean()
+
+  let topCount = []
+  const ticketsDb = []
+
+  async.waterfall(
+    [
+      function (next) {
+        q.exec(function (err, t) {
+          if (err) return next(err)
+
+          const arr = []
+
+          for (let i = 0; i < t.length; i++) {
+            const ticket = t[i]
+            if (ticket.owner) {
+              ticketsDb.push({
+                ticketId: ticket._id,
+                ownerId: ticket.owner._id
+              })
+              const o = {}
+              o._id = ticket.owner._id
+              o.name = ticket.owner.fullname
+
+              if (!_.filter(arr, { name: o.name }).length) {
+                arr.push(o)
+              }
+            }
+          }
+
+          return next(null, _.uniq(arr))
+        })
+      },
+      function (owners, next) {
+        for (let g = 0; g < owners.length; g++) {
+          const tickets = []
+          const owner = owners[g]
+          for (let i = 0; i < ticketsDb.length; i++) {
+            if (ticketsDb[i].ownerId.toString() === owner._id.toString()) {
+              tickets.push(ticketsDb[i])
+            }
+          }
+
+          topCount.push({ name: owner.name, count: tickets.length })
+        }
+
+        topCount = _.sortBy(topCount, function (o) {
+          return -o.count
+        })
+
+        topCount = topCount.slice(0, top)
+
+        return next(null, topCount)
+      }
+    ],
+    function (err, result) {
+      if (err) return callback(err, null)
+
+      return callback(null, result)
+    }
+  )
+}
+
 ticketSchema.statics.getTagCount = function (tagId, callback) {
   if (_.isUndefined(tagId)) return callback('Invalid Tag Id - TicketSchema.GetTagCount()', null)
 
