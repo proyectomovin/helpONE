@@ -100,11 +100,6 @@ function * fetchDashboardTopTypes ({ payload }) {
   try {
     const response = yield call(api.dashboard.getTopTypes, payload)
     yield put({ type: FETCH_DASHBOARD_TOP_TYPES.SUCCESS, response })
-function * fetchDashboardTimeTrackingStats ({ payload }) {
-  yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING })
-  try {
-    const response = yield call(api.dashboard.getTimeTrackingStats, payload)
-    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.SUCCESS, response })
   } catch (error) {
     const errorText = error.response ? error.response.data.error : error
     if (error.response && error.response.status !== (401 || 403)) {
@@ -121,6 +116,29 @@ function * fetchDashboardTopAssignees ({ payload }) {
   try {
     const response = yield call(api.dashboard.getTopAssignees, payload)
     yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.ERROR, error })
+  }
+}
+
+function * fetchDashboardTimeTrackingStats ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTimeTrackingStats, payload)
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
     yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.ERROR, error })
   }
 }
@@ -137,7 +155,7 @@ function * fetchDashboardTimeTrackingByGroup ({ payload }) {
       helpers.UI.showSnackbar(`Error: ${errorText}`, true)
     }
 
-    yield put({ type: FETCH_DASHBOARD_TOP_ASSIGNEES.ERROR, error })
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ERROR, error })
   }
 }
 
