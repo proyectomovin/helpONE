@@ -536,6 +536,38 @@ class SingleTicketContainer extends React.Component {
                               ))}
                           </div>
                         </div>
+
+                        {/* Producto */}
+                        <div className='uk-width-1-1 nopadding'>
+                          <span>Producto</span>
+                          <div className='input-box'>{this.ticket.product || '-'}</div>
+                        </div>
+
+                        {/* Módulo */}
+                        <div className='uk-width-1-1 nopadding'>
+                          <span>Módulo</span>
+                          <div className='input-box'>{this.ticket.module || '-'}</div>
+                        </div>
+
+                        {/* Solicitante */}
+                        <div className='uk-width-1-1 nopadding'>
+                          <span>Solicitante</span>
+                          <div className='input-box'>
+                            {this.ticket.requester ? this.ticket.requester.fullname : '-'}
+                          </div>
+                        </div>
+
+                        {/* Billable */}
+                        <div className='uk-width-1-1 nopadding'>
+                          <span>Es Facturable</span>
+                          <div className='input-box'>
+                            {this.ticket.billable ? (
+                              <span style={{ color: '#4CAF50' }}>✓ Sí</span>
+                            ) : (
+                              <span style={{ color: '#9E9E9E' }}>✗ No</span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
 

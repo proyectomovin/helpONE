@@ -18,6 +18,15 @@
                     {{/each}}
                 </select>
             </div>
+            <div class="uk-margin-medium-bottom">
+                <label for="requester" class="uk-form-label">Solicitante</label>
+                <select class="uk-form-width-full selectize" name="requester" id="requester" data-md-selectize-inline>
+                    <option value="">Seleccionar solicitante...</option>
+                    {{#each data.common.accounts}}
+                        <option value="{{{_id}}}">{{fullname}} ({{email}})</option>
+                    {{/each}}
+                </select>
+            </div>
             <div class="uk-margin-medium-bottom uk-clearfix">
                 <div class="uk-float-left" style="padding-right: 11px; width: 30%;">
                     <label for="type" class="uk-form-label">Type</label>
@@ -46,6 +55,25 @@
                 </div>
                 <div id="priority-wrapper" data-default-priorities="{{json data.common.defaultTicketType.priorities}}">
                 </div>
+            </div>
+
+            <div class="uk-margin-medium-bottom uk-clearfix">
+                <div class="uk-float-left" style="padding-right: 11px; width: 48%;">
+                    <label for="product" class="uk-form-label">Producto</label>
+                    <input type="text" class="md-input" id="product" name="product" placeholder="Ej: Sistema de Facturación" />
+                </div>
+
+                <div class="uk-float-left" style="width: 50%;">
+                    <label for="module" class="uk-form-label">Módulo</label>
+                    <input type="text" class="md-input" id="module" name="module" placeholder="Ej: Reportes" />
+                </div>
+            </div>
+
+            <div class="uk-margin-medium-bottom">
+                <label for="billable" class="uk-form-label">
+                    <input type="checkbox" id="billable" name="billable" value="true" class="uk-checkbox" />
+                    Es Facturable
+                </label>
             </div>
 
             <div class="uk-margin-medium-bottom">
