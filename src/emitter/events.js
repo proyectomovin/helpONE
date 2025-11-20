@@ -55,12 +55,25 @@ const automationEngine = require('../automation/ticketStatusRuleEngine')
 
   // Automation Rules - Ticket Comment Added
   emitter.on('ticket:comment:added', async function (ticket, comment, hostname) {
+    winston.info('AutomationRules: ticket:comment:added event received', {
+      ticketId: ticket?._id,
+      ticketUid: ticket?.uid,
+      commentId: comment?._id,
+      commentOwner: comment?.owner?.username || comment?.owner?._id
+    })
+
     if (ticket && comment && comment.owner) {
       try {
         await automationEngine.processAutomationRules('ticket_new_comment', ticket, comment.owner)
       } catch (err) {
         winston.error('Failed to process automation rules for ticket:comment:added', err)
       }
+    } else {
+      winston.warn('AutomationRules: Missing data in ticket:comment:added', {
+        hasTicket: !!ticket,
+        hasComment: !!comment,
+        hasCommentOwner: !!comment?.owner
+      })
     }
   })
 
