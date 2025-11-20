@@ -25,9 +25,10 @@ const PrioritySchema = require('../models/ticketpriority')
 const settingsDefaults = {}
 const roleDefaults = {}
 
-roleDefaults.userGrants = ['tickets:create view update', 'comments:create view update']
+roleDefaults.userGrants = ['tickets:create view update', 'tickets:timetracking:view', 'comments:create view update']
 roleDefaults.supportGrants = [
   'tickets:*',
+  'tickets:timetracking:*',
   'agent:*',
   'accounts:create update view import',
   'teams:create update view',
@@ -40,6 +41,7 @@ roleDefaults.adminGrants = [
   'agent:*',
   'chat:*',
   'tickets:*',
+  'tickets:timetracking:*',
   'accounts:*',
   'groups:*',
   'teams:*',
