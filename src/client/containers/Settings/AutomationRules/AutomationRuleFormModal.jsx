@@ -29,10 +29,10 @@ class AutomationRuleFormModal extends React.Component {
     helpers.formvalidator()
 
     // Cargar roles y estados si no están cargados
-    if (!this.props.roles || this.props.roles.size === 0) {
+    if (!this.props.roles || (this.props.roles.size !== undefined && this.props.roles.size === 0)) {
       this.props.fetchRoles()
     }
-    if (!this.props.statuses || this.props.statuses.size === 0) {
+    if (!this.props.statuses || (this.props.statuses.size !== undefined && this.props.statuses.size === 0)) {
       this.props.fetchTicketStatus()
     }
 
@@ -251,7 +251,7 @@ const mapStateToProps = (state, ownProps) => {
   const { ruleId } = ownProps
   return {
     roles: state.shared.roles,
-    statuses: state.shared.statuses,
+    statuses: state.ticketsState.ticketStatuses,
     rule: ruleId ? state.automationRulesState.byId.get(ruleId) : null
   }
 }
