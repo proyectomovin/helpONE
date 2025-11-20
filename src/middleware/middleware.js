@@ -221,6 +221,44 @@ middleware.canUser = function (action) {
   }
 }
 
+middleware.canUserTimeTracking = function (action) {
+  return function (req, res, next) {
+    if (!req.user) return res.status(401).json({ success: false, error: 'Not Authorized for this API call.' })
+
+    const permissions = require('../permissions')
+    const SettingsSchema = require('../models/setting')
+    const role = _.find(global.roles, { _id: req.user.role._id })
+
+    // Admin and Agent always have access
+    const isAdmin = role.grants.indexOf('admin:*') !== -1
+    const isAgent = role.grants.indexOf('agent:*') !== -1
+
+    if (isAdmin || isAgent) {
+      const perm = permissions.canThis(req.user.role, action)
+      if (perm) return next()
+      return res.status(401).json({ success: false, error: 'Not Authorized for this API call.' })
+    }
+
+    // For regular users, check the setting
+    SettingsSchema.getSettingByName('timetracking:users:enable', function (err, setting) {
+      if (err) {
+        return res.status(500).json({ success: false, error: 'Error checking time tracking settings.' })
+      }
+
+      const timeTrackingEnabled = setting ? setting.value : true
+
+      if (!timeTrackingEnabled) {
+        return res.status(401).json({ success: false, error: 'Time tracking is not enabled for your role.' })
+      }
+
+      const perm = permissions.canThis(req.user.role, action)
+      if (perm) return next()
+
+      return res.status(401).json({ success: false, error: 'Not Authorized for this API call.' })
+    })
+  }
+}
+
 middleware.isAdmin = function (req, res, next) {
   var roles = global.roles
   var role = _.find(roles, { _id: req.user.role._id })

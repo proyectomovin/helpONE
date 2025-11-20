@@ -741,6 +741,23 @@ function maintenanceModeDefault (callback) {
   })
 }
 
+function timeTrackingForUsersDefault (callback) {
+  SettingsSchema.getSettingByName('timetracking:users:enable', function (err, setting) {
+    if (err) return callback(err)
+    if (!setting) {
+      SettingsSchema.create(
+        {
+          name: 'timetracking:users:enable',
+          value: true
+        },
+        callback
+      )
+    } else {
+      return callback()
+    }
+  })
+}
+
 settingsDefaults.init = function (callback) {
   winston.debug('Checking Default Settings...')
   async.series(
@@ -789,6 +806,9 @@ settingsDefaults.init = function (callback) {
       },
       function (done) {
         return installationID(done)
+      },
+      function (done) {
+        return timeTrackingForUsersDefault(done)
       }
     ],
     function (err) {

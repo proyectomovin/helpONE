@@ -391,6 +391,16 @@ viewController.getData = function (request, cb) {
         })
       },
       function (callback) {
+        const SettingsSchema = require('../../models/setting')
+        SettingsSchema.getSettingByName('timetracking:users:enable', function (err, setting) {
+          if (err) return callback(err)
+
+          viewdata.timeTrackingUsersEnabled = setting ? setting.value : true
+
+          return callback()
+        })
+      },
+      function (callback) {
         viewController.getPluginsInfo(request, function (err, data) {
           if (err) return callback(err)
 
