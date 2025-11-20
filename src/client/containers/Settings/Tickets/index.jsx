@@ -44,6 +44,8 @@ import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import SpinLoader from 'components/SpinLoader'
 import EditStatusPartial from './editStatusPartial'
 import TicketStatusContainer from 'containers/Settings/Tickets/ticketStatusContainer'
+import ProductContainer from 'containers/Settings/Tickets/productContainer'
+import ModuleContainer from 'containers/Settings/Tickets/moduleContainer'
 
 class TicketsSettings extends React.Component {
   constructor (props) {
@@ -416,6 +418,10 @@ class TicketsSettings extends React.Component {
           </Zone>
         </SettingItem>
         <TicketStatusContainer statuses={this.getStatus()} />
+
+        <ProductContainer />
+
+        <ModuleContainer />
 
         {/*<SettingItem*/}
         {/*  title={'Ticket Status'}*/}

@@ -28,6 +28,14 @@ var COLLECTION = 'groups'
  * @property {String} name ```Required``` ```unique``` Name of Group
  * @property {Array} members Members in this group
  * @property {Array} sendMailTo Members to email when a new / updated ticket has triggered
+ * @property {Array} products Products associated with this group
+ * @property {Array} modules Modules associated with this group
+ * @property {String} rif Tax ID / RIF of the company
+ * @property {String} address Physical address of the company
+ * @property {String} phone Phone number of the company
+ * @property {String} email Email of the company
+ * @property {String} website Website of the company
+ * @property {String} contactPerson Primary contact person
  */
 var groupSchema = mongoose.Schema({
   name: { type: String, required: true, unique: true },
@@ -39,7 +47,15 @@ var groupSchema = mongoose.Schema({
     }
   ],
   sendMailTo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }],
-  public: { type: Boolean, required: true, default: false }
+  public: { type: Boolean, required: true, default: false },
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'products' }],
+  modules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'modules' }],
+  rif: { type: String },
+  address: { type: String },
+  phone: { type: String },
+  email: { type: String },
+  website: { type: String },
+  contactPerson: { type: String }
 })
 
 groupSchema.plugin(require('mongoose-autopopulate'))
