@@ -376,12 +376,23 @@ ticketsV2.getTimeTrackingStats = async (req, res) => {
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - timespan)
 
-    // Get all tickets with time tracking data in the timespan
+    // Get user's permitted groups
+    let groups = []
+    if (req.user.role.isAdmin || req.user.role.isAgent) {
+      const dbGroups = await Models.Department.getDepartmentGroupsOfUser(req.user._id)
+      groups = dbGroups.map(g => g._id)
+    } else {
+      groups = await Models.Group.getAllGroupsOfUser(req.user._id)
+    }
+    const mappedGroups = groups.map(g => g._id)
+
+    // Get all tickets with time tracking data in the timespan, filtered by user's groups
     const tickets = await Models.Ticket.find({
       $or: [
         { estimatedHours: { $exists: true, $gt: 0 } },
         { 'timeEntries.0': { $exists: true } }
       ],
+      group: { $in: mappedGroups },
       date: { $gte: startDate },
       deleted: false
     }).populate('timeEntries.owner', 'fullname email image')
@@ -453,12 +464,23 @@ ticketsV2.getTimeTrackingStatsByGroup = async (req, res) => {
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - timespan)
 
-    // Get all tickets with time tracking data in the timespan
+    // Get user's permitted groups
+    let groups = []
+    if (req.user.role.isAdmin || req.user.role.isAgent) {
+      const dbGroups = await Models.Department.getDepartmentGroupsOfUser(req.user._id)
+      groups = dbGroups.map(g => g._id)
+    } else {
+      groups = await Models.Group.getAllGroupsOfUser(req.user._id)
+    }
+    const mappedGroups = groups.map(g => g._id)
+
+    // Get all tickets with time tracking data in the timespan, filtered by user's groups
     const tickets = await Models.Ticket.find({
       $or: [
         { estimatedHours: { $exists: true, $gt: 0 } },
         { 'timeEntries.0': { $exists: true } }
       ],
+      group: { $in: mappedGroups },
       date: { $gte: startDate },
       deleted: false
     }).populate('timeEntries.owner', 'fullname email image')

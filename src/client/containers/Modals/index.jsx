@@ -48,6 +48,10 @@ import PrivacyPolicyModal from 'containers/Modals/PrivacyPolicyModal'
 import WebhookFormModal from 'containers/Settings/Webhooks/WebhookFormModal'
 import DeleteWebhookModal from 'containers/Settings/Webhooks/DeleteWebhookModal'
 import TestWebhookModal from 'containers/Settings/Webhooks/TestWebhookModal'
+import CreateProductModal from './CreateProductModal'
+import DeleteProductModal from './DeleteProductModal'
+import CreateModuleModal from './CreateModuleModal'
+import DeleteModuleModal from './DeleteModuleModal'
 
 const MODAL_COMPONENTS = {
   NOTICE_ALERT: NoticeAlertModal,
@@ -81,7 +85,11 @@ const MODAL_COMPONENTS = {
   CREATE_WEBHOOK: WebhookFormModal,
   EDIT_WEBHOOK: WebhookFormModal,
   TEST_WEBHOOK: TestWebhookModal,
-  DELETE_WEBHOOK: DeleteWebhookModal
+  DELETE_WEBHOOK: DeleteWebhookModal,
+  CREATE_PRODUCT: CreateProductModal,
+  DELETE_PRODUCT: DeleteProductModal,
+  CREATE_MODULE: CreateModuleModal,
+  DELETE_MODULE: DeleteModuleModal
 }
 
 const ModalRoot = ({ modalType, modalProps }) => {
