@@ -38,9 +38,13 @@ const automationEngine = require('../automation/ticketStatusRuleEngine')
   // Ticket Created - ejecuta automation rules Y lógica original
   emitter.on('ticket:created', async function (data) {
     // Ejecutar automation rules
-    if (data && data.ticket && data.owner) {
+    if (data && data.ticket) {
       try {
-        await automationEngine.processAutomationRules('ticket_created', data.ticket, data.owner)
+        // El owner del ticket es quien lo creó
+        const owner = data.ticket.owner
+        if (owner) {
+          await automationEngine.processAutomationRules('ticket_created', data.ticket, owner)
+        }
       } catch (err) {
         winston.error('Failed to process automation rules for ticket:created', err)
       }
@@ -50,10 +54,10 @@ const automationEngine = require('../automation/ticketStatusRuleEngine')
   })
 
   // Automation Rules - Ticket Comment Added
-  emitter.on('ticket:comment:added', async function (data) {
-    if (data && data.ticket && data.comment && data.comment.owner) {
+  emitter.on('ticket:comment:added', async function (ticket, comment, hostname) {
+    if (ticket && comment && comment.owner) {
       try {
-        await automationEngine.processAutomationRules('ticket_new_comment', data.ticket, data.comment.owner)
+        await automationEngine.processAutomationRules('ticket_new_comment', ticket, comment.owner)
       } catch (err) {
         winston.error('Failed to process automation rules for ticket:comment:added', err)
       }
@@ -61,10 +65,10 @@ const automationEngine = require('../automation/ticketStatusRuleEngine')
   })
 
   // Automation Rules - Ticket Note Added
-  emitter.on('ticket:note:added', async function (data) {
-    if (data && data.ticket && data.note && data.note.owner) {
+  emitter.on('ticket:note:added', async function (ticket, note) {
+    if (ticket && note && note.owner) {
       try {
-        await automationEngine.processAutomationRules('ticket_note_added', data.ticket, data.note.owner)
+        await automationEngine.processAutomationRules('ticket_note_added', ticket, note.owner)
       } catch (err) {
         winston.error('Failed to process automation rules for ticket:note:added', err)
       }
