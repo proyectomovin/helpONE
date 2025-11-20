@@ -81,10 +81,11 @@ class TimeTrackingPartial extends React.Component {
     const totalHours = this.calculateTotalHours()
     const ticketStatus = ticket.status
     const isResolved = ticketStatus ? ticketStatus.isResolved : false
-    const canManageTimeTracking = helpers.canUser('tickets:timeTracking', true)
+    const canViewTimeTracking = helpers.canUser('tickets:timetracking:view', true)
+    const canCreateTimeTracking = helpers.canUser('tickets:timetracking:create', true)
 
     // Si el usuario no tiene permisos de time tracking y no hay entradas, no mostrar nada
-    if (!canManageTimeTracking && (!timeEntries || timeEntries.length === 0)) {
+    if (!canViewTimeTracking && (!timeEntries || timeEntries.length === 0)) {
       return null
     }
 
@@ -152,7 +153,7 @@ class TimeTrackingPartial extends React.Component {
                   <div style={{ fontSize: 24, fontWeight: 600, color: '#2196F3' }}>
                     {estimatedHours}h
                   </div>
-                  {!isResolved && canManageTimeTracking && (
+                  {!isResolved && canCreateTimeTracking && (
                     <button
                       onClick={() => this.setState({ editingEstimatedHours: true })}
                       style={{
@@ -215,7 +216,7 @@ class TimeTrackingPartial extends React.Component {
           </div>
 
           {/* Add Time Entry Button */}
-          {!isResolved && !showAddForm && canManageTimeTracking && (
+          {!isResolved && !showAddForm && canCreateTimeTracking && (
             <button
               onClick={() => this.setState({ showAddForm: true })}
               style={{
@@ -235,7 +236,7 @@ class TimeTrackingPartial extends React.Component {
           )}
 
           {/* Add Time Entry Form */}
-          {showAddForm && !isResolved && canManageTimeTracking && (
+          {showAddForm && !isResolved && canCreateTimeTracking && (
             <div style={{
               marginBottom: 20,
               padding: 15,
