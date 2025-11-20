@@ -81,10 +81,15 @@ class TimeTrackingPartial extends React.Component {
     const totalHours = this.calculateTotalHours()
     const ticketStatus = ticket.status
     const isResolved = ticketStatus ? ticketStatus.isResolved : false
-    const canManageTimeTracking = helpers.canUser('tickets:timeTracking', true)
+
+    // Check if time tracking is enabled for users
+    const timeTrackingEnabled = helpers.getViewDataItem('timeTrackingUsersEnabled') !== false
+    const isAdminOrAgent = helpers.canUser('agent:*', true) || helpers.canUser('admin:*', true)
+    const canViewTimeTracking = (isAdminOrAgent || timeTrackingEnabled) && helpers.canUser('tickets:timetracking:view', true)
+    const canCreateTimeTracking = (isAdminOrAgent || timeTrackingEnabled) && helpers.canUser('tickets:timetracking:create', true)
 
     // Si el usuario no tiene permisos de time tracking y no hay entradas, no mostrar nada
-    if (!canManageTimeTracking && (!timeEntries || timeEntries.length === 0)) {
+    if (!canViewTimeTracking && (!timeEntries || timeEntries.length === 0)) {
       return null
     }
 
