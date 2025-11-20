@@ -53,12 +53,12 @@ class TimeEntryPartial extends React.Component {
                 </div>
                 {ticketStatus && ticketStatus.isResolved === false && (
                   <div style={{ display: 'flex', gap: 5 }}>
-                    {helpers.hasPermOverRole(timeEntry.owner.role, null, 'tickets:update', true) && (
+                    {helpers.hasPermOverRole(timeEntry.owner.role, null, 'tickets:timetracking:create', true) && (
                       <div className='edit-comment' onClick={onEditClick} style={{ cursor: 'pointer' }}>
                         <i className='material-icons'>&#xE254;</i>
                       </div>
                     )}
-                    {helpers.hasPermOverRole(timeEntry.owner.role, null, 'tickets:update', true) && (
+                    {helpers.hasPermOverRole(timeEntry.owner.role, null, 'tickets:timetracking:create', true) && (
                       <div className='remove-comment' onClick={onRemoveClick} style={{ cursor: 'pointer' }}>
                         <i className='material-icons'>&#xE5CD;</i>
                       </div>
