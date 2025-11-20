@@ -597,7 +597,7 @@ export default connect(mapStateToProps, {
   fetchDashboardTopTypes,
   fetchDashboardTopAssignees,
   fetchDashboardTopPriorities,
-  fetchDashboardTopOwners
+  fetchDashboardTopOwners,
   fetchDashboardTimeTrackingStats,
   fetchDashboardTimeTrackingByGroup
 })(DashboardContainer)
