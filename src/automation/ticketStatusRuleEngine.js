@@ -27,24 +27,32 @@ const _ = require('lodash')
  */
 async function processAutomationRules (ticketEvent, ticket, actor) {
   try {
+    winston.info(`AutomationRules: Processing event="${ticketEvent}"`)
+
     // Validar parámetros
     if (!ticketEvent || !ticket || !actor) {
-      winston.debug('AutomationRules: Missing required parameters')
+      winston.warn('AutomationRules: Missing required parameters', { ticketEvent, ticket: !!ticket, actor: !!actor })
       return
     }
+
+    winston.info(`AutomationRules: Ticket #${ticket.uid || ticket._id}, Actor: ${actor.username || actor._id}`)
 
     // Obtener el rol del actor
     const userRoleId = actor.role?._id || actor.role
     if (!userRoleId) {
-      winston.debug(`AutomationRules: Actor ${actor.username} has no role`)
+      winston.warn(`AutomationRules: Actor ${actor.username} has no role`, { actor })
       return
     }
+
+    winston.info(`AutomationRules: Looking for rules with event="${ticketEvent}" and roleId="${userRoleId}"`)
 
     // Buscar reglas que coincidan con el evento y rol
     const matchingRules = await AutomationRuleSchema.findMatchingRules(ticketEvent, userRoleId)
 
+    winston.info(`AutomationRules: Found ${matchingRules ? matchingRules.length : 0} matching rules`)
+
     if (!matchingRules || matchingRules.length === 0) {
-      winston.debug(`AutomationRules: No matching rules for event="${ticketEvent}" role="${userRoleId}"`)
+      winston.info(`AutomationRules: No matching rules for event="${ticketEvent}" roleId="${userRoleId}"`)
       return
     }
 
