@@ -16,6 +16,7 @@ var _ = require('lodash')
 var nodeMailer = require('nodemailer')
 
 var settings = require('../models/setting')
+var EmailTrackingService = require('../services/emailTrackingService')
 
 var mailer = {}
 
@@ -33,7 +34,33 @@ mailer.sendMail = function (data, callback) {
 
     if (!data.from) return callback('No From Address Set.')
 
-    mailSettings.transporter.sendMail(data, callback)
+    // Prepare email log data
+    var emailLogData = {
+      to: data.to,
+      subject: data.subject || 'No Subject',
+      template: data.template || 'unknown',
+      metadata: data.metadata || {}
+    }
+
+    // Send email with tracking
+    mailSettings.transporter.sendMail(data, function (sendErr, info) {
+      if (sendErr) {
+        // Log failure
+        EmailTrackingService.logFailure(emailLogData, sendErr)
+          .catch(function (logErr) {
+            console.error('Failed to log email failure:', logErr)
+          })
+        return callback(sendErr)
+      }
+
+      // Log success
+      EmailTrackingService.logSuccess(emailLogData)
+        .catch(function (logErr) {
+          console.error('Failed to log email success:', logErr)
+        })
+
+      callback(null, info)
+    })
   })
 }
 

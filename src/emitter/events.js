@@ -24,6 +24,7 @@ const Email = require('email-templates')
 const templateDir = path.resolve(__dirname, '..', 'mailer', 'templates')
 const socketEvents = require('../socketio/socketEventConsts')
 const notifications = require('../notifications') // Load Push Events
+const EmailPreferenceService = require('../services/emailPreferenceService')
 
 const eventTicketCreated = require('./events/event_ticket_created')
 
@@ -216,7 +217,9 @@ const eventTicketCreated = require('./events/event_ticket_created')
             if (!mailerEnabled) return c()
 
             const mailer = require('../mailer')
-            let emails = []
+            const userIds = []
+            const userEmailMap = {}
+
             async.each(
               ticket.subscribers,
               function (member, cb) {
@@ -224,60 +227,139 @@ const eventTicketCreated = require('./events/event_ticket_created')
                 if (member._id.toString() === comment.owner.toString()) return cb()
                 if (member.deleted) return cb()
 
-                emails.push(member.email)
+                userIds.push(member._id)
+                userEmailMap[member._id.toString()] = member.email
 
                 cb()
               },
               function (err) {
                 if (err) return c(err)
 
-                emails = _.uniq(emails)
-
-                if (_.size(emails) < 1) {
+                if (_.size(userIds) < 1) {
                   return c()
                 }
 
-                const email = new Email({
-                  views: {
-                    root: templateDir,
-                    options: {
-                      extension: 'handlebars'
-                    }
-                  }
-                })
+                // Filter users based on email preferences
+                EmailPreferenceService.filterUsersByPreferences(
+                  userIds,
+                  'ticketCommentAdded',
+                  { priority: ticket.priority }
+                )
+                  .then(function (filteredUserIds) {
+                    // Map filtered user IDs back to emails
+                    let emails = filteredUserIds.map(userId => userEmailMap[userId.toString()]).filter(Boolean)
+                    emails = _.uniq(emails)
 
-                ticket.populate('comments.owner', function (err, ticket) {
-                  if (err) winston.warn(err)
-                  if (err) return c()
-
-                  ticket = ticket.toJSON()
-
-                  email
-                    .render('ticket-comment-added', {
-                      ticket: ticket,
-                      comment: comment
-                    })
-                    .then(function (html) {
-                      const mailOptions = {
-                        to: emails.join(),
-                        subject: 'Updated: Ticket #' + ticket.uid + '-' + ticket.subject,
-                        html: html,
-                        generateTextFromHTML: true
-                      }
-
-                      mailer.sendMail(mailOptions, function (err) {
-                        if (err) winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
-
-                        winston.debug('Sent [' + emails.length + '] emails.')
-                      })
-
+                    if (_.size(emails) < 1) {
                       return c()
+                    }
+
+                    const email = new Email({
+                      views: {
+                        root: templateDir,
+                        options: {
+                          extension: 'handlebars'
+                        }
+                      }
                     })
-                    .catch(function (err) {
-                      winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
-                      return c(err)
+
+                    ticket.populate('comments.owner', function (err, ticket) {
+                      if (err) winston.warn(err)
+                      if (err) return c()
+
+                      ticket = ticket.toJSON()
+
+                      email
+                        .render('ticket-comment-added', {
+                          ticket: ticket,
+                          comment: comment
+                        })
+                        .then(function (html) {
+                          const mailOptions = {
+                            to: emails.join(),
+                            subject: 'Updated: Ticket #' + ticket.uid + '-' + ticket.subject,
+                            html: html,
+                            generateTextFromHTML: true,
+                            template: 'ticket-comment-added',
+                            metadata: {
+                              ticketId: ticket._id,
+                              commentId: comment._id,
+                              priority: ticket.priority ? ticket.priority.name : null
+                            }
+                          }
+
+                          mailer.sendMail(mailOptions, function (err) {
+                            if (err) winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
+
+                            winston.debug('Sent [' + emails.length + '] emails.')
+                          })
+
+                          return c()
+                        })
+                        .catch(function (err) {
+                          winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
+                          return c(err)
+                        })
                     })
-                })
+                  })
+                  .catch(function (prefErr) {
+                    winston.error('[trudesk:events:filterPreferences] - ' + prefErr)
+                    // Fallback: use all emails if preference check fails
+                    let emails = Object.values(userEmailMap)
+                    emails = _.uniq(emails)
+
+                    if (_.size(emails) < 1) {
+                      return c()
+                    }
+
+                    const email = new Email({
+                      views: {
+                        root: templateDir,
+                        options: {
+                          extension: 'handlebars'
+                        }
+                      }
+                    })
+
+                    ticket.populate('comments.owner', function (err, ticket) {
+                      if (err) winston.warn(err)
+                      if (err) return c()
+
+                      ticket = ticket.toJSON()
+
+                      email
+                        .render('ticket-comment-added', {
+                          ticket: ticket,
+                          comment: comment
+                        })
+                        .then(function (html) {
+                          const mailOptions = {
+                            to: emails.join(),
+                            subject: 'Updated: Ticket #' + ticket.uid + '-' + ticket.subject,
+                            html: html,
+                            generateTextFromHTML: true,
+                            template: 'ticket-comment-added',
+                            metadata: {
+                              ticketId: ticket._id,
+                              commentId: comment._id,
+                              priority: ticket.priority ? ticket.priority.name : null
+                            }
+                          }
+
+                          mailer.sendMail(mailOptions, function (err) {
+                            if (err) winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
+
+                            winston.debug('Sent [' + emails.length + '] emails.')
+                          })
+
+                          return c()
+                        })
+                        .catch(function (err) {
+                          winston.warn('[trudesk:events:sendSubscriberEmail] - ' + err)
+                          return c(err)
+                        })
+                    })
+                  })
               }
             )
           }

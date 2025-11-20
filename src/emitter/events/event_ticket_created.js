@@ -22,6 +22,7 @@ const Department = require('../../models/department')
 const Notification = require('../../models/notification')
 const Template = require('../../models/template')
 const Mailer = require('../../mailer')
+const EmailPreferenceService = require('../../services/emailPreferenceService')
 
 const Email = require('email-templates')
 const templateDir = path.resolve(__dirname, '../..', 'mailer', 'templates')
@@ -74,6 +75,10 @@ const parseMemberEmails = async ticket => {
 
   members = uniqBy(members, i => i._id)
 
+  // Collect user IDs for preference filtering
+  const userIds = []
+  const memberEmailMap = {}
+
   for (const member of members) {
     if (member.deleted) continue
 
@@ -81,7 +86,30 @@ const parseMemberEmails = async ticket => {
 
     if (typeof member.email === 'undefined' || emailTo.indexOf(member.email) === -1) continue
 
-    emails.push(member.email)
+    userIds.push(member._id)
+    memberEmailMap[member._id.toString()] = member.email
+  }
+
+  // Filter users based on email preferences
+  try {
+    const notificationType = 'groupTicketCreated'
+    const options = {
+      priority: ticket.priority
+    }
+
+    const filteredUserIds = await EmailPreferenceService.filterUsersByPreferences(userIds, notificationType, options)
+
+    // Map filtered user IDs back to emails
+    filteredUserIds.forEach(userId => {
+      const email = memberEmailMap[userId.toString()]
+      if (email) {
+        emails.push(email)
+      }
+    })
+  } catch (err) {
+    logger.error('[parseMemberEmails] Error filtering by preferences:', err)
+    // Fallback: use all emails if preference check fails
+    Object.values(memberEmailMap).forEach(email => emails.push(email))
   }
 
   return uniq(emails)
@@ -136,7 +164,13 @@ const sendMail = async (ticket, emails, baseUrl, betaEnabled) => {
       to: emails.join(),
       subject: subjectParsed,
       html,
-      generateTextFromHTML: true
+      generateTextFromHTML: true,
+      template: 'new-ticket',
+      metadata: {
+        ticketId: ticket._id,
+        groupId: ticket.group._id,
+        priority: ticket.priority ? ticket.priority.name : null
+      }
     }
 
     Mailer.sendMail(mailOptions, function (err) {

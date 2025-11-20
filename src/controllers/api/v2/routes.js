@@ -96,4 +96,14 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v2/es/status', apiv2Auth, isAdmin, apiv2.elasticsearch.status)
 
   router.get('/api/v2/mailer/check', apiv2Auth, isAdmin, apiv2.mailer.check)
+
+  // Email Preferences
+  router.get('/api/v2/email-preferences', apiv2Auth, apiv2.emailPreferences.get)
+  router.put('/api/v2/email-preferences', apiv2Auth, csrfCheck, apiv2.emailPreferences.update)
+  router.post('/api/v2/email-preferences/reset', apiv2Auth, csrfCheck, apiv2.emailPreferences.reset)
+  router.get('/api/v2/email-preferences/logs', apiv2Auth, apiv2.emailPreferences.getLogs)
+  router.get('/api/v2/email-preferences/logs/all', apiv2Auth, isAdmin, apiv2.emailPreferences.getAllLogs)
+  router.get('/api/v2/email-preferences/logs/ticket/:ticketId', apiv2Auth, apiv2.emailPreferences.getTicketLogs)
+  router.get('/api/v2/email-preferences/stats', apiv2Auth, isAdmin, apiv2.emailPreferences.getStats)
+  router.get('/api/v2/email-preferences/stats/templates', apiv2Auth, isAdmin, apiv2.emailPreferences.getTemplateUsage)
 }
