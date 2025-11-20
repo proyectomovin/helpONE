@@ -23,7 +23,9 @@ import {
   FETCH_DASHBOARD_TOP_TYPES,
   FETCH_DASHBOARD_TOP_ASSIGNEES,
   FETCH_DASHBOARD_TOP_PRIORITIES,
-  FETCH_DASHBOARD_TOP_OWNERS
+  FETCH_DASHBOARD_TOP_OWNERS,
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 const initialState = {
@@ -57,7 +59,19 @@ const initialState = {
   topPriorities: List([]),
 
   loadingTopOwners: false,
-  topOwners: List([])
+  topOwners: List([]),
+
+  loadingTimeTrackingStats: false,
+  timeTrackingStats: Map({
+    totalEstimated: 0,
+    totalConsumed: 0,
+    percentageComplete: 0,
+    ticketsWithTracking: 0,
+    topConsultants: List([])
+  }),
+
+  loadingTimeTrackingByGroup: false,
+  timeTrackingByGroup: List([])
 }
 
 const reducer = handleActions(
@@ -228,6 +242,36 @@ const reducer = handleActions(
         ...state,
         loadingTopOwners: false,
         topOwners: fromJS(topOwners)
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING]: state => {
+      return {
+        ...state,
+        loadingTimeTrackingStats: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_STATS.SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        loadingTimeTrackingStats: false,
+        timeTrackingStats: fromJS(action.response.stats)
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.PENDING]: state => {
+      return {
+        ...state,
+        loadingTimeTrackingByGroup: true
+      }
+    },
+
+    [FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        loadingTimeTrackingByGroup: false,
+        timeTrackingByGroup: fromJS(action.response.groups)
       }
     }
   },

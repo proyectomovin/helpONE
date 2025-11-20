@@ -44,7 +44,11 @@ import {
   TICKETS_DUEDATE_SET,
   TICKETS_UI_TAGS_UPDATE,
   TICKETS_COMMENT_NOTE_REMOVE,
-  TICKETS_COMMENT_NOTE_SET
+  TICKETS_COMMENT_NOTE_SET,
+  TICKETS_UI_TIMETRACKING_UPDATE,
+  TICKETS_ESTIMATEDHOURS_SET,
+  TICKETS_TIMEENTRY_ADD,
+  TICKETS_TIMEENTRY_DELETE
 } from 'serverSocket/socketEventConsts'
 
 import AssigneeDropdownPartial from 'containers/Tickets/AssigneeDropdownPartial'
@@ -56,6 +60,7 @@ import IssuePartial from 'containers/Tickets/IssuePartial'
 import OffCanvasEditor from 'components/OffCanvasEditor'
 import PDropdownTrigger from 'components/PDropdown/PDropdownTrigger'
 import StatusSelector from 'containers/Tickets/StatusSelector'
+import TimeTrackingPartial from 'containers/Tickets/TimeTrackingPartial'
 import TruTabSection from 'components/TruTabs/TruTabSection'
 import TruTabSelector from 'components/TruTabs/TruTabSelector'
 import TruTabSelectors from 'components/TruTabs/TruTabSelectors'
@@ -161,6 +166,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.on(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
     this.props.socket.on(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
     this.props.socket.on(TICKETS_UI_REQUESTER_UPDATE, this.onUpdateTicketRequester)
+    this.props.socket.on(TICKETS_UI_TIMETRACKING_UPDATE, this.onUpdateTimeTracking)
 
     fetchTicket(this)
     this.props.fetchTicketTypes()
@@ -186,6 +192,7 @@ class SingleTicketContainer extends React.Component {
     this.props.socket.off(TICKETS_UI_PRODUCT_UPDATE, this.onUpdateTicketProduct)
     this.props.socket.off(TICKETS_UI_MODULE_UPDATE, this.onUpdateTicketModule)
     this.props.socket.off(TICKETS_UI_REQUESTER_UPDATE, this.onUpdateTicketRequester)
+    this.props.socket.off(TICKETS_UI_TIMETRACKING_UPDATE, this.onUpdateTimeTracking)
 
     this.props.unloadGroups()
   }
@@ -370,6 +377,43 @@ class SingleTicketContainer extends React.Component {
       .catch(error => {
         Log.error(error.response || error)
       })
+  }
+
+  handleUpdateEstimatedHours = hours => {
+    this.props.socket.emit(TICKETS_ESTIMATEDHOURS_SET, {
+      _id: this.ticket._id,
+      hours: hours
+    })
+  }
+
+  handleAddTimeEntry = (hours, description) => {
+    this.props.socket.emit(TICKETS_TIMEENTRY_ADD, {
+      _id: this.ticket._id,
+      hours: hours,
+      description: description
+    })
+  }
+
+  handleEditTimeEntry = timeEntryId => {
+    helpers.UI.showSnackbar('Edit time entry functionality coming soon')
+    // TODO: Implement edit modal
+  }
+
+  handleRemoveTimeEntry = timeEntryId => {
+    UIkit.modal.confirm('Are you sure you want to delete this time entry?', () => {
+      this.props.socket.emit(TICKETS_TIMEENTRY_DELETE, {
+        _id: this.ticket._id,
+        timeEntryId: timeEntryId
+      })
+    })
+  }
+
+  onUpdateTimeTracking = (data) => {
+    if (this.ticket._id === data.tid) {
+      this.ticket.estimatedHours = data.estimatedHours
+      this.ticket.timeEntries = data.timeEntries
+      this.ticket.history = data.history
+    }
   }
 
   transferToThirdParty (e) {
@@ -1088,6 +1132,16 @@ class SingleTicketContainer extends React.Component {
                           </TruTabWrapper>
                         </div>
                       )}
+
+                    {/* Time Tracking Section */}
+                    <TimeTrackingPartial
+                      ticket={this.ticket}
+                      dateFormat={this.props.common.dateFormat}
+                      onAddTimeEntry={this.handleAddTimeEntry}
+                      onUpdateEstimatedHours={this.handleUpdateEstimatedHours}
+                      onEditTimeEntry={this.handleEditTimeEntry}
+                      onRemoveTimeEntry={this.handleRemoveTimeEntry}
+                    />
                   </div>
                 </div>
               </div>

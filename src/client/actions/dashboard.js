@@ -21,7 +21,9 @@ import {
   FETCH_DASHBOARD_TOP_TYPES,
   FETCH_DASHBOARD_TOP_ASSIGNEES,
   FETCH_DASHBOARD_TOP_PRIORITIES,
-  FETCH_DASHBOARD_TOP_OWNERS
+  FETCH_DASHBOARD_TOP_OWNERS,
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 export const fetchDashboardData = createAction(
@@ -37,3 +39,5 @@ export const fetchDashboardTopTypes = createAction(FETCH_DASHBOARD_TOP_TYPES.ACT
 export const fetchDashboardTopAssignees = createAction(FETCH_DASHBOARD_TOP_ASSIGNEES.ACTION, payload => payload)
 export const fetchDashboardTopPriorities = createAction(FETCH_DASHBOARD_TOP_PRIORITIES.ACTION, payload => payload)
 export const fetchDashboardTopOwners = createAction(FETCH_DASHBOARD_TOP_OWNERS.ACTION, payload => payload)
+export const fetchDashboardTimeTrackingStats = createAction(FETCH_DASHBOARD_TIMETRACKING_STATS.ACTION, payload => payload)
+export const fetchDashboardTimeTrackingByGroup = createAction(FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ACTION, payload => payload)

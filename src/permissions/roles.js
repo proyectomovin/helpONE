@@ -32,6 +32,7 @@
  ticket:setAssignee             = can set ticket Assignee
  ticket:public                  = can view public created tickets
  ticket:notifications_create    = send notification on ticket created
+ ticket:timeTracking            = can view and manage time tracking on tickets
 
  notes:                         = Internal Notes on tickets
 
@@ -51,7 +52,7 @@ var roles = {
     allowedAction: [
       'mod:*',
       'dashboard:*',
-      'ticket:create edit view attachment removeAttachment',
+      'ticket:create edit view attachment removeAttachment timeTracking',
       'comment:*',
       'notes:*',
       'reports:view'

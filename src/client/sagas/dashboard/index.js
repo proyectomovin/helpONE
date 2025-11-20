@@ -23,7 +23,9 @@ import {
   FETCH_DASHBOARD_TOP_TYPES,
   FETCH_DASHBOARD_TOP_ASSIGNEES,
   FETCH_DASHBOARD_TOP_PRIORITIES,
-  FETCH_DASHBOARD_TOP_OWNERS
+  FETCH_DASHBOARD_TOP_OWNERS,
+  FETCH_DASHBOARD_TIMETRACKING_STATS,
+  FETCH_DASHBOARD_TIMETRACKING_BY_GROUP
 } from 'actions/types'
 
 import Log from '../../logger'
@@ -125,6 +127,38 @@ function * fetchDashboardTopAssignees ({ payload }) {
   }
 }
 
+function * fetchDashboardTimeTrackingStats ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTimeTrackingStats, payload)
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_STATS.ERROR, error })
+  }
+}
+
+function * fetchDashboardTimeTrackingByGroup ({ payload }) {
+  yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.PENDING })
+  try {
+    const response = yield call(api.dashboard.getTimeTrackingStatsByGroup, payload)
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.SUCCESS, response })
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    if (error.response && error.response.status !== (401 || 403)) {
+      Log.error(errorText, error)
+      helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    }
+
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ERROR, error })
+  }
+}
+
 function * fetchDashboardTopPriorities ({ payload }) {
   yield put({ type: FETCH_DASHBOARD_TOP_PRIORITIES.PENDING })
   try {
@@ -154,6 +188,7 @@ function * fetchDashboardTopOwners ({ payload }) {
     }
 
     yield put({ type: FETCH_DASHBOARD_TOP_OWNERS.ERROR, error })
+    yield put({ type: FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ERROR, error })
   }
 }
 
@@ -166,4 +201,6 @@ export default function * watcher () {
   yield takeLatest(FETCH_DASHBOARD_TOP_ASSIGNEES.ACTION, fetchDashboardTopAssignees)
   yield takeLatest(FETCH_DASHBOARD_TOP_PRIORITIES.ACTION, fetchDashboardTopPriorities)
   yield takeLatest(FETCH_DASHBOARD_TOP_OWNERS.ACTION, fetchDashboardTopOwners)
+  yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_STATS.ACTION, fetchDashboardTimeTrackingStats)
+  yield takeLatest(FETCH_DASHBOARD_TIMETRACKING_BY_GROUP.ACTION, fetchDashboardTimeTrackingByGroup)
 }

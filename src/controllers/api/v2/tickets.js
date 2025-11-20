@@ -275,4 +275,268 @@ ticketsV2.info.tags = async (req, res) => {
   }
 }
 
+// Time Tracking Endpoints
+ticketsV2.setEstimatedHours = async (req, res) => {
+  const uid = req.params.uid
+  const hours = req.body.hours
+
+  if (!uid || hours === undefined || hours === null) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.setEstimatedHours(req.user._id, parseFloat(hours))
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.addTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const { hours, description } = req.body
+
+  if (!uid || !hours || !description) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters - hours and description are required')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.addTimeEntry(req.user._id, parseFloat(hours), description)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.updateTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const timeEntryId = req.params.timeEntryId
+  const { hours, description } = req.body
+
+  if (!uid || !timeEntryId) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.updateTimeEntry(req.user._id, timeEntryId, parseFloat(hours), description)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+ticketsV2.deleteTimeEntry = async (req, res) => {
+  const uid = req.params.uid
+  const timeEntryId = req.params.timeEntryId
+
+  if (!uid || !timeEntryId) {
+    return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
+  }
+
+  try {
+    const ticket = await Models.Ticket.getTicketByUid(uid)
+    if (!ticket) return apiUtils.sendApiError(res, 404, 'Ticket not found')
+
+    await ticket.removeTimeEntry(req.user._id, timeEntryId)
+    await ticket.save()
+
+    const updatedTicket = await Models.Ticket.getTicketByUid(uid)
+    return apiUtils.sendApiSuccess(res, { ticket: updatedTicket })
+  } catch (err) {
+    logger.warn(err)
+    return apiUtils.sendApiError(res, 500, err.message)
+  }
+}
+
+// Time Tracking Stats
+ticketsV2.getTimeTrackingStats = async (req, res) => {
+  try {
+    const timespan = parseInt(req.params.timespan) || 30
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - timespan)
+
+    // Get user's permitted groups
+    let groups = []
+    if (req.user.role.isAdmin || req.user.role.isAgent) {
+      const dbGroups = await Models.Department.getDepartmentGroupsOfUser(req.user._id)
+      groups = dbGroups.map(g => g._id)
+    } else {
+      groups = await Models.Group.getAllGroupsOfUser(req.user._id)
+    }
+    const mappedGroups = groups.map(g => g._id)
+
+    // Get all tickets with time tracking data in the timespan, filtered by user's groups
+    const tickets = await Models.Ticket.find({
+      $or: [
+        { estimatedHours: { $exists: true, $gt: 0 } },
+        { 'timeEntries.0': { $exists: true } }
+      ],
+      group: { $in: mappedGroups },
+      date: { $gte: startDate },
+      deleted: false
+    }).populate('timeEntries.owner', 'fullname email image')
+
+    // Calculate statistics
+    let totalEstimated = 0
+    let totalConsumed = 0
+    let ticketsWithTracking = 0
+    const consultantStats = {}
+
+    tickets.forEach(ticket => {
+      if (ticket.estimatedHours > 0 || (ticket.timeEntries && ticket.timeEntries.length > 0)) {
+        ticketsWithTracking++
+
+        if (ticket.estimatedHours) {
+          totalEstimated += ticket.estimatedHours
+        }
+
+        if (ticket.timeEntries && ticket.timeEntries.length > 0) {
+          ticket.timeEntries.forEach(entry => {
+            if (!entry.deleted) {
+              totalConsumed += entry.hours
+
+              // Track per consultant
+              if (entry.owner) {
+                const ownerId = entry.owner._id.toString()
+                if (!consultantStats[ownerId]) {
+                  consultantStats[ownerId] = {
+                    name: entry.owner.fullname,
+                    email: entry.owner.email,
+                    hours: 0,
+                    entries: 0
+                  }
+                }
+                consultantStats[ownerId].hours += entry.hours
+                consultantStats[ownerId].entries++
+              }
+            }
+          })
+        }
+      }
+    })
+
+    // Get top 5 consultants by hours
+    const topConsultants = Object.values(consultantStats)
+      .sort((a, b) => b.hours - a.hours)
+      .slice(0, 5)
+
+    const stats = {
+      totalEstimated: Math.round(totalEstimated * 10) / 10,
+      totalConsumed: Math.round(totalConsumed * 10) / 10,
+      percentageComplete: totalEstimated > 0 ? Math.round((totalConsumed / totalEstimated) * 100) : 0,
+      ticketsWithTracking,
+      topConsultants,
+      timespan
+    }
+
+    return res.json({ success: true, stats })
+  } catch (error) {
+    logger.error('Error getting time tracking stats:', error)
+    return apiUtils.sendApiError(res, 500, error.message)
+  }
+}
+
+// Time Tracking Stats By Group
+ticketsV2.getTimeTrackingStatsByGroup = async (req, res) => {
+  try {
+    const timespan = parseInt(req.params.timespan) || 30
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - timespan)
+
+    // Get user's permitted groups
+    let groups = []
+    if (req.user.role.isAdmin || req.user.role.isAgent) {
+      const dbGroups = await Models.Department.getDepartmentGroupsOfUser(req.user._id)
+      groups = dbGroups.map(g => g._id)
+    } else {
+      groups = await Models.Group.getAllGroupsOfUser(req.user._id)
+    }
+    const mappedGroups = groups.map(g => g._id)
+
+    // Get all tickets with time tracking data in the timespan, filtered by user's groups
+    const tickets = await Models.Ticket.find({
+      $or: [
+        { estimatedHours: { $exists: true, $gt: 0 } },
+        { 'timeEntries.0': { $exists: true } }
+      ],
+      group: { $in: mappedGroups },
+      date: { $gte: startDate },
+      deleted: false
+    }).populate('timeEntries.owner', 'fullname email image')
+      .populate('group', 'name')
+
+    // Calculate statistics grouped by group
+    const groupStats = {}
+
+    tickets.forEach(ticket => {
+      if (ticket.estimatedHours > 0 || (ticket.timeEntries && ticket.timeEntries.length > 0)) {
+        const groupId = ticket.group ? ticket.group._id.toString() : 'unassigned'
+        const groupName = ticket.group ? ticket.group.name : 'Sin Grupo'
+
+        if (!groupStats[groupId]) {
+          groupStats[groupId] = {
+            groupId,
+            groupName,
+            totalEstimated: 0,
+            totalConsumed: 0,
+            ticketCount: 0
+          }
+        }
+
+        groupStats[groupId].ticketCount++
+
+        if (ticket.estimatedHours) {
+          groupStats[groupId].totalEstimated += ticket.estimatedHours
+        }
+
+        if (ticket.timeEntries && ticket.timeEntries.length > 0) {
+          ticket.timeEntries.forEach(entry => {
+            if (!entry.deleted) {
+              groupStats[groupId].totalConsumed += entry.hours
+            }
+          })
+        }
+      }
+    })
+
+    // Format and sort groups by total consumed hours
+    const groupsArray = Object.values(groupStats).map(group => ({
+      groupId: group.groupId,
+      groupName: group.groupName,
+      totalEstimated: Math.round(group.totalEstimated * 10) / 10,
+      totalConsumed: Math.round(group.totalConsumed * 10) / 10,
+      percentageComplete: group.totalEstimated > 0
+        ? Math.round((group.totalConsumed / group.totalEstimated) * 100)
+        : 0,
+      ticketCount: group.ticketCount
+    })).sort((a, b) => b.totalConsumed - a.totalConsumed)
+
+    return res.json({ success: true, groups: groupsArray, timespan })
+  } catch (error) {
+    logger.error('Error getting time tracking stats by group:', error)
+    return apiUtils.sendApiError(res, 500, error.message)
+  }
+}
+
 module.exports = ticketsV2

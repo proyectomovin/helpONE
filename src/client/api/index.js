@@ -68,6 +68,18 @@ api.dashboard.getTopOwners = payload => {
     return res.data
   })
 }
+api.dashboard.getTimeTrackingStats = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v2/tickets/timetracking/stats/${timespan}`).then(res => {
+    return res.data
+  })
+}
+api.dashboard.getTimeTrackingStatsByGroup = payload => {
+  const timespan = payload.timespan || 30
+  return axios.get(`/api/v2/tickets/timetracking/stats/bygroup/${timespan}`).then(res => {
+    return res.data
+  })
+}
 
 api.tickets = {}
 api.tickets.getWithPage = payload => {
@@ -223,6 +235,31 @@ api.tickets.createTag = ({ name }) => {
 
 api.tickets.transferToThirdParty = ({ uid }) => {
   return axios.post(`/api/v2/tickets/transfer/${uid}`).then(res => {
+    return res.data
+  })
+}
+
+// Time Tracking API
+api.tickets.setEstimatedHours = ({ uid, hours }) => {
+  return axios.put(`/api/v2/tickets/${uid}/estimatedhours`, { hours }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.addTimeEntry = ({ uid, hours, description }) => {
+  return axios.post(`/api/v2/tickets/${uid}/timeentries`, { hours, description }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.updateTimeEntry = ({ uid, timeEntryId, hours, description }) => {
+  return axios.put(`/api/v2/tickets/${uid}/timeentries/${timeEntryId}`, { hours, description }).then(res => {
+    return res.data
+  })
+}
+
+api.tickets.deleteTimeEntry = ({ uid, timeEntryId }) => {
+  return axios.delete(`/api/v2/tickets/${uid}/timeentries/${timeEntryId}`).then(res => {
     return res.data
   })
 }

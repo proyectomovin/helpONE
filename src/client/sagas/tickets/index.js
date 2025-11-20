@@ -36,7 +36,11 @@ import {
   TICKET_EVENT,
   TRANSFER_TO_THIRDPARTY,
   FETCH_TICKET_TYPES,
-  FETCH_STATUS
+  FETCH_STATUS,
+  SET_ESTIMATED_HOURS,
+  ADD_TIME_ENTRY,
+  UPDATE_TIME_ENTRY,
+  DELETE_TIME_ENTRY
 } from 'actions/types'
 
 import helpers from 'lib/helpers'
@@ -312,6 +316,63 @@ function * fetchTicketStatus ({ payload }) {
   }
 }
 
+// Time Tracking Sagas
+function * setEstimatedHours ({ payload }) {
+  yield put({ type: SET_ESTIMATED_HOURS.PENDING })
+  try {
+    const response = yield call(api.tickets.setEstimatedHours, payload)
+    yield put({ type: SET_ESTIMATED_HOURS.SUCCESS, response })
+    helpers.UI.showSnackbar('Estimated hours updated successfully')
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    Log.error(errorText, error)
+    helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    yield put({ type: SET_ESTIMATED_HOURS.ERROR, error })
+  }
+}
+
+function * addTimeEntry ({ payload }) {
+  yield put({ type: ADD_TIME_ENTRY.PENDING })
+  try {
+    const response = yield call(api.tickets.addTimeEntry, payload)
+    yield put({ type: ADD_TIME_ENTRY.SUCCESS, response })
+    helpers.UI.showSnackbar('Time entry added successfully')
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    Log.error(errorText, error)
+    helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    yield put({ type: ADD_TIME_ENTRY.ERROR, error })
+  }
+}
+
+function * updateTimeEntry ({ payload }) {
+  yield put({ type: UPDATE_TIME_ENTRY.PENDING })
+  try {
+    const response = yield call(api.tickets.updateTimeEntry, payload)
+    yield put({ type: UPDATE_TIME_ENTRY.SUCCESS, response })
+    helpers.UI.showSnackbar('Time entry updated successfully')
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    Log.error(errorText, error)
+    helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    yield put({ type: UPDATE_TIME_ENTRY.ERROR, error })
+  }
+}
+
+function * deleteTimeEntry ({ payload }) {
+  yield put({ type: DELETE_TIME_ENTRY.PENDING })
+  try {
+    const response = yield call(api.tickets.deleteTimeEntry, payload)
+    yield put({ type: DELETE_TIME_ENTRY.SUCCESS, response })
+    helpers.UI.showSnackbar('Time entry deleted successfully')
+  } catch (error) {
+    const errorText = error.response ? error.response.data.error : error
+    Log.error(errorText, error)
+    helpers.UI.showSnackbar(`Error: ${errorText}`, true)
+    yield put({ type: DELETE_TIME_ENTRY.ERROR, error })
+  }
+}
+
 export default function * watcher () {
   yield takeLatest(FETCH_TICKETS.ACTION, fetchTickets)
   yield takeLatest(CREATE_TICKET.ACTION, createTicket)
@@ -333,4 +394,8 @@ export default function * watcher () {
   yield takeLatest(TRANSFER_TO_THIRDPARTY.ACTION, transferToThirdParty)
   yield takeLatest(FETCH_TICKET_TYPES.ACTION, fetchTicketTypes)
   yield takeLatest(DELETE_STATUS.ACTION, deleteStatus)
+  yield takeLatest(SET_ESTIMATED_HOURS.ACTION, setEstimatedHours)
+  yield takeLatest(ADD_TIME_ENTRY.ACTION, addTimeEntry)
+  yield takeLatest(UPDATE_TIME_ENTRY.ACTION, updateTimeEntry)
+  yield takeLatest(DELETE_TIME_ENTRY.ACTION, deleteTimeEntry)
 }
