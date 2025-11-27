@@ -199,4 +199,38 @@ settingsController.logs = function (req, res) {
   })
 }
 
+settingsController.emailTemplates = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const content = initViewContent('email-templates', req)
+  content.title = 'Email Templates - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('email_templates', content)
+  })
+}
+
+settingsController.emailTemplatesEditor = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const templateId = req.params.id
+  const content = initViewContent('email-templates', req)
+  content.title = 'Email Template Editor - Settings'
+  content.data.templateId = templateId
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('email_template_editor', content)
+  })
+}
+
 module.exports = settingsController

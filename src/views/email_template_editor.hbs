@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template Editor</title>
+
+    <!-- GrapesJS CSS -->
+    <link rel="stylesheet" href="/node_modules/grapesjs/dist/css/grapes.min.css">
+    <link rel="stylesheet" href="/node_modules/grapesjs-preset-newsletter/dist/grapesjs-preset-newsletter.css">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        #editor-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .editor-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .editor-header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        #gjs {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Custom GrapesJS styling */
+        .gjs-one-bg {
+            background-color: #34495e;
+        }
+
+        .gjs-two-color {
+            color: #ecf0f1;
+        }
+
+        .gjs-three-bg {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .gjs-four-color,
+        .gjs-four-color-h:hover {
+            color: #3498db;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+            text-align: right;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dfe6e9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="editor-container">
+        <div class="editor-header">
+            <h1>📧 Editor de Plantillas de Email</h1>
+            <div class="editor-actions">
+                <button class="btn btn-outline" onclick="previewTemplate()">
+                    👁️ Preview
+                </button>
+                <button class="btn btn-success" onclick="showTestModal()">
+                    ✉️ Testear Mail
+                </button>
+                <button class="btn btn-primary" onclick="saveTemplate()">
+                    💾 Guardar
+                </button>
+                <a href="/settings/email-templates" class="btn btn-secondary">
+                    ← Volver
+                </a>
+            </div>
+        </div>
+
+        <div id="gjs"></div>
+    </div>
+
+    <!-- Modal de Testing -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📨 Enviar Email de Prueba</h2>
+            </div>
+            <div class="modal-body">
+                <div id="testAlert"></div>
+
+                <div class="form-group">
+                    <label for="testEmail">Email de destino:</label>
+                    <input
+                        type="email"
+                        id="testEmail"
+                        class="form-control"
+                        placeholder="tu@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="useSampleData" checked>
+                        Usar datos de muestra
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTestModal()">
+                    Cancelar
+                </button>
+                <button class="btn btn-success" onclick="sendTestEmail()" id="sendTestBtn">
+                    Enviar Prueba
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GrapesJS JS -->
+    <script src="/node_modules/grapesjs/dist/grapes.min.js"></script>
+    <script src="/node_modules/grapesjs-preset-newsletter/dist/grapesjs-preset-newsletter.min.js"></script>
+
+    <script>
+        const templateId = '{{data.templateId}}' || null;
+        let editor = null;
+        let currentTemplate = null;
+
+        // Initialize GrapesJS Editor
+        document.addEventListener('DOMContentLoaded', function() {
+            editor = grapesjs.init({
+                container: '#gjs',
+                height: 'calc(100vh - 65px)',
+                width: 'auto',
+                plugins: ['gjs-preset-newsletter'],
+                pluginsOpts: {
+                    'gjs-preset-newsletter': {
+                        modalTitleImport: 'Importar HTML',
+                        modalLabelImport: 'Pega tu código HTML aquí',
+                        modalLabelExport: 'Copia el código HTML',
+                        modalBtnImport: 'Importar',
+                        codeViewerTheme: 'material',
+                        importPlaceholder: '<html>...</html>',
+                    }
+                },
+                storageManager: false,
+                assetManager: {
+                    upload: false,
+                    multiUpload: false,
+                },
+                canvas: {
+                    styles: [
+                        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+                    ]
+                },
+                panels: {
+                    defaults: [
+                        {
+                            id: 'basic-actions',
+                            el: '.panel__basic-actions',
+                            buttons: [
+                                {
+                                    id: 'visibility',
+                                    active: true,
+                                    className: 'btn-toggle-borders',
+                                    label: '<i class="fa fa-clone"></i>',
+                                    command: 'sw-visibility',
+                                },
+                            ],
+                        },
+                        {
+                            id: 'panel-devices',
+                            el: '.panel__devices',
+                            buttons: [
+                                {
+                                    id: 'device-desktop',
+                                    label: '<i class="fa fa-desktop"></i>',
+                                    command: 'set-device-desktop',
+                                    active: true,
+                                    togglable: false,
+                                },
+                                {
+                                    id: 'device-mobile',
+                                    label: '<i class="fa fa-mobile"></i>',
+                                    command: 'set-device-mobile',
+                                    togglable: false,
+                                },
+                            ],
+                        }
+                    ]
+                }
+            });
+
+            // Add custom blocks with email variables
+            const blockManager = editor.BlockManager;
+
+            blockManager.add('ticket-info', {
+                label: '🎫 Info Ticket',
+                category: 'Variables',
+                content: `
+                    <div style="padding: 15px; background: #f8f9fa; border-left: 4px solid #3498db; margin: 10px 0;">
+                        <h3>Ticket #{{ticket.uid}}</h3>
+                        <p><strong>Asunto:</strong> {{ticket.subject}}</p>
+                        <p><strong>Prioridad:</strong> {{ticket.priority}}</p>
+                        <p><strong>Estado:</strong> {{ticket.status}}</p>
+                    </div>
+                `
+            });
+
+            blockManager.add('action-button', {
+                label: '🔘 Botón Acción',
+                category: 'Variables',
+                content: `
+                    <div style="text-align: center; padding: 20px;">
+                        <a href="{{action.url}}" style="display: inline-block; padding: 12px 30px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                            {{action.label}}
+                        </a>
+                    </div>
+                `
+            });
+
+            blockManager.add('user-info', {
+                label: '👤 Info Usuario',
+                category: 'Variables',
+                content: `
+                    <div style="padding: 10px;">
+                        <p><strong>Usuario:</strong> {{user.fullname}}</p>
+                        <p><strong>Email:</strong> {{user.email}}</p>
+                    </div>
+                `
+            });
+
+            // Load template if editing
+            if (templateId) {
+                loadTemplate(templateId);
+            } else {
+                // Set default email template
+                editor.setComponents(`
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="text-align: center; padding: 20px; background: #3498db; color: white;">
+                            <h1>{{company.name}}</h1>
+                        </div>
+                        <div style="padding: 30px; background: white;">
+                            <h2>Hola {{user.fullname}},</h2>
+                            <p>Este es el contenido de tu email...</p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9fa; font-size: 12px; color: #7f8c8d;">
+                            <p>&copy; {{company.name}}. Todos los derechos reservados.</p>
+                        </div>
+                    </div>
+                `);
+            }
+        });
+
+        // Load template from API
+        function loadTemplate(id) {
+            fetch('/api/v2/email-templates/' + id, {
+                headers: {
+                    'accesstoken': localStorage.getItem('accesstoken') || ''
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.template) {
+                    currentTemplate = data.template;
+                    if (data.template.htmlContent) {
+                        editor.setComponents(data.template.htmlContent);
+                    }
+                    if (data.template.grapesData) {
+                        editor.loadProjectData(data.template.grapesData);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Error loading template:', err);
+                alert('Error al cargar la plantilla');
+            });
+        }
+
+        // Save template
+        function saveTemplate() {
+            const html = editor.getHtml();
+            const css = editor.getCss();
+            const grapesData = editor.getProjectData();
+
+            const htmlContent = `<style>${css}</style>${html}`;
+
+            const data = {
+                htmlContent: htmlContent,
+                grapesData: grapesData
+            };
+
+            const url = templateId
+                ? '/api/v2/email-templates/' + templateId
+                : '/api/v2/email-templates';
+
+            const method = templateId ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accesstoken': localStorage.getItem('accesstoken') || ''
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Plantilla guardada correctamente');
+                    if (!templateId && data.template && data.template._id) {
+                        window.location.href = '/settings/email-templates/editor/' + data.template._id;
+                    }
+                } else {
+                    alert('❌ Error al guardar: ' + (data.error || 'Error desconocido'));
+                }
+            })
+            .catch(err => {
+                console.error('Error saving template:', err);
+                alert('❌ Error al guardar la plantilla');
+            });
+        }
+
+        // Preview template
+        function previewTemplate() {
+            const html = editor.getHtml();
+            const css = editor.getCss();
+            const htmlContent = `<style>${css}</style>${html}`;
+
+            const previewWindow = window.open('', 'preview', 'width=800,height=600');
+            previewWindow.document.write(htmlContent);
+            previewWindow.document.close();
+        }
+
+        // Show test modal
+        function showTestModal() {
+            document.getElementById('testModal').style.display = 'block';
+            document.getElementById('testEmail').focus();
+        }
+
+        // Close test modal
+        function closeTestModal() {
+            document.getElementById('testModal').style.display = 'none';
+            document.getElementById('testAlert').innerHTML = '';
+        }
+
+        // Send test email
+        function sendTestEmail() {
+            const email = document.getElementById('testEmail').value;
+            const useSampleData = document.getElementById('useSampleData').checked;
+            const sendBtn = document.getElementById('sendTestBtn');
+            const alertDiv = document.getElementById('testAlert');
+
+            if (!email) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Por favor ingresa un email</div>';
+                return;
+            }
+
+            if (!templateId) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Debes guardar la plantilla primero</div>';
+                return;
+            }
+
+            // Disable button and show loading
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading"></span> Enviando...';
+            alertDiv.innerHTML = '';
+
+            fetch('/api/v2/email-templates/' + templateId + '/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accesstoken': localStorage.getItem('accesstoken') || ''
+                },
+                body: JSON.stringify({
+                    email: email,
+                    useSampleData: useSampleData
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alertDiv.innerHTML = '<div class="alert alert-success">✅ Email de prueba enviado correctamente a ' + email + '</div>';
+                    setTimeout(() => {
+                        closeTestModal();
+                    }, 2000);
+                } else {
+                    alertDiv.innerHTML = '<div class="alert alert-error">❌ Error: ' + (data.error || 'Error al enviar') + '</div>';
+                }
+            })
+            .catch(err => {
+                console.error('Error sending test:', err);
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Error al enviar el email de prueba</div>';
+            })
+            .finally(() => {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = 'Enviar Prueba';
+            });
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('testModal');
+            if (event.target == modal) {
+                closeTestModal();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S or Cmd+S to save
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveTemplate();
+            }
+            // Escape to close modal
+            if (e.key === 'Escape') {
+                closeTestModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<div id="email-templates-container"></div>
+
+{{#contentFor 'page-title'}}Email Templates{{/contentFor}}
+
+{{#contentFor 'page-script'}}
+<script>
+  window.emailTemplatesData = {
+    title: '{{title}}',
+    user: {{{json data.user}}},
+    settings: {{{json data.settings}}}
+  };
+</script>
+{{/contentFor}}

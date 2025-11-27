@@ -346,6 +346,24 @@ function mainRoutes (router, middleware, controllers) {
   )
   router.get('/settings/legal', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.legal)
   router.get('/settings/logs', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.logs)
+  router.get(
+    '/settings/email-templates',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.emailTemplates
+  )
+  router.get(
+    '/settings/email-templates/editor/:id',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.emailTemplatesEditor
+  )
+  router.get(
+    '/settings/email-templates/editor',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.emailTemplatesEditor
+  )
 
   router.get(
     '/settings/editor/:template',
