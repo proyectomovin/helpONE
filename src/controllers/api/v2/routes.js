@@ -95,5 +95,19 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v2/es/rebuild', apiv2Auth, isAdmin, apiv2.elasticsearch.rebuild)
   router.get('/api/v2/es/status', apiv2Auth, isAdmin, apiv2.elasticsearch.status)
 
+  // Email Templates
+  router.get('/api/v2/email-templates', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.get)
+  router.get('/api/v2/email-templates/variables', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.getVariables)
+  router.get('/api/v2/email-templates/sample-data', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.getSampleData)
+  router.get('/api/v2/email-templates/:id', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.single)
+  router.post('/api/v2/email-templates', apiv2Auth, isAdmin, apiv2.emailTemplates.create)
+  router.put('/api/v2/email-templates/:id', apiv2Auth, isAdmin, apiv2.emailTemplates.update)
+  router.delete('/api/v2/email-templates/:id', apiv2Auth, isAdmin, apiv2.emailTemplates.delete)
+  router.post('/api/v2/email-templates/:id/clone', apiv2Auth, isAdmin, apiv2.emailTemplates.clone)
+  router.post('/api/v2/email-templates/:id/set-default', apiv2Auth, isAdmin, apiv2.emailTemplates.setDefault)
+  router.post('/api/v2/email-templates/:id/preview', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.preview)
+  router.post('/api/v2/email-templates/:id/test', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.test)
+  router.post('/api/v2/email-templates/validate', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.validate)
+
   router.get('/api/v2/mailer/check', apiv2Auth, isAdmin, apiv2.mailer.check)
 }
