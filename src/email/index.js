@@ -13,8 +13,10 @@
 
 var mailer = require('../mailer')
 var EmailTemplate = require('../models/emailTemplate')
+var EmailLog = require('../models/emailLog')
 var templateEngine = require('./templates/engine')
 var variablesHelper = require('./templates/variables')
+var calendar = require('./calendar')
 var winston = require('../logger')
 
 var emailModule = {}
@@ -193,6 +195,240 @@ emailModule.validateTemplate = function (htmlContent, subject, callback) {
   } catch (err) {
     callback(err)
   }
+}
+
+/**
+ * Send email with calendar attachment
+ * @param {Object} options - Options object
+ * @param {String} options.templateType - Template type
+ * @param {String|Array} options.to - Recipient email(s)
+ * @param {Object} options.data - Data for template rendering
+ * @param {String} options.calendarType - Type of calendar event ('sla', 'assignment', 'meeting')
+ * @param {Object} options.calendarData - Calendar event data
+ * @param {Function} callback - Callback function
+ */
+emailModule.sendEmailWithCalendar = function (options, callback) {
+  if (!options.to) {
+    return callback(new Error('Recipient email is required'))
+  }
+
+  // Get template
+  EmailTemplate.getByType(options.templateType, options.language || 'es').exec(function (err, template) {
+    if (err) return callback(err)
+    if (!template) {
+      return callback(new Error('Email template not found'))
+    }
+
+    try {
+      // Render template
+      var rendered = templateEngine.renderEmailTemplate(template, options.data)
+
+      // Create calendar attachment
+      var icsContent
+      var calendarEventId = calendar.generateUID()
+
+      switch (options.calendarType) {
+        case 'sla':
+          icsContent = calendar.createSLAWarningEvent(
+            options.calendarData.ticket,
+            options.calendarData.slaDeadline,
+            Object.assign({}, options.calendarData.options || {}, { uid: calendarEventId })
+          )
+          break
+        case 'assignment':
+          icsContent = calendar.createTicketAssignmentEvent(
+            options.calendarData.ticket,
+            options.calendarData.assignee,
+            Object.assign({}, options.calendarData.options || {}, { uid: calendarEventId })
+          )
+          break
+        case 'meeting':
+          icsContent = calendar.createMeetingEvent(
+            options.calendarData.ticket,
+            options.calendarData.meetingDate,
+            options.calendarData.duration,
+            options.calendarData.attendees,
+            Object.assign({}, options.calendarData.options || {}, { uid: calendarEventId })
+          )
+          break
+        default:
+          return callback(new Error('Invalid calendar type'))
+      }
+
+      // Prepare email with calendar attachment
+      var mailOptions = {
+        to: Array.isArray(options.to) ? options.to.join(',') : options.to,
+        subject: rendered.subject,
+        html: rendered.html,
+        generateTextFromHTML: true,
+        attachments: [calendar.createCalendarAttachment(icsContent)]
+      }
+
+      if (rendered.text) {
+        mailOptions.text = rendered.text
+      }
+
+      // Create log entry
+      var logEntry = new EmailLog({
+        templateId: template._id,
+        templateName: template.name,
+        templateType: template.type,
+        recipients: Array.isArray(options.to) ? options.to : [options.to],
+        subject: rendered.subject,
+        status: 'sending',
+        relatedTicket: options.ticketId,
+        relatedUser: options.userId,
+        hasCalendarAttachment: true,
+        calendarEventId: calendarEventId
+      })
+
+      logEntry.save(function (logErr) {
+        if (logErr) winston.warn('Error creating email log: ' + logErr.message)
+
+        // Send email
+        mailer.sendMail(mailOptions, function (err, info) {
+          if (err) {
+            winston.warn('Error sending email with calendar: ' + err.message)
+            if (logEntry) logEntry.markAsFailed(err, function () {})
+            return callback(err)
+          }
+
+          winston.debug('Email with calendar sent successfully: ' + template.name)
+          if (logEntry) logEntry.markAsSent(info.messageId, function () {})
+
+          callback(null, {
+            info: info,
+            logId: logEntry._id,
+            calendarEventId: calendarEventId
+          })
+        })
+      })
+    } catch (err) {
+      winston.error('Error sending email with calendar: ' + err.message)
+      callback(err)
+    }
+  })
+}
+
+/**
+ * Send ticket assigned notification
+ * @param {Object} ticket - Ticket object
+ * @param {Object} assignee - Assignee user object
+ * @param {String} baseUrl - Base URL for ticket links
+ * @param {Object} options - Additional options
+ * @param {Function} callback - Callback function
+ */
+emailModule.sendTicketAssignedNotification = function (ticket, assignee, baseUrl, options, callback) {
+  if (typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+
+  var templateData = templateEngine.buildTemplateData({
+    ticket: ticket,
+    user: assignee,
+    baseUrl: baseUrl,
+    action: {
+      url: baseUrl + '/tickets/' + ticket.uid,
+      label: 'View Ticket'
+    }
+  })
+
+  var calendarOptions = {
+    ticketUrl: baseUrl + '/tickets/' + ticket.uid,
+    organizerEmail: options.organizerEmail || 'noreply@helpdesk.com',
+    endDate: options.estimatedCompletion
+  }
+
+  this.sendEmailWithCalendar({
+    to: assignee.email,
+    templateType: 'ticket-assigned',
+    data: templateData,
+    calendarType: 'assignment',
+    calendarData: {
+      ticket: ticket,
+      assignee: assignee,
+      options: calendarOptions
+    },
+    ticketId: ticket._id,
+    userId: assignee._id
+  }, callback)
+}
+
+/**
+ * Send SLA warning notification
+ * @param {Object} ticket - Ticket object
+ * @param {Date} slaDeadline - SLA deadline date
+ * @param {Array} recipients - Array of recipient emails or user objects
+ * @param {String} baseUrl - Base URL for ticket links
+ * @param {Object} options - Additional options
+ * @param {Function} callback - Callback function
+ */
+emailModule.sendSLAWarningNotification = function (ticket, slaDeadline, recipients, baseUrl, options, callback) {
+  if (typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+
+  var recipientEmails = recipients.map(function (r) {
+    return typeof r === 'string' ? r : r.email
+  })
+
+  var templateData = templateEngine.buildTemplateData({
+    ticket: ticket,
+    baseUrl: baseUrl,
+    custom: {
+      slaDeadline: slaDeadline,
+      slaDeadlineFormatted: require('moment')(slaDeadline).format('DD/MM/YYYY HH:mm')
+    },
+    action: {
+      url: baseUrl + '/tickets/' + ticket.uid,
+      label: 'Resolve Now'
+    }
+  })
+
+  var calendarOptions = {
+    ticketUrl: baseUrl + '/tickets/' + ticket.uid,
+    reminderMinutes: options.reminderMinutes || 60
+  }
+
+  this.sendEmailWithCalendar({
+    to: recipientEmails,
+    templateType: 'ticket-sla-warning',
+    data: templateData,
+    calendarType: 'sla',
+    calendarData: {
+      ticket: ticket,
+      slaDeadline: slaDeadline,
+      options: calendarOptions
+    },
+    ticketId: ticket._id
+  }, callback)
+}
+
+/**
+ * Send ticket closed notification
+ * @param {Object} ticket - Ticket object
+ * @param {Object} requester - Ticket requester/owner
+ * @param {String} baseUrl - Base URL for ticket links
+ * @param {Function} callback - Callback function
+ */
+emailModule.sendTicketClosedNotification = function (ticket, requester, baseUrl, callback) {
+  var templateData = templateEngine.buildTemplateData({
+    ticket: ticket,
+    user: requester,
+    baseUrl: baseUrl,
+    action: {
+      url: baseUrl + '/tickets/' + ticket.uid,
+      label: 'View Ticket'
+    }
+  })
+
+  this.sendTemplateEmail({
+    to: requester.email,
+    templateType: 'ticket-closed',
+    data: templateData
+  }, callback)
 }
 
 module.exports = emailModule
