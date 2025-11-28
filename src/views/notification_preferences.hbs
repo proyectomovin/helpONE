@@ -1,0 +1,286 @@
+<div id="notification-preferences-container" class="full-height uk-clearfix">
+  <h2>Notification Preferences</h2>
+  <p class="uk-text-muted">Control how and when you receive notifications</p>
+
+  <div id="loading" class="uk-text-center uk-margin-large">
+    <i class="fa fa-spinner fa-spin fa-2x"></i>
+    <p>Loading preferences...</p>
+  </div>
+
+  <div id="error-message" class="uk-alert uk-alert-danger" style="display: none;"></div>
+
+  <form id="preferences-form" style="display: none;">
+    <!-- Global Settings -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Global Settings</legend>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" id="global-enabled" /> Enable all notifications</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" id="dnd-enabled" /> Do Not Disturb (pause all notifications)</label>
+      </div>
+    </fieldset>
+
+    <!-- Email Settings -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Email Notifications</legend>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" id="email-enabled" /> Enable email notifications</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Email Frequency</label>
+        <div class="uk-form-controls">
+          <select id="email-frequency" class="uk-width-1-2">
+            <option value="immediate">Immediate (real-time)</option>
+            <option value="digest-hourly">Hourly Digest</option>
+            <option value="digest-daily">Daily Digest</option>
+            <option value="digest-weekly">Weekly Digest</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="digest-time-container" class="uk-form-row uk-margin" style="display: none;">
+        <label class="uk-form-label">Digest Delivery Time</label>
+        <div class="uk-form-controls">
+          <input type="time" id="digest-time" class="uk-width-1-4" />
+          <p class="uk-form-help-block">Time when daily/weekly digests will be sent</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Event Preferences -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Event Notifications</legend>
+      <p class="uk-text-muted">Choose which events trigger notifications</p>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" class="event-pref" data-event="ticketAssigned" /> Ticket assigned to me</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" class="event-pref" data-event="commentAdded" /> New comments on my tickets</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" class="event-pref" data-event="ticketUpdated" /> Updates on tickets I'm participating in</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" class="event-pref" data-event="slaWarning" /> SLA warning on assigned tickets</label>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" class="event-pref" data-event="slaExceeded" /> SLA exceeded on assigned tickets</label>
+      </div>
+    </fieldset>
+
+    <!-- Quiet Hours -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Quiet Hours</legend>
+
+      <div class="uk-form-row uk-margin">
+        <label><input type="checkbox" id="quiet-hours-enabled" /> Enable quiet hours</label>
+      </div>
+
+      <div id="quiet-hours-config" style="display: none;">
+        <div class="uk-form-row uk-margin">
+          <label class="uk-form-label">Start Time</label>
+          <div class="uk-form-controls">
+            <input type="time" id="quiet-start" class="uk-width-1-4" />
+          </div>
+        </div>
+
+        <div class="uk-form-row uk-margin">
+          <label class="uk-form-label">End Time</label>
+          <div class="uk-form-controls">
+            <input type="time" id="quiet-end" class="uk-width-1-4" />
+          </div>
+        </div>
+
+        <div class="uk-form-row uk-margin">
+          <label><input type="checkbox" id="quiet-allow-urgent" /> Allow urgent notifications during quiet hours</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Actions -->
+    <div class="uk-form-row uk-margin-large-top">
+      <button type="submit" class="uk-button uk-button-primary">
+        <i class="fa fa-save"></i> Save Preferences
+      </button>
+      <button type="button" id="test-preferences" class="uk-button uk-button-success uk-margin-left">
+        <i class="fa fa-flask"></i> Test Preferences
+      </button>
+      <button type="button" id="reset-preferences" class="uk-button uk-button-danger uk-margin-left">
+        <i class="fa fa-undo"></i> Reset to Defaults
+      </button>
+    </div>
+  </form>
+</div>
+
+{{#contentFor 'page-title'}}Notification Preferences{{/contentFor}}
+
+{{#contentFor 'page-script'}}
+<script>
+(function() {
+  var preferences = null;
+
+  function loadPreferences() {
+    $.get('/api/v2/notification-preferences/me', function(response) {
+      $('#loading').hide();
+
+      if (response.success && response.preferences) {
+        preferences = response.preferences;
+        populateForm();
+        $('#preferences-form').show();
+      }
+    }).fail(function() {
+      $('#loading').hide();
+      $('#error-message').text('Error loading preferences').show();
+    });
+  }
+
+  function populateForm() {
+    // Global settings
+    $('#global-enabled').prop('checked', preferences.globalEnabled);
+    $('#dnd-enabled').prop('checked', preferences.doNotDisturb);
+
+    // Email settings
+    $('#email-enabled').prop('checked', preferences.channels.email.enabled);
+    $('#email-frequency').val(preferences.channels.email.frequency);
+    $('#digest-time').val(preferences.channels.email.digestTime || '09:00');
+
+    updateDigestTimeVisibility();
+
+    // Event preferences
+    $('.event-pref').each(function() {
+      var event = $(this).data('event');
+      if (preferences.eventPreferences && preferences.eventPreferences[event]) {
+        $(this).prop('checked', preferences.eventPreferences[event].enabled);
+      }
+    });
+
+    // Quiet hours
+    $('#quiet-hours-enabled').prop('checked', preferences.quietHours.enabled);
+    $('#quiet-start').val(preferences.quietHours.startTime || '22:00');
+    $('#quiet-end').val(preferences.quietHours.endTime || '08:00');
+    $('#quiet-allow-urgent').prop('checked', preferences.quietHours.allowUrgent);
+
+    updateQuietHoursVisibility();
+  }
+
+  function updateDigestTimeVisibility() {
+    var frequency = $('#email-frequency').val();
+    if (frequency.startsWith('digest-')) {
+      $('#digest-time-container').show();
+    } else {
+      $('#digest-time-container').hide();
+    }
+  }
+
+  function updateQuietHoursVisibility() {
+    if ($('#quiet-hours-enabled').is(':checked')) {
+      $('#quiet-hours-config').show();
+    } else {
+      $('#quiet-hours-config').hide();
+    }
+  }
+
+  function collectFormData() {
+    var eventPreferences = {};
+    $('.event-pref').each(function() {
+      var event = $(this).data('event');
+      eventPreferences[event] = {
+        enabled: $(this).is(':checked')
+      };
+    });
+
+    return {
+      globalEnabled: $('#global-enabled').is(':checked'),
+      doNotDisturb: $('#dnd-enabled').is(':checked'),
+      channels: {
+        email: {
+          enabled: $('#email-enabled').is(':checked'),
+          frequency: $('#email-frequency').val(),
+          digestTime: $('#digest-time').val()
+        }
+      },
+      eventPreferences: eventPreferences,
+      quietHours: {
+        enabled: $('#quiet-hours-enabled').is(':checked'),
+        startTime: $('#quiet-start').val(),
+        endTime: $('#quiet-end').val(),
+        allowUrgent: $('#quiet-allow-urgent').is(':checked')
+      }
+    };
+  }
+
+  // Event handlers
+  $('#email-frequency').on('change', updateDigestTimeVisibility);
+  $('#quiet-hours-enabled').on('change', updateQuietHoursVisibility);
+
+  $('#preferences-form').on('submit', function(e) {
+    e.preventDefault();
+
+    var data = collectFormData();
+
+    $.ajax({
+      url: '/api/v2/notification-preferences/me',
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(response) {
+        if (response.success) {
+          helpers.UI.showSnackbar('Preferences saved successfully', false);
+        }
+      },
+      error: function(xhr) {
+        var message = 'Error saving preferences';
+        if (xhr.responseJSON && xhr.responseJSON.error) {
+          message += ': ' + xhr.responseJSON.error.message;
+        }
+        helpers.UI.showSnackbar(message, true);
+      }
+    });
+  });
+
+  $('#test-preferences').on('click', function() {
+    $.post('/api/v2/notification-preferences/test', {
+      eventType: 'ticket-assigned',
+      context: { isUrgent: false }
+    }, function(response) {
+      if (response.success) {
+        helpers.UI.showSnackbar(response.message, false);
+      }
+    }).fail(function() {
+      helpers.UI.showSnackbar('Error testing preferences', true);
+    });
+  });
+
+  $('#reset-preferences').on('click', function() {
+    if (!confirm('Are you sure you want to reset all preferences to defaults?')) {
+      return;
+    }
+
+    $.post('/api/v2/notification-preferences/me/reset', function(response) {
+      if (response.success) {
+        helpers.UI.showSnackbar('Preferences reset to defaults', false);
+        preferences = response.preferences;
+        populateForm();
+      }
+    }).fail(function() {
+      helpers.UI.showSnackbar('Error resetting preferences', true);
+    });
+  });
+
+  // Initialize
+  $(document).ready(function() {
+    loadPreferences();
+  });
+})();
+</script>
+{{/contentFor}}

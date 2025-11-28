@@ -127,4 +127,17 @@ module.exports = function (middleware, router, controllers) {
   router.post('/api/v2/notification-rules/:id/clone', apiv2Auth, isAdmin, apiv2.notificationRules.clone)
   router.post('/api/v2/notification-rules/:id/test', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.test)
   router.post('/api/v2/notification-rules/:id/reset-stats', apiv2Auth, isAdmin, apiv2.notificationRules.resetStats)
+
+  // User Notification Preferences
+  router.get('/api/v2/notification-preferences/me', apiv2Auth, apiv2.userNotificationPreferences.getMe)
+  router.put('/api/v2/notification-preferences/me', apiv2Auth, apiv2.userNotificationPreferences.updateMe)
+  router.post('/api/v2/notification-preferences/test', apiv2Auth, apiv2.userNotificationPreferences.test)
+  router.get('/api/v2/users/:userId/notification-preferences', apiv2Auth, apiv2.userNotificationPreferences.get)
+  router.put('/api/v2/users/:userId/notification-preferences', apiv2Auth, apiv2.userNotificationPreferences.update)
+  router.post('/api/v2/users/:userId/notification-preferences/reset', apiv2Auth, apiv2.userNotificationPreferences.reset)
+  router.get('/api/v2/users/:userId/notification-preferences/stats', apiv2Auth, apiv2.userNotificationPreferences.stats)
+  router.get('/api/v2/users/:userId/notification-preferences/export', apiv2Auth, apiv2.userNotificationPreferences.export)
+  router.post('/api/v2/users/:userId/notification-preferences/import', apiv2Auth, apiv2.userNotificationPreferences.import)
+  router.post('/api/v2/users/:userId/notification-preferences/dnd', apiv2Auth, apiv2.userNotificationPreferences.toggleDND)
+  router.post('/api/v2/users/:userId/notification-preferences/ooo', apiv2Auth, apiv2.userNotificationPreferences.setOutOfOffice)
 }

@@ -25,6 +25,7 @@ const templateDir = path.resolve(__dirname, '..', 'mailer', 'templates')
 const socketEvents = require('../socketio/socketEventConsts')
 const notifications = require('../notifications') // Load Push Events
 const notificationRules = require('../email/rules/integration')
+const digestScheduler = require('../email/digest/scheduler')
 
 const eventTicketCreated = require('./events/event_ticket_created')
 
@@ -37,6 +38,9 @@ const eventTicketCreated = require('./events/event_ticket_created')
 
   // Initialize notification rules integration
   notificationRules.init()
+
+  // Initialize digest scheduler
+  digestScheduler.init()
 
   emitter.on('ticket:created', async function (data) {
     await eventTicketCreated(data)

@@ -382,6 +382,12 @@ function mainRoutes (router, middleware, controllers) {
     middleware.loadCommonData,
     controllers.settings.notificationRulesEditor
   )
+  router.get(
+    '/settings/notification-preferences',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.notificationPreferences
+  )
 
   router.get(
     '/settings/editor/:template',

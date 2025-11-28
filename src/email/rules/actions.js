@@ -18,6 +18,7 @@
 
 var emailModule = require('../index')
 var templateEngine = require('../templates/engine')
+var preferencesManager = require('../preferences/manager')
 var winston = require('../../logger')
 var axios = require('axios')
 
@@ -99,32 +100,48 @@ actionsHelper.sendEmail = function (action, context, callback) {
     return callback(new Error('No recipients resolved for email action'))
   }
 
-  // Prepare template data
-  var templateData = templateEngine.buildTemplateData({
-    ticket: context.ticket,
-    user: context.user,
-    comment: context.comment,
-    baseUrl: context.baseUrl
-  })
-
-  // Send email
-  var emailOptions = {
-    to: recipients,
-    templateType: emailConfig.templateType,
-    templateSlug: emailConfig.templateSlug,
-    data: templateData,
-    ticketId: context.ticket ? context.ticket._id : null,
-    userId: context.user ? context.user._id : null
-  }
-
-  emailModule.sendTemplateEmail(emailOptions, function (err, result) {
+  // Filter recipients based on their notification preferences
+  var eventType = context.eventType || 'ticket-created'
+  preferencesManager.filterRecipients(recipients, eventType, context, function (err, filteredRecipients) {
     if (err) {
-      winston.error('Error sending email: ' + err.message)
-      return callback(err)
+      winston.warn('Error filtering recipients by preferences: ' + err.message)
+      filteredRecipients = recipients // Fallback to all recipients
     }
 
-    winston.debug('Email sent successfully')
-    callback(null, { messageId: result.messageId })
+    if (!filteredRecipients || filteredRecipients.length === 0) {
+      winston.debug('All recipients filtered out by preferences')
+      return callback(null, { messageId: null, recipientsFiltered: true })
+    }
+
+    winston.debug('Sending to ' + filteredRecipients.length + ' recipients after preference filtering')
+
+    // Prepare template data
+    var templateData = templateEngine.buildTemplateData({
+      ticket: context.ticket,
+      user: context.user,
+      comment: context.comment,
+      baseUrl: context.baseUrl
+    })
+
+    // Send email
+    var emailOptions = {
+      to: filteredRecipients,
+      templateType: emailConfig.templateType,
+      templateSlug: emailConfig.templateSlug,
+      data: templateData,
+      ticketId: context.ticket ? context.ticket._id : null,
+      userId: context.user ? context.user._id : null
+    }
+
+    emailModule.sendTemplateEmail(emailOptions, function (err, result) {
+      if (err) {
+        winston.error('Error sending email: ' + err.message)
+        return callback(err)
+      }
+
+      winston.debug('Email sent successfully')
+      callback(null, { messageId: result.messageId })
+    })
   })
 }
 
@@ -147,12 +164,27 @@ actionsHelper.sendEmailWithCalendar = function (action, context, callback) {
     return callback(new Error('Calendar email requires calendarType'))
   }
 
-  // Prepare template data
-  var templateData = templateEngine.buildTemplateData({
-    ticket: context.ticket,
-    user: context.user,
-    baseUrl: context.baseUrl
-  })
+  // Filter recipients based on their notification preferences
+  var eventType = context.eventType || 'ticket-created'
+  preferencesManager.filterRecipients(recipients, eventType, context, function (err, filteredRecipients) {
+    if (err) {
+      winston.warn('Error filtering recipients by preferences: ' + err.message)
+      filteredRecipients = recipients // Fallback to all recipients
+    }
+
+    if (!filteredRecipients || filteredRecipients.length === 0) {
+      winston.debug('All recipients filtered out by preferences')
+      return callback(null, { messageId: null, recipientsFiltered: true })
+    }
+
+    winston.debug('Sending calendar email to ' + filteredRecipients.length + ' recipients after preference filtering')
+
+    // Prepare template data
+    var templateData = templateEngine.buildTemplateData({
+      ticket: context.ticket,
+      user: context.user,
+      baseUrl: context.baseUrl
+    })
 
   // Prepare calendar data based on type
   var calendarData = {}
@@ -203,28 +235,29 @@ actionsHelper.sendEmailWithCalendar = function (action, context, callback) {
       return callback(new Error('Invalid calendar type: ' + emailConfig.calendarType))
   }
 
-  // Send email with calendar
-  var emailOptions = {
-    to: recipients,
-    templateType: emailConfig.templateType,
-    templateSlug: emailConfig.templateSlug,
-    data: templateData,
-    calendarType: emailConfig.calendarType,
-    calendarData: calendarData,
-    ticketId: context.ticket ? context.ticket._id : null,
-    userId: context.user ? context.user._id : null
-  }
-
-  emailModule.sendEmailWithCalendar(emailOptions, function (err, result) {
-    if (err) {
-      winston.error('Error sending calendar email: ' + err.message)
-      return callback(err)
+    // Send email with calendar
+    var emailOptions = {
+      to: filteredRecipients,
+      templateType: emailConfig.templateType,
+      templateSlug: emailConfig.templateSlug,
+      data: templateData,
+      calendarType: emailConfig.calendarType,
+      calendarData: calendarData,
+      ticketId: context.ticket ? context.ticket._id : null,
+      userId: context.user ? context.user._id : null
     }
 
-    winston.debug('Calendar email sent successfully')
-    callback(null, {
-      messageId: result.info.messageId,
-      calendarEventId: result.calendarEventId
+    emailModule.sendEmailWithCalendar(emailOptions, function (err, result) {
+      if (err) {
+        winston.error('Error sending calendar email: ' + err.message)
+        return callback(err)
+      }
+
+      winston.debug('Calendar email sent successfully')
+      callback(null, {
+        messageId: result.info.messageId,
+        calendarEventId: result.calendarEventId
+      })
     })
   })
 }

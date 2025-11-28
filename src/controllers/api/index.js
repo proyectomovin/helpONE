@@ -40,6 +40,7 @@ module.exports = {
     messages: require('./v2/messages'),
     notificationRules: require('./v2/notificationRules'),
     notices: require('./v2/notices'),
+    userNotificationPreferences: require('./v2/userNotificationPreferences'),
     reports: require('./v2/reports'),
     roles: require('./v2/roles'),
     settings: require('./v2/settings'),

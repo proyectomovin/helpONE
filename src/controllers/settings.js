@@ -267,4 +267,18 @@ settingsController.notificationRulesEditor = function (req, res) {
   })
 }
 
+settingsController.notificationPreferences = function (req, res) {
+  const content = initViewContent('notification-preferences', req)
+  content.title = 'Notification Preferences - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_preferences', content)
+  })
+}
+
 module.exports = settingsController
