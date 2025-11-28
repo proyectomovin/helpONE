@@ -364,6 +364,24 @@ function mainRoutes (router, middleware, controllers) {
     middleware.loadCommonData,
     controllers.settings.emailTemplatesEditor
   )
+  router.get(
+    '/settings/notification-rules',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.notificationRules
+  )
+  router.get(
+    '/settings/notification-rules/editor/:id',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.notificationRulesEditor
+  )
+  router.get(
+    '/settings/notification-rules/editor',
+    middleware.redirectToLogin,
+    middleware.loadCommonData,
+    controllers.settings.notificationRulesEditor
+  )
 
   router.get(
     '/settings/editor/:template',

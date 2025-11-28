@@ -24,6 +24,7 @@ const Email = require('email-templates')
 const templateDir = path.resolve(__dirname, '..', 'mailer', 'templates')
 const socketEvents = require('../socketio/socketEventConsts')
 const notifications = require('../notifications') // Load Push Events
+const notificationRules = require('../email/rules/integration')
 
 const eventTicketCreated = require('./events/event_ticket_created')
 
@@ -33,6 +34,9 @@ const eventTicketCreated = require('./events/event_ticket_created')
   })
 
   notifications.init(emitter)
+
+  // Initialize notification rules integration
+  notificationRules.init()
 
   emitter.on('ticket:created', async function (data) {
     await eventTicketCreated(data)

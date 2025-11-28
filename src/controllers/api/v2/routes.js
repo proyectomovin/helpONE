@@ -110,4 +110,21 @@ module.exports = function (middleware, router, controllers) {
   router.post('/api/v2/email-templates/validate', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.validate)
 
   router.get('/api/v2/mailer/check', apiv2Auth, isAdmin, apiv2.mailer.check)
+
+  // Notification Rules
+  router.get('/api/v2/notification-rules', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.list)
+  router.get('/api/v2/notification-rules/stats/summary', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.statsSummary)
+  router.get('/api/v2/notification-rules/config/fields', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getAvailableFields)
+  router.get('/api/v2/notification-rules/config/operators', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getOperators)
+  router.get('/api/v2/notification-rules/config/actions', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getAvailableActions)
+  router.get('/api/v2/notification-rules/config/event-types', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getEventTypes)
+  router.post('/api/v2/notification-rules/validate', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.validate)
+  router.get('/api/v2/notification-rules/:id', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.get)
+  router.post('/api/v2/notification-rules', apiv2Auth, isAdmin, apiv2.notificationRules.create)
+  router.put('/api/v2/notification-rules/:id', apiv2Auth, isAdmin, apiv2.notificationRules.update)
+  router.delete('/api/v2/notification-rules/:id', apiv2Auth, isAdmin, apiv2.notificationRules.delete)
+  router.post('/api/v2/notification-rules/:id/toggle', apiv2Auth, isAdmin, apiv2.notificationRules.toggle)
+  router.post('/api/v2/notification-rules/:id/clone', apiv2Auth, isAdmin, apiv2.notificationRules.clone)
+  router.post('/api/v2/notification-rules/:id/test', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.test)
+  router.post('/api/v2/notification-rules/:id/reset-stats', apiv2Auth, isAdmin, apiv2.notificationRules.resetStats)
 }

@@ -38,6 +38,7 @@ module.exports = {
     groups: require('./v2/groups'),
     mailer: require('./v2/mailer'),
     messages: require('./v2/messages'),
+    notificationRules: require('./v2/notificationRules'),
     notices: require('./v2/notices'),
     reports: require('./v2/reports'),
     roles: require('./v2/roles'),

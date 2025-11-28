@@ -233,4 +233,38 @@ settingsController.emailTemplatesEditor = function (req, res) {
   })
 }
 
+settingsController.notificationRules = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const content = initViewContent('notification-rules', req)
+  content.title = 'Notification Rules - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_rules', content)
+  })
+}
+
+settingsController.notificationRulesEditor = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const ruleId = req.params.id
+  const content = initViewContent('notification-rules', req)
+  content.title = (ruleId === 'new' ? 'New' : 'Edit') + ' Notification Rule - Settings'
+  content.data.ruleId = ruleId
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_rule_editor', content)
+  })
+}
+
 module.exports = settingsController
