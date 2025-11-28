@@ -111,6 +111,18 @@ module.exports = function (middleware, router, controllers) {
 
   router.get('/api/v2/mailer/check', apiv2Auth, isAdmin, apiv2.mailer.check)
 
+  // Email Providers
+  router.get('/api/v2/email-providers', apiv2Auth, isAdmin, apiv2.emailProviders.list)
+  router.get('/api/v2/email-providers/stats/summary', apiv2Auth, isAdmin, apiv2.emailProviders.statsSummary)
+  router.get('/api/v2/email-providers/types', apiv2Auth, isAdmin, apiv2.emailProviders.getTypes)
+  router.get('/api/v2/email-providers/:id', apiv2Auth, isAdmin, apiv2.emailProviders.get)
+  router.post('/api/v2/email-providers', apiv2Auth, isAdmin, apiv2.emailProviders.create)
+  router.put('/api/v2/email-providers/:id', apiv2Auth, isAdmin, apiv2.emailProviders.update)
+  router.delete('/api/v2/email-providers/:id', apiv2Auth, isAdmin, apiv2.emailProviders.delete)
+  router.post('/api/v2/email-providers/:id/toggle', apiv2Auth, isAdmin, apiv2.emailProviders.toggle)
+  router.post('/api/v2/email-providers/:id/test', apiv2Auth, isAdmin, apiv2.emailProviders.test)
+  router.post('/api/v2/email-providers/:id/reset-stats', apiv2Auth, isAdmin, apiv2.emailProviders.resetStats)
+
   // Notification Rules
   router.get('/api/v2/notification-rules', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.list)
   router.get('/api/v2/notification-rules/stats/summary', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.statsSummary)

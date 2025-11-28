@@ -34,6 +34,7 @@ module.exports = {
     common: require('./v2/common'),
     departments: require('./v2/departments'),
     elasticsearch: require('./v2/elasticsearch'),
+    emailProviders: require('./v2/emailProviders'),
     emailTemplates: require('./v2/emailTemplates'),
     groups: require('./v2/groups'),
     mailer: require('./v2/mailer'),
