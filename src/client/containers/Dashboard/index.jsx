@@ -358,9 +358,14 @@ class DashboardContainer extends React.Component {
                 }
               />
             </GridItem>
-            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
-              <TruCard
-                loaderActive={this.props.dashboardState.loadingTimeTrackingStats}
+            {(() => {
+              const timeTrackingEnabled = helpers.getViewDataItem('timeTrackingUsersEnabled') !== false
+              const isAdminOrAgent = helpers.canUser('agent:*', true) || helpers.canUser('admin:*', true)
+              const canViewTimeTracking = (isAdminOrAgent || timeTrackingEnabled) && helpers.canUser('tickets:timetracking:view', true)
+              return canViewTimeTracking ? (
+                <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+                  <TruCard
+                    loaderActive={this.props.dashboardState.loadingTimeTrackingStats}
                 animateLoader={true}
                 style={{ minHeight: 250 }}
                 header={
@@ -432,7 +437,9 @@ class DashboardContainer extends React.Component {
                   </div>
                 }
               />
-            </GridItem>
+                </GridItem>
+              ) : null
+            })()}
             <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
               <TruCard
                 loaderActive={this.props.dashboardState.loadingTopAssignees}
@@ -487,9 +494,14 @@ class DashboardContainer extends React.Component {
                 }
               />
             </GridItem>
-            <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
-              <TruCard
-                loaderActive={this.props.dashboardState.loadingTimeTrackingByGroup}
+            {(() => {
+              const timeTrackingEnabled = helpers.getViewDataItem('timeTrackingUsersEnabled') !== false
+              const isAdminOrAgent = helpers.canUser('agent:*', true) || helpers.canUser('admin:*', true)
+              const canViewTimeTracking = (isAdminOrAgent || timeTrackingEnabled) && helpers.canUser('tickets:timetracking:view', true)
+              return canViewTimeTracking ? (
+                <GridItem width={'1-1'} extraClass={'uk-margin-medium-top'}>
+                  <TruCard
+                    loaderActive={this.props.dashboardState.loadingTimeTrackingByGroup}
                 animateLoader={true}
                 style={{ minHeight: 250 }}
                 header={
@@ -563,7 +575,9 @@ class DashboardContainer extends React.Component {
                   </div>
                 }
               />
-            </GridItem>
+                </GridItem>
+              ) : null
+            })()}
           </Grid>
         </PageContent>
       </div>

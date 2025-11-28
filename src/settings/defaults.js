@@ -25,9 +25,10 @@ const PrioritySchema = require('../models/ticketpriority')
 const settingsDefaults = {}
 const roleDefaults = {}
 
-roleDefaults.userGrants = ['tickets:create view update', 'comments:create view update']
+roleDefaults.userGrants = ['tickets:create view update', 'tickets:timetracking:view', 'comments:create view update']
 roleDefaults.supportGrants = [
   'tickets:*',
+  'tickets:timetracking:*',
   'agent:*',
   'accounts:create update view import',
   'teams:create update view',
@@ -40,6 +41,7 @@ roleDefaults.adminGrants = [
   'agent:*',
   'chat:*',
   'tickets:*',
+  'tickets:timetracking:*',
   'accounts:*',
   'groups:*',
   'teams:*',
@@ -739,6 +741,23 @@ function maintenanceModeDefault (callback) {
   })
 }
 
+function timeTrackingForUsersDefault (callback) {
+  SettingsSchema.getSettingByName('timetracking:users:enable', function (err, setting) {
+    if (err) return callback(err)
+    if (!setting) {
+      SettingsSchema.create(
+        {
+          name: 'timetracking:users:enable',
+          value: true
+        },
+        callback
+      )
+    } else {
+      return callback()
+    }
+  })
+}
+
 settingsDefaults.init = function (callback) {
   winston.debug('Checking Default Settings...')
   async.series(
@@ -787,6 +806,9 @@ settingsDefaults.init = function (callback) {
       },
       function (done) {
         return installationID(done)
+      },
+      function (done) {
+        return timeTrackingForUsersDefault(done)
       }
     ],
     function (err) {
