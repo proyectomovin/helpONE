@@ -29,6 +29,7 @@ import SplitSettingsPanel from 'components/Settings/SplitSettingsPanel'
 import helpers from 'lib/helpers'
 import Zone from 'components/ZoneBox/zone'
 import ZoneBox from 'components/ZoneBox'
+import History from 'client/lib/history'
 
 const templateBody = ({ template, handleSaveSubject, handleOpenEditor }) => (
   <div>
