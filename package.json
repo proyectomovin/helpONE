@@ -23,6 +23,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "8.2.1",
     "@handlebars/allow-prototype-access": "1.0.5",
+    "@monaco-editor/react": "4.7.0",
     "adm-zip": "0.5.9",
     "animejs": "3.0.1",
     "ansi_up": "5.1.0",

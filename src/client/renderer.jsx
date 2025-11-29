@@ -30,6 +30,7 @@ import ProfileContainer from 'containers/Profile'
 import MessagesContainer from 'containers/Messages'
 import ReportsContainer from 'containers/Reports'
 import AboutContainer from 'containers/About'
+import EmailTemplateEditorContainer from 'containers/EmailTemplateEditor/EmailTemplateEditorContainer'
 
 export default function (store) {
   if (document.getElementById('dashboard-container')) {
@@ -181,5 +182,16 @@ export default function (store) {
     )
 
     ReactDOM.render(AboutContainerWithProvider, document.getElementById('about-container'))
+  }
+
+  if (document.getElementById('email-template-editor-container')) {
+    const templateName = document.getElementById('email-template-editor-container').getAttribute('data-template')
+    const EmailTemplateEditorWithProvider = (
+      <Provider store={store}>
+        <EmailTemplateEditorContainer templateName={templateName} />
+      </Provider>
+    )
+
+    ReactDOM.render(EmailTemplateEditorWithProvider, document.getElementById('email-template-editor-container'))
   }
 }
