@@ -177,6 +177,21 @@ apiSettings.updateTemplateSubject = function (req, res) {
   })
 }
 
+apiSettings.getMailerTemplate = function (req, res) {
+  var templateSchema = require('../../../models/template')
+  var name = req.params.id
+  if (!name) return res.status(400).json({ success: false, error: 'Invalid Template Name' })
+
+  templateSchema.get(name, function (err, template) {
+    if (err) return defaultApiResponse(err, res)
+    if (!template) return res.status(404).json({ success: false, error: 'No Template Found' })
+
+    if (template.data && !template.data.id) template.data.id = 'gjs-'
+
+    return res.json({ success: true, template: template })
+  })
+}
+
 apiSettings.buildsass = function (req, res) {
   var buildsass = require('../../../sass/buildsass')
   buildsass.build(function (err) {

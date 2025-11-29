@@ -243,6 +243,7 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v1/settings', apiv1, apiCtrl.settings.getSettings)
   router.put('/api/v1/settings', apiv1, isAdmin, apiCtrl.settings.updateSetting)
   router.post('/api/v1/settings/testmailer', apiv1, isAdmin, apiCtrl.settings.testMailer)
+  router.get('/api/v1/settings/mailer/template/:id', apiv1, isAdmin, apiCtrl.settings.getMailerTemplate)
   router.put('/api/v1/settings/mailer/template/:id', apiv1, isAdmin, apiCtrl.settings.updateTemplateSubject)
   router.get('/api/v1/settings/buildsass', apiv1, isAdmin, apiCtrl.settings.buildsass)
   router.put('/api/v1/settings/updateroleorder', apiv1, isAdmin, apiCtrl.settings.updateRoleOrder)
