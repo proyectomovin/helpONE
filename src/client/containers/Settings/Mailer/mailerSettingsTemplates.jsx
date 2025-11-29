@@ -53,19 +53,14 @@ const templateBody = ({ template, handleSaveSubject, handleOpenEditor }) => (
     <Zone extraClass={'uk-margin-medium-top'}>
       <ZoneBox>
         <div className={'uk-float-left'}>
-          <h6 style={{ margin: 0, fontSize: '16px', lineHeight: '14px' }}>Edit Template (Disabled)</h6>
+          <h6 style={{ margin: 0, fontSize: '16px', lineHeight: '14px' }}>Edit Template</h6>
           <h5 className={'uk-text-muted'} style={{ margin: '2px 0 0 0', fontSize: '12px' }}>
-            Customize template - Currently disabled
+            Customize the notification template in the visual editor
           </h5>
         </div>
         <div className='uk-float-right uk-width-1-3 uk-clearfix'>
           <div className='uk-width-1-1 uk-float-right' style={{ textAlign: 'right' }}>
-            <button
-              className={'md-btn md-btn-small right disabled'}
-              style={{ textTransform: 'none' }}
-              onClick={handleOpenEditor}
-              disabled={true}
-            >
+            <button className={'md-btn md-btn-small right'} style={{ textTransform: 'none' }} onClick={handleOpenEditor}>
               Open Editor
             </button>
           </div>
@@ -139,7 +134,7 @@ class MailerSettingsTemplates extends React.Component {
 
   static onOpenEditor (e, name) {
     e.preventDefault()
-    const url = `/settings/editor/${name}/`
+    const url = `/settings/editor/${name}`
     History.pushState(null, null, url)
   }
 
