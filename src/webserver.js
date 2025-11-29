@@ -23,7 +23,8 @@ const winston = require('./logger')
 const middleware = require('./middleware')
 const routes = require('./routes')
 const server = require('http').createServer(WebServer)
-let port = nconf.get('port') || 8118
+const envPort = nconf.get('port') || nconf.get('PORT') || process.env.PORT
+let port = envPort || 8118
 
 ;(app => {
   'use strict'
