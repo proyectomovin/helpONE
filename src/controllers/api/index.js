@@ -34,14 +34,17 @@ module.exports = {
     common: require('./v2/common'),
     departments: require('./v2/departments'),
     elasticsearch: require('./v2/elasticsearch'),
-    emailProviders: require('./v2/emailProviders'),
-    emailTemplates: require('./v2/emailTemplates'),
+    // TEMPORARILY DISABLED - debugging SIGABRT
+    // emailProviders: require('./v2/emailProviders'),
+    // emailTemplates: require('./v2/emailTemplates'),
     groups: require('./v2/groups'),
     mailer: require('./v2/mailer'),
     messages: require('./v2/messages'),
-    notificationRules: require('./v2/notificationRules'),
+    // TEMPORARILY DISABLED - debugging SIGABRT
+    // notificationRules: require('./v2/notificationRules'),
     notices: require('./v2/notices'),
-    userNotificationPreferences: require('./v2/userNotificationPreferences'),
+    // TEMPORARILY DISABLED - debugging SIGABRT
+    // userNotificationPreferences: require('./v2/userNotificationPreferences'),
     reports: require('./v2/reports'),
     roles: require('./v2/roles'),
     settings: require('./v2/settings'),
