@@ -40,7 +40,8 @@ const eventTicketCreated = require('./events/event_ticket_created')
   notificationRules.init()
 
   // Initialize digest scheduler (Phase 4)
-  digestScheduler.init()
+  // TEMPORARILY DISABLED: Requires node-cron dependency to be installed in Docker
+  // digestScheduler.init()
 
   emitter.on('ticket:created', async function (data) {
     await eventTicketCreated(data)

@@ -8,13 +8,19 @@ FROM node:16.14-alpine AS builder
 RUN mkdir -p /usr/src/trudesk
 WORKDIR /usr/src/trudesk
 
-COPY . /usr/src/trudesk
+# Copy package files first to leverage Docker cache
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
 
 RUN apk add --no-cache --update bash make gcc g++ python3
 RUN yarn plugin import workspace-tools
 RUN yarn workspaces focus --all --production
 RUN cp -R node_modules prod_node_modules
 RUN yarn install
+
+# Copy rest of the code
+COPY . /usr/src/trudesk
+
 RUN yarn build
 RUN rm -rf node_modules && mv prod_node_modules node_modules
 RUN rm -rf .yarn/cache
