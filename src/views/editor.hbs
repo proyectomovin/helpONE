@@ -1,7 +1,187 @@
-<div class="page-content no-border-top full-height" ng-controller="editorController" ng-init="template='{{data.template}}';" >
-    <div id="web-editor"></div>
-    <div id="web-editor-invalid-notification" class="full-height hide">
-        <h2 style="width: 100%; text-align: center; position: absolute; top: 50%; left: 50%; margin: 0 0 0 -50%;"
-            class="uk-text-muted font-light">404: Invalid Template. Redirecting...</h2>
-    </div>
+{{#contentFor 'css'}}
+  <link rel="stylesheet" href="/js/vendor/grapesjs/css/grapes.min.css" />
+  <style>
+    #web-editor {
+      min-height: calc(100vh - 80px);
+      background: #f7f7f7;
+    }
+
+    #web-editor-invalid-notification {
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #web-editor-invalid-notification.show {
+      display: flex;
+    }
+  </style>
+{{/contentFor}}
+
+<div class="page-content no-border-top full-height" id="mailer-editor" data-template="{{data.template}}">
+  <div id="web-editor"></div>
+  <div id="web-editor-invalid-notification" class="full-height">
+    <h2 class="uk-text-muted font-light">Unable to load template. Please try again.</h2>
+  </div>
 </div>
+
+{{#contentFor 'js-plugins'}}
+  <script src="/js/vendor/grapesjs/grapes.min.js"></script>
+  <script src="/js/vendor/grapesjs/grapesjs-preset-email.min.js"></script>
+  <script>
+    (function () {
+      var editorContainer = document.getElementById('mailer-editor')
+      if (!editorContainer) return
+
+      var templateName = editorContainer.getAttribute('data-template')
+      var invalidNotice = document.getElementById('web-editor-invalid-notification')
+      var loaderWrapper = document.getElementById('loader-wrapper')
+
+      var showToast = function (message, isError) {
+        if (window.helpers && window.helpers.UI && typeof window.helpers.UI.showSnackbar === 'function') {
+          window.helpers.UI.showSnackbar(message, isError === true)
+        }
+      }
+
+      var showInvalid = function (message) {
+        if (invalidNotice) {
+          invalidNotice.classList.add('show')
+          if (message) invalidNotice.querySelector('h2').innerText = message
+        }
+        var webEditor = document.getElementById('web-editor')
+        if (webEditor) webEditor.style.display = 'none'
+      }
+
+      var toggleLoader = function (visible) {
+        if (!loaderWrapper) return
+        loaderWrapper.style.display = visible ? 'block' : 'none'
+      }
+
+      var parseTemplate = function (payload) {
+        if (!payload) return null
+        if (payload.invalid) return null
+        if (payload.template) return payload.template.data || payload.template
+        if (payload.data) return payload.data
+        return payload
+      }
+
+      var fetchTemplateData = function () {
+        var endpoints = [
+          '/api/v1/settings/mailer/template/' + templateName,
+          '/api/v1/editor/load/' + templateName
+        ]
+
+        var attempt = function (index) {
+          if (index >= endpoints.length) return Promise.reject(new Error('Template not found'))
+
+          return fetch(endpoints[index], { credentials: 'same-origin' })
+            .then(function (res) {
+              if (!res.ok) throw new Error(res.statusText)
+              return res.json()
+            })
+            .then(function (data) {
+              var parsed = parseTemplate(data)
+              if (!parsed) throw new Error('Invalid Template Data')
+              return parsed
+            })
+            .catch(function () {
+              return attempt(index + 1)
+            })
+        }
+
+        return attempt(0)
+      }
+
+      var saveTemplateData = function (data) {
+        return fetch('/api/v1/editor/save', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(Object.assign({}, data, { template: templateName }))
+        }).then(function (res) {
+          return res.json()
+        })
+      }
+
+      var initEditor = function () {
+        if (!templateName) {
+          showInvalid('No template selected.')
+          showToast('Missing template name', true)
+          return
+        }
+
+        toggleLoader(true)
+
+        fetchTemplateData()
+          .then(function (templateData) {
+            var editor = grapesjs.init({
+              container: '#web-editor',
+              height: 'calc(100vh - 80px)',
+              storageManager: {
+                type: 'remote',
+                autosave: false,
+                autoload: false,
+                stepsBeforeSave: 1,
+                store: function (data) {
+                  return saveTemplateData(data).then(function (response) {
+                    if (!response || response.success !== true) throw new Error('Save failed')
+                    return response
+                  })
+                },
+                load: function () {
+                  return fetchTemplateData()
+                }
+              },
+              plugins: ['gjs-preset-newsletter']
+            })
+
+            if (editor.loadProjectData) {
+              editor.loadProjectData(templateData)
+            } else {
+              var html = templateData['gjs-components'] || templateData['gjs-html'] || ''
+              var styles = templateData['gjs-styles'] || templateData['gjs-css'] || ''
+              if (html) editor.setComponents(html)
+              if (styles) editor.setStyle(styles)
+            }
+
+            editor.load()
+
+            editor.Commands.add('save-template', {
+              run: function (ed) {
+                ed.store()
+              }
+            })
+
+            editor.Panels.addButton('options', [
+              {
+                id: 'save-template',
+                className: 'fa fa-save',
+                command: 'save-template',
+                attributes: { title: 'Save Template' }
+              }
+            ])
+
+            editor.on('storage:end:store', function () {
+              showToast('Template saved successfully')
+            })
+
+            editor.on('storage:error', function () {
+              showToast('Unable to save template', true)
+            })
+          })
+          .catch(function (err) {
+            console.error(err)
+            showToast('Unable to load template', true)
+            showInvalid('Unable to load template. Please try again later.')
+          })
+          .finally(function () {
+            toggleLoader(false)
+          })
+      }
+
+      initEditor()
+    })()
+  </script>
+{{/contentFor}}
