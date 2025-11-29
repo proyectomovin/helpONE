@@ -346,6 +346,8 @@ function mainRoutes (router, middleware, controllers) {
   )
   router.get('/settings/legal', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.legal)
   router.get('/settings/logs', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.logs)
+  // TEMPORARILY DISABLED - debugging SIGABRT
+  /*
   router.get(
     '/settings/email-templates',
     middleware.redirectToLogin,
@@ -388,6 +390,7 @@ function mainRoutes (router, middleware, controllers) {
     middleware.loadCommonData,
     controllers.settings.notificationPreferences
   )
+  */
 
   router.get(
     '/settings/editor/:template',
