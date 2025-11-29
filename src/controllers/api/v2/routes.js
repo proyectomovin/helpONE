@@ -95,6 +95,9 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v2/es/rebuild', apiv2Auth, isAdmin, apiv2.elasticsearch.rebuild)
   router.get('/api/v2/es/status', apiv2Auth, isAdmin, apiv2.elasticsearch.status)
 
+  // TEMPORARILY DISABLED - debugging SIGABRT
+  // All new email/notification routes commented out to isolate crash
+  /*
   // Email Templates
   router.get('/api/v2/email-templates', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.get)
   router.get('/api/v2/email-templates/variables', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.getVariables)
@@ -152,4 +155,5 @@ module.exports = function (middleware, router, controllers) {
   router.post('/api/v2/users/:userId/notification-preferences/import', apiv2Auth, apiv2.userNotificationPreferences.import)
   router.post('/api/v2/users/:userId/notification-preferences/dnd', apiv2Auth, apiv2.userNotificationPreferences.toggleDND)
   router.post('/api/v2/users/:userId/notification-preferences/ooo', apiv2Auth, apiv2.userNotificationPreferences.setOutOfOffice)
+  */
 }
