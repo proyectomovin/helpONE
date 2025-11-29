@@ -20,6 +20,7 @@ import { observer } from 'mobx-react'
 import { makeObservable, observable } from 'mobx'
 import Log from '../../../logger'
 import axios from 'axios'
+import History from 'lib2/history'
 
 import Button from 'components/Button'
 import SettingItem from 'components/Settings/SettingItem'
@@ -56,12 +57,12 @@ const templateBody = ({ template, handleSaveSubject, handleOpenEditor }) => (
         <div className={'uk-float-left'}>
           <h6 style={{ margin: 0, fontSize: '16px', lineHeight: '14px' }}>Edit Template</h6>
           <h5 className={'uk-text-muted'} style={{ margin: '2px 0 0 0', fontSize: '12px' }}>
-            Customize the notification template in the visual editor
+            Open the visual editor to customize this email notification.
           </h5>
         </div>
         <div className='uk-float-right uk-width-1-3 uk-clearfix'>
           <div className='uk-width-1-1 uk-float-right' style={{ textAlign: 'right' }}>
-            <button className={'md-btn md-btn-small right'} style={{ textTransform: 'none' }} onClick={handleOpenEditor}>
+            <button className={'md-btn md-btn-primary md-btn-small right'} style={{ textTransform: 'none' }} onClick={handleOpenEditor}>
               Open Editor
             </button>
           </div>
@@ -135,8 +136,8 @@ class MailerSettingsTemplates extends React.Component {
 
   static onOpenEditor (e, name) {
     e.preventDefault()
-    const url = `/settings/editor/${name}`
-    History.pushState(null, null, url)
+    const url = `/settings/editor/${name}/`
+    History.push(url)
   }
 
   mapTemplateMenu () {
