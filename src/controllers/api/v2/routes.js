@@ -95,5 +95,51 @@ module.exports = function (middleware, router, controllers) {
   router.get('/api/v2/es/rebuild', apiv2Auth, isAdmin, apiv2.elasticsearch.rebuild)
   router.get('/api/v2/es/status', apiv2Auth, isAdmin, apiv2.elasticsearch.status)
 
+  // Phase 1: Email Templates with GrapesJS
+  router.get('/api/v2/email-templates', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.get)
+  router.get('/api/v2/email-templates/variables', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.getVariables)
+  router.get('/api/v2/email-templates/sample-data', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.getSampleData)
+  router.get('/api/v2/email-templates/:id', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.single)
+  router.post('/api/v2/email-templates', apiv2Auth, isAdmin, apiv2.emailTemplates.create)
+  router.put('/api/v2/email-templates/:id', apiv2Auth, isAdmin, apiv2.emailTemplates.update)
+  router.delete('/api/v2/email-templates/:id', apiv2Auth, isAdmin, apiv2.emailTemplates.delete)
+  router.post('/api/v2/email-templates/:id/clone', apiv2Auth, isAdmin, apiv2.emailTemplates.clone)
+  router.post('/api/v2/email-templates/:id/set-default', apiv2Auth, isAdmin, apiv2.emailTemplates.setDefault)
+  router.post('/api/v2/email-templates/:id/preview', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.preview)
+  router.post('/api/v2/email-templates/:id/test', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.test)
+  router.post('/api/v2/email-templates/validate', apiv2Auth, isAgentOrAdmin, apiv2.emailTemplates.validate)
+
   router.get('/api/v2/mailer/check', apiv2Auth, isAdmin, apiv2.mailer.check)
+
+  // Phase 5 removed - email providers not needed (SMTP works)
+
+  // Phase 3: Notification Rules
+  router.get('/api/v2/notification-rules', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.list)
+  router.get('/api/v2/notification-rules/stats/summary', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.statsSummary)
+  router.get('/api/v2/notification-rules/config/fields', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getAvailableFields)
+  router.get('/api/v2/notification-rules/config/operators', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getOperators)
+  router.get('/api/v2/notification-rules/config/actions', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getAvailableActions)
+  router.get('/api/v2/notification-rules/config/event-types', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.getEventTypes)
+  router.post('/api/v2/notification-rules/validate', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.validate)
+  router.get('/api/v2/notification-rules/:id', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.get)
+  router.post('/api/v2/notification-rules', apiv2Auth, isAdmin, apiv2.notificationRules.create)
+  router.put('/api/v2/notification-rules/:id', apiv2Auth, isAdmin, apiv2.notificationRules.update)
+  router.delete('/api/v2/notification-rules/:id', apiv2Auth, isAdmin, apiv2.notificationRules.delete)
+  router.post('/api/v2/notification-rules/:id/toggle', apiv2Auth, isAdmin, apiv2.notificationRules.toggle)
+  router.post('/api/v2/notification-rules/:id/clone', apiv2Auth, isAdmin, apiv2.notificationRules.clone)
+  router.post('/api/v2/notification-rules/:id/test', apiv2Auth, isAgentOrAdmin, apiv2.notificationRules.test)
+  router.post('/api/v2/notification-rules/:id/reset-stats', apiv2Auth, isAdmin, apiv2.notificationRules.resetStats)
+
+  // Phase 4: User Notification Preferences
+  router.get('/api/v2/notification-preferences/me', apiv2Auth, apiv2.userNotificationPreferences.getMe)
+  router.put('/api/v2/notification-preferences/me', apiv2Auth, apiv2.userNotificationPreferences.updateMe)
+  router.post('/api/v2/notification-preferences/test', apiv2Auth, apiv2.userNotificationPreferences.test)
+  router.get('/api/v2/users/:userId/notification-preferences', apiv2Auth, apiv2.userNotificationPreferences.get)
+  router.put('/api/v2/users/:userId/notification-preferences', apiv2Auth, apiv2.userNotificationPreferences.update)
+  router.post('/api/v2/users/:userId/notification-preferences/reset', apiv2Auth, apiv2.userNotificationPreferences.reset)
+  router.get('/api/v2/users/:userId/notification-preferences/stats', apiv2Auth, apiv2.userNotificationPreferences.stats)
+  router.get('/api/v2/users/:userId/notification-preferences/export', apiv2Auth, apiv2.userNotificationPreferences.export)
+  router.post('/api/v2/users/:userId/notification-preferences/import', apiv2Auth, apiv2.userNotificationPreferences.import)
+  router.post('/api/v2/users/:userId/notification-preferences/dnd', apiv2Auth, apiv2.userNotificationPreferences.toggleDND)
+  router.post('/api/v2/users/:userId/notification-preferences/ooo', apiv2Auth, apiv2.userNotificationPreferences.setOutOfOffice)
 }

@@ -199,4 +199,86 @@ settingsController.logs = function (req, res) {
   })
 }
 
+settingsController.emailTemplates = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const content = initViewContent('email-templates', req)
+  content.title = 'Email Templates - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('email_templates', content)
+  })
+}
+
+settingsController.emailTemplatesEditor = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const templateId = req.params.id
+  const content = initViewContent('email-templates', req)
+  content.title = 'Email Template Editor - Settings'
+  content.data.templateId = templateId
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('email_template_editor', content)
+  })
+}
+
+settingsController.notificationRules = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const content = initViewContent('notification-rules', req)
+  content.title = 'Notification Rules - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_rules', content)
+  })
+}
+
+settingsController.notificationRulesEditor = function (req, res) {
+  if (!checkPerms(req, 'settings:mailer')) return res.redirect('/settings')
+
+  const ruleId = req.params.id
+  const content = initViewContent('notification-rules', req)
+  content.title = (ruleId === 'new' ? 'New' : 'Edit') + ' Notification Rule - Settings'
+  content.data.ruleId = ruleId
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_rule_editor', content)
+  })
+}
+
+settingsController.notificationPreferences = function (req, res) {
+  const content = initViewContent('notification-preferences', req)
+  content.title = 'Notification Preferences - Settings'
+
+  settingsUtil.getSettings(function (err, returnedContent) {
+    if (err) return handleError(res, err)
+
+    content.data.settings = returnedContent.data.settings
+    content.data.common = req.viewdata
+
+    return res.render('notification_preferences', content)
+  })
+}
+
 module.exports = settingsController

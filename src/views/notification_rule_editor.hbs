@@ -1,0 +1,439 @@
+<div id="notification-rule-editor" class="full-height uk-clearfix">
+  <div class="uk-width-1-1 uk-margin-large-bottom">
+    <h2 id="page-header">{{#if data.ruleId}}Edit{{else}}New{{/if}} Notification Rule</h2>
+  </div>
+
+  <form id="rule-form" class="uk-form uk-form-horizontal">
+    <input type="hidden" id="rule-id" value="{{data.ruleId}}" />
+
+    <!-- Basic Information -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Basic Information</legend>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Name *</label>
+        <div class="uk-form-controls">
+          <input type="text" id="rule-name" class="uk-width-1-1" placeholder="Rule name" required />
+        </div>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Description</label>
+        <div class="uk-form-controls">
+          <textarea id="rule-description" class="uk-width-1-1" rows="3" placeholder="Optional description"></textarea>
+        </div>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Event Type *</label>
+        <div class="uk-form-controls">
+          <select id="rule-event-type" class="uk-width-1-1" required>
+            <option value="">Select event type...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Priority</label>
+        <div class="uk-form-controls">
+          <input type="number" id="rule-priority" class="uk-width-1-4" value="100" min="1" max="1000" />
+          <p class="uk-form-help-block">Lower numbers execute first (1-1000)</p>
+        </div>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+        <label class="uk-form-label">Status</label>
+        <div class="uk-form-controls">
+          <label><input type="checkbox" id="rule-active" /> Active</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Conditions -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Conditions (When)</legend>
+      <p class="uk-text-muted">Define when this rule should execute. All conditions must be met.</p>
+
+      <div id="conditions-container"></div>
+
+      <button type="button" id="add-condition" class="uk-button uk-button-small uk-button-primary">
+        <i class="fa fa-plus"></i> Add Condition
+      </button>
+    </fieldset>
+
+    <!-- Actions -->
+    <fieldset class="uk-margin-large-bottom">
+      <legend>Actions (Then) *</legend>
+      <p class="uk-text-muted">Define what should happen when conditions are met. At least one action is required.</p>
+
+      <div id="actions-container"></div>
+
+      <button type="button" id="add-action" class="uk-button uk-button-small uk-button-primary">
+        <i class="fa fa-plus"></i> Add Action
+      </button>
+    </fieldset>
+
+    <!-- Form Actions -->
+    <div class="uk-form-row uk-margin-large-top">
+      <button type="submit" id="save-rule" class="uk-button uk-button-primary">
+        <i class="fa fa-save"></i> Save Rule
+      </button>
+      <button type="button" id="test-rule" class="uk-button uk-button-success uk-margin-left">
+        <i class="fa fa-flask"></i> Test Rule
+      </button>
+      <a href="/settings/notification-rules" class="uk-button uk-button-default uk-margin-left">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+{{#contentFor 'page-title'}}Notification Rule Editor{{/contentFor}}
+
+{{#contentFor 'page-style'}}
+<style>
+  .condition-item, .action-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background: #f9f9f9;
+  }
+  .condition-item .uk-button-danger, .action-item .uk-button-danger {
+    float: right;
+  }
+</style>
+{{/contentFor}}
+
+{{#contentFor 'page-script'}}
+<script>
+(function() {
+  var ruleId = $('#rule-id').val();
+  var isEditMode = ruleId && ruleId !== 'new';
+  var availableFields = [];
+  var availableActions = [];
+  var eventTypes = [];
+  var conditionCounter = 0;
+  var actionCounter = 0;
+
+  // Load configuration data
+  function loadConfig() {
+    $.when(
+      $.get('/api/v2/notification-rules/config/fields'),
+      $.get('/api/v2/notification-rules/config/actions'),
+      $.get('/api/v2/notification-rules/config/event-types')
+    ).done(function(fieldsResp, actionsResp, eventsResp) {
+      availableFields = fieldsResp[0].fields || [];
+      availableActions = actionsResp[0].actions || [];
+      eventTypes = eventsResp[0].eventTypes || [];
+
+      populateEventTypes();
+
+      if (isEditMode) {
+        loadRule();
+      } else {
+        $('#rule-active').prop('checked', true);
+      }
+    }).fail(function() {
+      helpers.UI.showSnackbar('Error loading configuration', true);
+    });
+  }
+
+  function populateEventTypes() {
+    var select = $('#rule-event-type');
+    eventTypes.forEach(function(et) {
+      select.append($('<option>').val(et.value).text(et.label));
+    });
+  }
+
+  function loadRule() {
+    $.get('/api/v2/notification-rules/' + ruleId, function(response) {
+      if (response.success && response.rule) {
+        var rule = response.rule;
+
+        $('#rule-name').val(rule.name);
+        $('#rule-description').val(rule.description || '');
+        $('#rule-event-type').val(rule.eventType);
+        $('#rule-priority').val(rule.priority || 100);
+        $('#rule-active').prop('checked', rule.isActive);
+
+        // Load conditions
+        if (rule.conditions && rule.conditions.length > 0) {
+          rule.conditions.forEach(function(condition) {
+            addCondition(condition);
+          });
+        }
+
+        // Load actions
+        if (rule.actions && rule.actions.length > 0) {
+          rule.actions.forEach(function(action) {
+            addAction(action);
+          });
+        }
+      }
+    }).fail(function() {
+      helpers.UI.showSnackbar('Error loading rule', true);
+    });
+  }
+
+  function addCondition(data) {
+    var id = conditionCounter++;
+    var container = $('#conditions-container');
+
+    var item = $('<div>').addClass('condition-item').attr('data-id', id);
+
+    var removeBtn = $('<button>')
+      .addClass('uk-button uk-button-small uk-button-danger')
+      .html('<i class="fa fa-trash"></i>')
+      .on('click', function() { item.remove(); });
+
+    var fieldSelect = $('<select>')
+      .addClass('condition-field uk-width-1-3 uk-margin-small-right')
+      .attr('data-id', id);
+    fieldSelect.append($('<option>').val('').text('Select field...'));
+    availableFields.forEach(function(f) {
+      fieldSelect.append($('<option>').val(f.field).text(f.label).attr('data-type', f.type));
+    });
+
+    var operatorSelect = $('<select>')
+      .addClass('condition-operator uk-width-1-4 uk-margin-small-right')
+      .attr('data-id', id);
+
+    var valueInput = $('<input>')
+      .attr('type', 'text')
+      .addClass('condition-value uk-width-1-3')
+      .attr('placeholder', 'Value')
+      .attr('data-id', id);
+
+    item.append(removeBtn);
+    item.append($('<div>').addClass('uk-margin-small-top')
+      .append(fieldSelect)
+      .append(operatorSelect)
+      .append(valueInput));
+
+    container.append(item);
+
+    // Load operators when field changes
+    fieldSelect.on('change', function() {
+      var selectedOption = $(this).find('option:selected');
+      var fieldType = selectedOption.attr('data-type') || 'string';
+
+      $.get('/api/v2/notification-rules/config/operators?fieldType=' + fieldType, function(response) {
+        operatorSelect.empty();
+        operatorSelect.append($('<option>').val('').text('Select operator...'));
+        if (response.success && response.operators) {
+          response.operators.forEach(function(op) {
+            operatorSelect.append($('<option>').val(op.value).text(op.label));
+          });
+        }
+      });
+    });
+
+    // Set values if provided
+    if (data) {
+      fieldSelect.val(data.field).trigger('change');
+      setTimeout(function() {
+        operatorSelect.val(data.operator);
+        valueInput.val(data.value);
+      }, 100);
+    }
+  }
+
+  function addAction(data) {
+    var id = actionCounter++;
+    var container = $('#actions-container');
+
+    var item = $('<div>').addClass('action-item').attr('data-id', id);
+
+    var removeBtn = $('<button>')
+      .addClass('uk-button uk-button-small uk-button-danger')
+      .html('<i class="fa fa-trash"></i>')
+      .on('click', function() { item.remove(); });
+
+    var typeSelect = $('<select>')
+      .addClass('action-type uk-width-1-2')
+      .attr('data-id', id);
+    typeSelect.append($('<option>').val('').text('Select action...'));
+    availableActions.forEach(function(a) {
+      typeSelect.append($('<option>').val(a.type).text(a.label));
+    });
+
+    var configDiv = $('<div>')
+      .addClass('action-config uk-margin-small-top')
+      .attr('data-id', id);
+
+    item.append(removeBtn);
+    item.append($('<div>').addClass('uk-margin-small-top').append(typeSelect));
+    item.append(configDiv);
+
+    container.append(item);
+
+    // Show config based on action type
+    typeSelect.on('change', function() {
+      var actionType = $(this).val();
+      configDiv.empty();
+
+      if (actionType === 'send-email' || actionType === 'send-email-calendar') {
+        configDiv.append($('<label>').text('Recipients:'));
+        configDiv.append($('<select>')
+          .addClass('action-recipients uk-width-1-1 uk-margin-small')
+          .attr('data-id', id)
+          .append($('<option>').val('ticket-owner').text('Ticket Owner'))
+          .append($('<option>').val('ticket-assignee').text('Ticket Assignee'))
+          .append($('<option>').val('custom-emails').text('Custom Emails')));
+
+        configDiv.append($('<label>').text('Template Type:'));
+        configDiv.append($('<input>')
+          .attr('type', 'text')
+          .addClass('action-template-type uk-width-1-1')
+          .attr('placeholder', 'e.g., ticket-assigned')
+          .attr('data-id', id));
+      }
+    });
+
+    // Set values if provided
+    if (data) {
+      typeSelect.val(data.type).trigger('change');
+
+      if (data.emailConfig) {
+        setTimeout(function() {
+          $('.action-recipients[data-id="' + id + '"]').val(data.emailConfig.recipients);
+          $('.action-template-type[data-id="' + id + '"]').val(data.emailConfig.templateType);
+        }, 100);
+      }
+    }
+  }
+
+  function collectFormData() {
+    var conditions = [];
+    $('.condition-item').each(function() {
+      var id = $(this).attr('data-id');
+      var field = $('.condition-field[data-id="' + id + '"]').val();
+      var operator = $('.condition-operator[data-id="' + id + '"]').val();
+      var value = $('.condition-value[data-id="' + id + '"]').val();
+
+      if (field && operator) {
+        conditions.push({
+          field: field,
+          operator: operator,
+          value: value,
+          valueType: 'string'
+        });
+      }
+    });
+
+    var actions = [];
+    $('.action-item').each(function() {
+      var id = $(this).attr('data-id');
+      var type = $('.action-type[data-id="' + id + '"]').val();
+
+      if (type) {
+        var action = { type: type };
+
+        if (type === 'send-email' || type === 'send-email-calendar') {
+          var recipients = $('.action-recipients[data-id="' + id + '"]').val();
+          var templateType = $('.action-template-type[data-id="' + id + '"]').val();
+
+          action.emailConfig = {
+            recipients: recipients,
+            templateType: templateType
+          };
+        }
+
+        actions.push(action);
+      }
+    });
+
+    return {
+      name: $('#rule-name').val(),
+      description: $('#rule-description').val(),
+      eventType: $('#rule-event-type').val(),
+      priority: parseInt($('#rule-priority').val()) || 100,
+      isActive: $('#rule-active').is(':checked'),
+      conditions: conditions,
+      actions: actions
+    };
+  }
+
+  $('#add-condition').on('click', function() {
+    addCondition();
+  });
+
+  $('#add-action').on('click', function() {
+    addAction();
+  });
+
+  $('#rule-form').on('submit', function(e) {
+    e.preventDefault();
+
+    var data = collectFormData();
+
+    // Validate
+    if (!data.name || !data.eventType) {
+      helpers.UI.showSnackbar('Please fill in all required fields', true);
+      return;
+    }
+
+    if (data.actions.length === 0) {
+      helpers.UI.showSnackbar('At least one action is required', true);
+      return;
+    }
+
+    var url = isEditMode
+      ? '/api/v2/notification-rules/' + ruleId
+      : '/api/v2/notification-rules';
+
+    var method = isEditMode ? 'PUT' : 'POST';
+
+    $.ajax({
+      url: url,
+      method: method,
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(response) {
+        if (response.success) {
+          helpers.UI.showSnackbar('Rule saved successfully', false);
+          setTimeout(function() {
+            window.location.href = '/settings/notification-rules';
+          }, 1000);
+        }
+      },
+      error: function(xhr) {
+        var message = 'Error saving rule';
+        if (xhr.responseJSON && xhr.responseJSON.error) {
+          message += ': ' + xhr.responseJSON.error.message;
+        }
+        helpers.UI.showSnackbar(message, true);
+      }
+    });
+  });
+
+  $('#test-rule').on('click', function() {
+    var data = collectFormData();
+
+    $.ajax({
+      url: '/api/v2/notification-rules/validate',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(response) {
+        if (response.success && response.valid) {
+          helpers.UI.showSnackbar('Rule configuration is valid!', false);
+        } else {
+          var errors = response.errors.join(', ');
+          helpers.UI.showSnackbar('Validation errors: ' + errors, true);
+        }
+      },
+      error: function() {
+        helpers.UI.showSnackbar('Error validating rule', true);
+      }
+    });
+  });
+
+  // Initialize
+  $(document).ready(function() {
+    loadConfig();
+  });
+})();
+</script>
+{{/contentFor}}
