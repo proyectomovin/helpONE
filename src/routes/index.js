@@ -346,8 +346,8 @@ function mainRoutes (router, middleware, controllers) {
   )
   router.get('/settings/legal', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.legal)
   router.get('/settings/logs', middleware.redirectToLogin, middleware.loadCommonData, controllers.settings.logs)
-  // TEMPORARILY DISABLED - debugging SIGABRT
-  /*
+
+  // Phase 1: Email Templates with GrapesJS editor
   router.get(
     '/settings/email-templates',
     middleware.redirectToLogin,
@@ -366,6 +366,8 @@ function mainRoutes (router, middleware, controllers) {
     middleware.loadCommonData,
     controllers.settings.emailTemplatesEditor
   )
+
+  // Phase 3: Notification Rules
   router.get(
     '/settings/notification-rules',
     middleware.redirectToLogin,
@@ -384,13 +386,14 @@ function mainRoutes (router, middleware, controllers) {
     middleware.loadCommonData,
     controllers.settings.notificationRulesEditor
   )
+
+  // Phase 4: User Preferences
   router.get(
     '/settings/notification-preferences',
     middleware.redirectToLogin,
     middleware.loadCommonData,
     controllers.settings.notificationPreferences
   )
-  */
 
   router.get(
     '/settings/editor/:template',

@@ -36,15 +36,11 @@ const eventTicketCreated = require('./events/event_ticket_created')
 
   notifications.init(emitter)
 
-  // Initialize notification rules integration
-  // TEMPORARILY DISABLED - debugging SIGABRT crash
-  // TODO: Re-enable after fixing the crash issue
-  // notificationRules.init()
+  // Initialize notification rules integration (Phase 3)
+  notificationRules.init()
 
-  // Initialize digest scheduler
-  // TEMPORARILY DISABLED - debugging SIGABRT crash
-  // TODO: Re-enable after fixing the crash issue
-  // digestScheduler.init()
+  // Initialize digest scheduler (Phase 4)
+  digestScheduler.init()
 
   emitter.on('ticket:created', async function (data) {
     await eventTicketCreated(data)
