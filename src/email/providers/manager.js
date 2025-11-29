@@ -250,15 +250,17 @@ providerManager.createMailgunTransport = function (provider) {
     throw new Error('Mailgun configuration not found')
   }
 
-  var mg = require('nodemailer-mailgun-transport')
+  var username = provider.config.mailgun.username || 'postmaster@' + provider.config.mailgun.domain
 
-  return nodemailer.createTransport(mg({
+  return nodemailer.createTransport({
+    host: provider.config.mailgun.host || 'smtp.mailgun.org',
+    port: provider.config.mailgun.port || 587,
+    secure: false,
     auth: {
-      api_key: provider.config.mailgun.apiKey,
-      domain: provider.config.mailgun.domain
-    },
-    host: provider.config.mailgun.host || 'api.mailgun.net'
-  }))
+      user: username,
+      pass: provider.config.mailgun.apiKey
+    }
+  })
 }
 
 /**
@@ -269,20 +271,18 @@ providerManager.createSESTransport = function (provider) {
     throw new Error('AWS SES configuration not found')
   }
 
-  var aws = require('@aws-sdk/client-ses')
-  var { defaultProvider } = require('@aws-sdk/credential-provider-node')
-
-  var ses = new aws.SES({
-    apiVersion: '2010-12-01',
-    region: provider.config.ses.region || 'us-east-1',
-    credentials: {
-      accessKeyId: provider.config.ses.accessKeyId,
-      secretAccessKey: provider.config.ses.secretAccessKey
-    }
-  })
+  var region = provider.config.ses.region || 'us-east-1'
+  var smtpHost = provider.config.ses.smtpHost || 'email-smtp.' + region + '.amazonaws.com'
 
   return nodemailer.createTransport({
-    SES: { ses: ses, aws: aws }
+    host: smtpHost,
+    port: provider.config.ses.port || 587,
+    secure: false,
+    auth: {
+      // Prefer explicit SMTP credentials but fall back to access key for compatibility
+      user: provider.config.ses.smtpUser || provider.config.ses.accessKeyId,
+      pass: provider.config.ses.smtpPassword || provider.config.ses.secretAccessKey
+    }
   })
 }
 
@@ -294,13 +294,15 @@ providerManager.createPostmarkTransport = function (provider) {
     throw new Error('Postmark configuration not found')
   }
 
-  var postmark = require('nodemailer-postmark-transport')
-
-  return nodemailer.createTransport(postmark({
+  return nodemailer.createTransport({
+    host: provider.config.postmark.host || 'smtp.postmarkapp.com',
+    port: provider.config.postmark.port || 587,
+    secure: false,
     auth: {
-      apiKey: provider.config.postmark.serverToken
+      user: provider.config.postmark.smtpUser || 'postmark',
+      pass: provider.config.postmark.serverToken
     }
-  }))
+  })
 }
 
 /**
@@ -311,12 +313,15 @@ providerManager.createSparkPostTransport = function (provider) {
     throw new Error('SparkPost configuration not found')
   }
 
-  var sparkpost = require('nodemailer-sparkpost-transport')
-
-  return nodemailer.createTransport(sparkpost({
-    sparkPostApiKey: provider.config.sparkpost.apiKey,
-    endpoint: provider.config.sparkpost.endpoint
-  }))
+  return nodemailer.createTransport({
+    host: provider.config.sparkpost.host || 'smtp.sparkpostmail.com',
+    port: provider.config.sparkpost.port || 587,
+    secure: false,
+    auth: {
+      user: provider.config.sparkpost.smtpUser || 'SMTP_Injection',
+      pass: provider.config.sparkpost.apiKey
+    }
+  })
 }
 
 /**
