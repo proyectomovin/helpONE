@@ -20,6 +20,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt
 const base32 = require('thirty-two')
 const User = require('../models/user')
 const nconf = require('nconf')
+const winston = require('winston')
 
 module.exports = function () {
   passport.serializeUser(function (user, done) {
@@ -41,18 +42,37 @@ module.exports = function () {
         passReqToCallback: true
       },
       function (req, username, password, done) {
-        User.findOne({ username: new RegExp('^' + username.trim() + '$', 'i') })
+        const usernameToSearch = username.trim()
+        winston.debug(`[LOGIN] Attempting login for username: ${usernameToSearch}`)
+
+        User.findOne({ username: new RegExp('^' + usernameToSearch + '$', 'i') })
           .select('+password +tOTPKey +tOTPPeriod')
           .exec(function (err, user) {
             if (err) {
+              winston.error(`[LOGIN] Database error during login for username: ${usernameToSearch}`, err)
               return done(err)
             }
 
-            if (!user || user.deleted || !User.validate(password, user.password)) {
+            if (!user) {
+              winston.warn(`[LOGIN] User not found: ${usernameToSearch}`)
               req.flash('loginMessage', '')
               return done(null, false, req.flash('loginMessage', 'Invalid Username/Password'))
             }
 
+            if (user.deleted) {
+              winston.warn(`[LOGIN] Attempted login with deleted account: ${usernameToSearch}`)
+              req.flash('loginMessage', '')
+              return done(null, false, req.flash('loginMessage', 'Invalid Username/Password'))
+            }
+
+            const passwordValid = User.validate(password, user.password)
+            if (!passwordValid) {
+              winston.warn(`[LOGIN] Invalid password for username: ${usernameToSearch}`)
+              req.flash('loginMessage', '')
+              return done(null, false, req.flash('loginMessage', 'Invalid Username/Password'))
+            }
+
+            winston.info(`[LOGIN] Successful login for username: ${usernameToSearch}`)
             req.user = user
 
             return done(null, user)
