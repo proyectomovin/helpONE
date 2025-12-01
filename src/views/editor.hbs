@@ -1,7 +1,24 @@
-<div class="page-content no-border-top full-height" ng-controller="editorController" ng-init="template='{{data.template}}';" >
+{{#contentFor 'css'}}
+<link rel="stylesheet" href="/js/vendor/grapesjs/css/grapes.min.css"/>
+{{/contentFor}}
+
+<div class="page-content no-border-top full-height" style="margin-left: 0 !important;">
     <div id="web-editor"></div>
     <div id="web-editor-invalid-notification" class="full-height hide">
         <h2 style="width: 100%; text-align: center; position: absolute; top: 50%; left: 50%; margin: 0 0 0 -50%;"
             class="uk-text-muted font-light">404: Invalid Template. Redirecting...</h2>
     </div>
 </div>
+
+{{#contentFor 'js-plugins'}}
+<script src="/js/vendor/grapesjs/grapes.js"></script>
+<script src="/js/vendor/grapesjs/grapesjs-preset-email.min.js"></script>
+<script>
+    require(['jquery', 'pages/editor'], function($, editorPage) {
+        $(document).ready(function() {
+            var template = '{{data.template}}';
+            editorPage.init(template);
+        });
+    });
+</script>
+{{/contentFor}}

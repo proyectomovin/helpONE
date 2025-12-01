@@ -53,18 +53,17 @@ const templateBody = ({ template, handleSaveSubject, handleOpenEditor }) => (
     <Zone extraClass={'uk-margin-medium-top'}>
       <ZoneBox>
         <div className={'uk-float-left'}>
-          <h6 style={{ margin: 0, fontSize: '16px', lineHeight: '14px' }}>Edit Template (Disabled)</h6>
+          <h6 style={{ margin: 0, fontSize: '16px', lineHeight: '14px' }}>Edit Template</h6>
           <h5 className={'uk-text-muted'} style={{ margin: '2px 0 0 0', fontSize: '12px' }}>
-            Customize template - Currently disabled
+            Customize email template with visual HTML editor
           </h5>
         </div>
         <div className='uk-float-right uk-width-1-3 uk-clearfix'>
           <div className='uk-width-1-1 uk-float-right' style={{ textAlign: 'right' }}>
             <button
-              className={'md-btn md-btn-small right disabled'}
+              className={'md-btn md-btn-small md-btn-primary right'}
               style={{ textTransform: 'none' }}
               onClick={handleOpenEditor}
-              disabled={true}
             >
               Open Editor
             </button>
