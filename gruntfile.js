@@ -141,12 +141,22 @@ module.exports = function (grunt) {
           }
         ]
       },
-      editorjs: {
+      modules: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src/public/js/modules/',
+            src: ['**/*'],
+            dest: 'public/js/modules/'
+          }
+        ]
+      },
+      pages: {
         files: [
           {
             expand: true,
             cwd: 'src/public/js/pages/',
-            src: ['editor.js'],
+            src: ['**/*'],
             dest: 'public/js/pages/'
           }
         ]
