@@ -128,12 +128,35 @@ module.exports = function (grunt) {
       webpackWatch: 'yarn run webpackwatch',
       webpackDev: 'yarn run webpackdev',
       webpackDist: 'yarn run webpackdist'
+    },
+
+    copy: {
+      grapesjs: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src/public/js/vendor/grapesjs/',
+            src: ['**/*'],
+            dest: 'public/js/vendor/grapesjs/'
+          }
+        ]
+      },
+      editorjs: {
+        files: [
+          {
+            expand: true,
+            cwd: 'src/public/js/pages/',
+            src: ['editor.js'],
+            dest: 'public/js/pages/'
+          }
+        ]
+      }
     }
   })
 
   grunt.registerTask('buildcss', ['uglify:uikit', 'cssmin'])
-  grunt.registerTask('server', 'launch webserver and watch tasks', ['uglify:uikit', 'cssmin', 'parallel:web'])
-  grunt.registerTask('build', ['uglify:uikit', 'cssmin', 'shell:webpackDist'])
-  grunt.registerTask('devbuild', ['shell:webpackDev'])
+  grunt.registerTask('server', 'launch webserver and watch tasks', ['uglify:uikit', 'cssmin', 'copy', 'parallel:web'])
+  grunt.registerTask('build', ['uglify:uikit', 'cssmin', 'copy', 'shell:webpackDist'])
+  grunt.registerTask('devbuild', ['copy', 'shell:webpackDev'])
   grunt.registerTask('default', ['server'])
 }
